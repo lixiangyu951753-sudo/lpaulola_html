@@ -1,0 +1,513 @@
+{%- comment -%}
+  PAULOLA Hero Video Section (GSAP 版)
+  多圆点 + 引导线 + 四卡片 + 样条跟踪 + GSAP 动画（quickTo/ticker/线条绘制/卡片浮现）
+  影片上傳到 設定→檔案→影片 後，在「主視覺影片」選擇即可
+{%- endcomment -%}
+
+{%- assign poster_url = 'hero-glorious.jpg' | asset_url -%}
+{%- if section.settings.poster != blank -%}
+  {%- assign poster_url = section.settings.poster | image_url: width: 1920 -%}
+{%- endif -%}
+
+{%- assign video_url = '' -%}
+{%- if section.settings.video != blank -%}
+  {%- assign video_url = section.settings.video.sources | first | map: 'url' | first | default: '' -%}
+{%- endif -%}
+{%- if video_url == blank -%}
+  {%- assign video_url = 'video-jewelry-showcase-web.mp4' | file_url -%}
+{%- endif -%}
+
+{%- assign mobile_video_url = '' -%}
+{%- if section.settings.mobile_video != blank -%}
+  {%- assign mobile_video_url = section.settings.mobile_video.sources | first | map: 'url' | first | default: '' -%}
+{%- endif -%}
+{%- if mobile_video_url == blank -%}
+  {%- comment -%} 店铺 Files 里的手机版视频真实托管地址 {%- endcomment -%}
+  {%- assign mobile_video_url = 'https://cdn.shopify.com/videos/c/vp/2de7b8e9c93549b7928ff5dd78a1c43c/2de7b8e9c93549b7928ff5dd78a1c43c.HD-720p-1.6Mbps-91724913.mp4' -%}
+{%- endif -%}
+
+<section class="pk-hero" id="pkHero">
+  <video class="pk-hero-video" autoplay muted loop playsinline preload="auto" poster="{{ poster_url }}"
+         data-desktop-src="{{ video_url }}" data-mobile-src="{{ mobile_video_url }}">
+    <source src="{{ video_url }}" type="video/mp4">
+  </video>
+
+  <div class="pk-hero-content">
+    {%- if section.settings.logo != blank -%}
+      <img class="pk-hero-logo" src="{{ section.settings.logo | image_url: width: 600 }}" alt="PAULOLA" width="600" height="600">
+    {%- else -%}
+      <img class="pk-hero-logo" src="{{ 'PAULOLA.png' | asset_url }}" alt="PAULOLA" width="600" height="600">
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h1 class="pk-serif" style="color:#fff; font-size:clamp(30px,4vw,48px); font-weight:600; line-height:1.1; margin:0 0 20px; letter-spacing:-0.02em; text-shadow:0 2px 14px rgba(0,0,0,0.35);">{{ section.settings.heading }}</h1>
+    {%- endif -%}
+    {%- if section.settings.subtext != blank -%}
+      <p style="color:rgba(255,255,255,0.9); font-size:16px; line-height:1.6; max-width:480px; margin:0 0 32px; text-shadow:0 1px 8px rgba(0,0,0,0.4);">{{ section.settings.subtext }}</p>
+    {%- endif -%}
+    <div class="flex-wrap" style="display:flex; flex-wrap:wrap; gap:16px;">
+      {%- if section.settings.btn_text != blank -%}
+        <a href="{{ section.settings.btn_link | default: routes.root_url }}" class="pk-btn-gold">{{ section.settings.btn_text }} →</a>
+      {%- endif -%}
+      {%- if section.settings.btn2_text != blank -%}
+        <a href="{{ section.settings.btn2_link | default: routes.root_url }}" class="pk-btn-outline">{{ section.settings.btn2_text }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <!-- 引导线层（圆点定位在宝石旁，细线+空心环指向宝石） -->
+  <svg class="pk-leader" id="pkLeader" aria-hidden="true">
+    <line id="pkLine-bracelet" class="pk-line" pathLength="1"></line>
+    <line id="pkLine-necklace" class="pk-line" pathLength="1"></line>
+    <line id="pkLine-ring" class="pk-line" pathLength="1"></line>
+    <line id="pkLine-earrings" class="pk-line" pathLength="1"></line>
+    <circle id="pkTip-bracelet" class="pk-line-tip" r="5"></circle>
+    <circle id="pkTip-necklace" class="pk-line-tip" r="5"></circle>
+    <circle id="pkTip-ring" class="pk-line-tip" r="5"></circle>
+    <circle id="pkTip-earrings" class="pk-line-tip" r="5"></circle>
+  </svg>
+
+  <!-- 时间轴首饰热点（多圆点：重叠时段各首饰同时显示） -->
+  <div class="pk-hero-hotspot" id="pkHotspot-bracelet"></div>
+  <div class="pk-hero-hotspot" id="pkHotspot-necklace"></div>
+  <div class="pk-hero-hotspot" id="pkHotspot-ring"></div>
+  <div class="pk-hero-hotspot" id="pkHotspot-earrings"></div>
+
+  <!-- 首饰介绍卡（每圆点各一张，吸附在各自圆点旁，可共存） -->
+  <div class="pk-hero-intro" id="pkIntro-bracelet" hidden>
+    <button class="pk-intro-close" aria-label="關閉">✕</button>
+    <p class="pk-intro-eyebrow"></p>
+    <h3 class="pk-intro-name pk-serif"></h3>
+    <p class="pk-intro-desc"></p>
+    <a class="pk-intro-link" href="#" onclick="return false;">查看商品 →</a>
+  </div>
+  <div class="pk-hero-intro" id="pkIntro-necklace" hidden>
+    <button class="pk-intro-close" aria-label="關閉">✕</button>
+    <p class="pk-intro-eyebrow"></p>
+    <h3 class="pk-intro-name pk-serif"></h3>
+    <p class="pk-intro-desc"></p>
+    <a class="pk-intro-link" href="#" onclick="return false;">查看商品 →</a>
+  </div>
+  <div class="pk-hero-intro" id="pkIntro-ring" hidden>
+    <button class="pk-intro-close" aria-label="關閉">✕</button>
+    <p class="pk-intro-eyebrow"></p>
+    <h3 class="pk-intro-name pk-serif"></h3>
+    <p class="pk-intro-desc"></p>
+    <a class="pk-intro-link" href="#" onclick="return false;">查看商品 →</a>
+  </div>
+  <div class="pk-hero-intro" id="pkIntro-earrings" hidden>
+    <button class="pk-intro-close" aria-label="關閉">✕</button>
+    <p class="pk-intro-eyebrow"></p>
+    <h3 class="pk-intro-name pk-serif"></h3>
+    <p class="pk-intro-desc"></p>
+    <a class="pk-intro-link" href="#" onclick="return false;">查看商品 →</a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero 影片",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "主視覺影片（先上傳到 設定→檔案→影片）"
+    },
+    {
+      "type": "video",
+      "id": "mobile_video",
+      "label": "手機版主視覺影片（9:16 直式，上傳後選擇）"
+    },
+    {
+      "type": "image_picker",
+      "id": "poster",
+      "label": "影片封面圖"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "主圖品牌 Logo（預設使用線上主題 PAULOLA 字標）"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "主標題",
+      "default": "莫桑璀璨 真愛永恆"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "副標題",
+      "default": "探索香港頂級莫桑石珠寶，每一件都經過嚴選認證"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "按鈕 1 文字",
+      "default": "探索系列"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "按鈕 1 連結"
+    },
+    {
+      "type": "text",
+      "id": "btn2_text",
+      "label": "按鈕 2 文字",
+      "default": "了解更多"
+    },
+    {
+      "type": "url",
+      "id": "btn2_link",
+      "label": "按鈕 2 連結"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero 影片"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+  .pk-hero { position: relative; display: block; overflow: hidden; }
+  .pk-hero-video { display: block; width: 100%; height: auto; }
+  .pk-hero-content { position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%); z-index: 2; max-width: 1160px; margin: 0 auto; padding: 0 24px; width: 100%; }
+
+  /* 主圖品牌 Logo（深色字標反白，適配深色影片背景） */
+  .pk-hero-logo { display: block; width: clamp(160px, 16vw, 240px); height: auto; margin-bottom: 18px; filter: brightness(0) invert(1); }
+
+  .pk-btn-gold { display: inline-flex; align-items: center; gap: 8px; background: var(--pk-gold); color: var(--pk-dark); font-size: 15px; font-weight: 600; padding: 14px 32px; border-radius: 999px; text-decoration: none; transition: background .2s ease, transform .2s ease; }
+  .pk-btn-gold:hover { background: var(--pk-gold-hover); transform: translateY(-1px); }
+  .pk-btn-outline { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: #fff; font-size: 15px; font-weight: 500; padding: 14px 32px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.4); text-decoration: none; transition: border-color .2s ease, background .2s ease; }
+  .pk-btn-outline:hover { border-color: var(--pk-gold); background: rgba(196,163,90,0.1); }
+
+  /* 引导线层 */
+  .pk-leader { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 4; pointer-events: none; }
+  .pk-line { stroke: rgba(196,163,90,0.65); stroke-width: 1.5; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; transition: opacity .45s ease .05s; }
+  .pk-line.on { opacity: 1; }
+  .pk-line-tip { fill: none; stroke: var(--pk-gold); stroke-width: 1.4; opacity: 0; transition: opacity .45s ease .1s; }
+  .pk-line-tip.on { opacity: 1; }
+
+  /* 时间轴热点圆点 */
+  .pk-hero-hotspot { position: absolute; z-index: 5; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; background: var(--pk-gold); border: 2px solid #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transform: scale(.4); transition: opacity .35s ease, transform .35s cubic-bezier(.2,.8,.3,1.2), visibility .35s; will-change: transform, left, top; }
+  .pk-hero-hotspot.on { opacity: 1; visibility: visible; transform: scale(1); }
+  .pk-hero-hotspot::before { content: ''; position: absolute; inset: -8px; border-radius: 50%; border: 1px solid rgba(196,163,90,0.7); animation: pk-ring 1.8s ease-out infinite; }
+  .pk-hero-hotspot.on:hover { transform: scale(1.3); }
+  @keyframes pk-ring { 0% { transform: scale(0.6); opacity: 1; } 100% { transform: scale(1.8); opacity: 0; } }
+
+  /* 首饰介绍卡（紧凑卡片：吸附在圆点旁，悬停暂停视频；入场由 GSAP 控制） */
+  .pk-hero-intro { position: absolute; z-index: 100; width: min(280px, calc(100vw - 48px)); background: rgba(15,15,15,0.88); backdrop-filter: blur(10px); border: 1px solid rgba(196,163,90,0.4); border-radius: 8px; padding: 12px 34px 12px 14px; color: #fff; box-shadow: 0 12px 28px rgba(0,0,0,0.35); pointer-events: auto; }
+  .pk-hero-intro[hidden] { display: none; }
+  .pk-intro-close { position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,0.12); border: none; color: #fff; font-size: 13px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .pk-intro-close:hover { background: var(--pk-gold); color: var(--pk-dark); }
+  .pk-intro-eyebrow { color: var(--pk-gold); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600; margin: 0 0 4px; }
+  .pk-intro-name { font-size: 17px; font-weight: 600; margin: 0 0 6px; color: #fff; }
+  .pk-intro-desc { font-size: 13px; line-height: 1.5; color: rgba(255,255,255,0.85); margin: 0; }
+  .pk-intro-link { display: inline-flex; align-items: center; gap: 4px; color: var(--pk-gold); font-size: 13px; font-weight: 600; text-decoration: none; margin-top: 8px; }
+  .pk-intro-link:hover { text-decoration: underline; }
+
+  @media (max-width: 768px) {
+    .pk-hero-content { padding: 0 20px; }
+    .pk-hero { height: 100vh; height: 100svh; }
+    .pk-hero-video { width: 100%; height: 100%; object-fit: cover; }
+    .pk-hero-hotspot { display: none; }
+    .pk-hero-intro { width: min(420px, calc(100% - 32px)); }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    'use strict';
+    /* ===== 时间轴配置（时间段 = 手动标注的首饰可见区间） ===== */
+    var ITEMS = [
+      { id: 'bracelet', name: '璀璨莫桑石手鏈', eyebrow: 'BRACELET', desc: 'S925 純銀莫桑石手鏈，日常疊戴的點睛之選，舉手間熠熠生輝。', start: 0.0, end: 3.3, x: 60, y: 38 },
+      { id: 'necklace', name: '莫桑石項鍊', eyebrow: 'NECKLACE', desc: '纖細銀鏈綴單顆莫桑石，貼合頸間線條，低調而閃耀。', start: 0.0, end: 6.0, x: 51, y: 2 },
+      { id: 'ring', name: '經典莫桑石戒指', eyebrow: 'RING', desc: '六爪鑲嵌圓形莫桑石，火彩從每個角度綻放，見證永恆時刻。', start: 2.4, end: 6.5, x: 15, y: 1 },
+      { id: 'earrings', name: '莫桑石耳環', eyebrow: 'EARRINGS', desc: '圈形密鑲搭配垂墜莫桑石，隨步伐輕盈搖曳，點亮側顏。', start: 7.4, end: 10.0, x: 49, y: 1 }
+    ];
+
+    /* 手动标注跟踪数据：[时间, x%, y%] */
+    var TRACKING = {
+      "bracelet": [[0, 60, 37.7], [0.25, 60.7, 41.4], [0.5, 61.7, 44.6], [0.75, 62.4, 48.1], [1, 64.1, 53], [1.25, 65.1, 56.9], [1.5, 66.2, 61.6], [1.75, 66.8, 66.4], [2, 66.8, 72.5], [2.25, 67.2, 77], [2.49, 67.6, 82.2], [2.74, 68.2, 87.7], [2.99, 68.4, 93.1], [3.24, 68.6, 98.1]],
+      "necklace": [[0, 51, 1.7], [0.25, 52.1, 4], [0.5, 53.6, 5.5], [0.75, 54.5, 8.7], [1, 56.4, 11.2], [1.25, 57.6, 14.6], [1.5, 58.7, 18.3], [1.75, 59.2, 21.8], [2, 59, 25.7], [2.24, 59.8, 29.5], [2.49, 60.3, 33.2], [2.74, 61.5, 37.2], [2.99, 62.3, 41.6], [3.24, 63, 45.6], [3.47, 63.5, 50.5], [3.72, 63.3, 55], [3.97, 63.3, 59.4], [4.22, 64.5, 63.7], [4.46, 64.9, 66.9], [4.71, 65, 72.1], [4.96, 65.6, 76.3], [5.21, 68.8, 80.5], [5.46, 69.6, 85.7], [5.71, 70.4, 89.7], [5.96, 71.4, 95.9]],
+      "ring": [[2.47, 15, 1.3], [2.72, 15.1, 4.9], [2.97, 15.5, 8.4], [3.22, 16, 14.4], [3.47, 16.3, 20.1], [3.72, 16, 24.2], [3.97, 16.4, 29.9], [4.22, 17.2, 36.6], [4.47, 17.5, 40.9], [4.71, 18.2, 45.5], [4.96, 19, 50.6], [5.21, 20, 56.7], [5.46, 21.2, 62.1], [5.71, 21.9, 67.3], [5.96, 22.8, 75.6], [6.21, 23.2, 83], [6.46, 24.8, 93.2]],
+      "earrings": [[7.46, 49.4, 0.8], [7.71, 50.5, 5.9], [7.96, 51.5, 11.4], [8.21, 51.4, 20.3], [8.46, 51.5, 25.8], [8.71, 51.8, 32], [8.96, 51.7, 37.4], [9.21, 51.6, 40.9], [9.46, 52.2, 45.1], [9.71, 53, 48.3], [9.96, 53.1, 50.1]]
+    };
+
+    var video = document.querySelector('.pk-hero-video');
+    var hero = document.querySelector('.pk-hero');
+
+    /* 响应式视频：手机端（<768px）切换为竖屏 9:16 版 */
+    var mq = window.matchMedia('(max-width: 768px)');
+    function applySrc() {
+      if (!video || !video.dataset.desktopSrc) return;
+      var target = mq.matches && video.dataset.mobileSrc ? video.dataset.mobileSrc : video.dataset.desktopSrc;
+      if (video.currentSrc.indexOf(target) === -1) {
+        video.src = target;
+        video.load();
+        video.play().catch(function () {});
+      }
+    }
+    if (mq.addEventListener) { mq.addEventListener('change', applySrc); } else if (mq.addListener) { mq.addListener(applySrc); }
+    applySrc();
+
+    var dots = {};
+    var cards = {};
+    var cardEls = {};
+    ITEMS.forEach(function (it) {
+      dots[it.id] = document.getElementById('pkHotspot-' + it.id);
+      var c = document.getElementById('pkIntro-' + it.id);
+      cards[it.id] = c;
+      if (c) {
+        cardEls[it.id] = {
+          eyebrow: c.querySelector('.pk-intro-eyebrow'),
+          name: c.querySelector('.pk-intro-name'),
+          desc: c.querySelector('.pk-intro-desc'),
+          close: c.querySelector('.pk-intro-close')
+        };
+      }
+    });
+    var wasActive = {};
+    var openCards = {};
+
+    /* Catmull-Rom 样条插值：轨迹穿过全部标注点 */
+    function trackPos(item, t) {
+      var fallback = { x: item.x, y: item.y };
+      var pts = TRACKING[item.id];
+      if (!pts) return fallback;
+      var P = [];
+      for (var i = 0; i < pts.length; i++) {
+        if (pts[i][1] !== null && pts[i][2] !== null) {
+          P.push({ t: pts[i][0], x: pts[i][1], y: pts[i][2] });
+        }
+      }
+      if (P.length === 0) return fallback;
+      if (t <= P[0].t) return { x: P[0].x, y: P[0].y };
+      if (t >= P[P.length - 1].t) return { x: P[P.length - 1].x, y: P[P.length - 1].y };
+      if (P.length < 2) return { x: P[0].x, y: P[0].y };
+      var seg = 0;
+      for (var i = 0; i < P.length - 1; i++) {
+        if (t >= P[i].t && t <= P[i + 1].t) { seg = i; break; }
+      }
+      var spanT = P[seg + 1].t - P[seg].t;
+      var u = spanT > 0 ? (t - P[seg].t) / spanT : 0;
+      var p0 = P[Math.max(0, seg - 1)];
+      var p1 = P[seg];
+      var p2 = P[seg + 1];
+      var p3 = P[Math.min(P.length - 1, seg + 2)];
+      if (seg === 0) p0 = p1;
+      if (seg === P.length - 2) p3 = p2;
+      function cr(v0, v1, v2, v3, uu) {
+        var u2 = uu * uu, u3 = u2 * uu;
+        return 0.5 * ((2 * v1) + (-v0 + v2) * uu + (2 * v0 - 5 * v1 + 4 * v2 - v3) * u2 + (-v0 + 3 * v1 - 3 * v2 + v3) * u3);
+      }
+      return { x: Math.min(100, Math.max(0, cr(p0.x, p1.x, p2.x, p3.x, u))), y: Math.min(100, Math.max(0, cr(p0.y, p1.y, p2.y, p3.y, u))) };
+    }
+
+    function openCard(item) {
+      var e = cardEls[item.id];
+      var c = cards[item.id];
+      if (!c || !e) return;
+      e.eyebrow.textContent = item.eyebrow;
+      e.name.textContent = item.name;
+      e.desc.textContent = item.desc;
+      if (window.gsap) {
+        gsap.killTweensOf(c);
+        c.hidden = false;
+        gsap.fromTo(c,
+          { autoAlpha: 0, scale: 0.9, transformOrigin: 'left center' },
+          { autoAlpha: 1, scale: 1, duration: 0.35, delay: 0.38, ease: 'power2.out', overwrite: true });
+      } else {
+        c.hidden = false;
+      }
+      openCards[item.id] = true;
+    }
+    function closeCard(item) {
+      var c = cards[item.id];
+      openCards[item.id] = false;
+      if (!c || c.hidden) return;
+      if (c.matches && c.matches(':hover')) {
+        hovered = Math.max(0, hovered - 1);
+        if (hovered === 0 && pausedByHover) {
+          pausedByHover = false;
+          if (video) video.play().catch(function () {});
+        }
+      }
+      if (window.gsap) {
+        gsap.killTweensOf(c);
+        gsap.to(c, { autoAlpha: 0, scale: 0.9, duration: 0.16, ease: 'power1.in', overwrite: true, onComplete: function () { c.hidden = true; } });
+      } else {
+        c.hidden = true;
+      }
+    }
+    function closeAllCards() {
+      ITEMS.forEach(function (it) { closeCard(it); });
+    }
+
+    var hovered = 0;
+    var pausedByHover = false;
+
+    /* GSAP 依赖部分：等 gsap 就绪（defer 在 DOMContentLoaded 前执行）后启动 */
+    function bootGsap() {
+      if (!window.gsap || !video || !hero) return;
+      var lines = {}, tips = {};
+      ITEMS.forEach(function (it) {
+        lines[it.id] = document.getElementById('pkLine-' + it.id);
+        tips[it.id] = document.getElementById('pkTip-' + it.id);
+      });
+      var heroW = hero.offsetWidth, heroH = hero.offsetHeight;
+      window.addEventListener('resize', function () { heroW = hero.offsetWidth; heroH = hero.offsetHeight; });
+      var isMobile = window.matchMedia('(max-width: 768px)');
+      var clampX = gsap.utils.clamp(8, 92);
+      var clampY = gsap.utils.clamp(8, 92);
+
+      /* GSAP quickTo 跟随器：宝石端(稳) / 圆点端(灵) / 卡片端(自然延迟) */
+      var follows = {};
+      ITEMS.forEach(function (it) {
+        var gem = { x: 50, y: 50 }, dot = { x: 50, y: 50 }, card = { x: 50, y: 50 };
+        follows[it.id] = {
+          gem: gem, dot: dot, card: card,
+          gemQx: gsap.quickTo(gem, 'x', { duration: 0.55, ease: 'power2.out' }),
+          gemQy: gsap.quickTo(gem, 'y', { duration: 0.55, ease: 'power2.out' }),
+          dotQx: gsap.quickTo(dot, 'x', { duration: 0.32, ease: 'power2.out' }),
+          dotQy: gsap.quickTo(dot, 'y', { duration: 0.32, ease: 'power2.out' }),
+          cardQx: gsap.quickTo(card, 'x', { duration: 0.6, ease: 'power2.out' }),
+          cardQy: gsap.quickTo(card, 'y', { duration: 0.6, ease: 'power2.out' })
+        };
+      });
+
+      function positionCard(item) {
+        var c = cards[item.id];
+        if (!c) return;
+        var cardW = c.offsetWidth || 300;
+        var cardH = c.offsetHeight || 130;
+        if (isMobile.matches) {
+          c.style.left = '50%';
+          c.style.transform = 'translateX(-50%)';
+          c.style.top = Math.max(12, heroH - cardH - 24) + 'px';
+          return;
+        }
+        var f = follows[item.id];
+        var mxPx = f.card.x / 100 * heroW;
+        var myPx = f.card.y / 100 * heroH;
+        var leftPx = mxPx + 28;
+        var topPx = myPx - cardH / 2;
+        if (leftPx + cardW > heroW - 12) leftPx = mxPx - cardW - 28;
+        if (leftPx < 12) leftPx = 12;
+        topPx = Math.max(12, Math.min(heroH - cardH - 12, topPx));
+        c.style.left = leftPx + 'px';
+        c.style.top = topPx + 'px';
+        c.style.transform = 'none';
+      }
+
+      /* GSAP ticker 驱动 */
+      function loop() {
+        var t = video.currentTime;
+        ITEMS.forEach(function (it) {
+          var d = dots[it.id];
+          if (!d) return;
+          var active = t >= it.start && t < it.end;
+          if (active) {
+            var target = trackPos(it, t);
+            var f = follows[it.id];
+            var ln = lines[it.id], tp = tips[it.id];
+            if (!wasActive[it.id]) {
+              wasActive[it.id] = true;
+              gsap.set(f.gem, { x: target.x, y: target.y });
+              var ix = clampX(target.x + 11), iy = clampY(target.y - 9);
+              gsap.set(f.dot, { x: ix, y: iy });
+              gsap.set(f.card, { x: ix, y: iy });
+              if (ln) {
+                gsap.killTweensOf(ln);
+                gsap.set(ln, { strokeDashoffset: 1 });
+                gsap.to(ln, { strokeDashoffset: 0, duration: 0.4, ease: 'power2.out', overwrite: true });
+                ln.classList.add('on');
+              }
+              if (tp) tp.classList.add('on');
+              openCard(it);
+            }
+            f.gemQx(target.x); f.gemQy(target.y);
+            var mx = clampX(f.gem.x + 11), my = clampY(f.gem.y - 9);
+            f.dotQx(mx); f.dotQy(my);
+            f.cardQx(mx); f.cardQy(my);
+            d.style.left = f.dot.x + '%';
+            d.style.top = f.dot.y + '%';
+            if (ln) {
+              ln.setAttribute('x1', (f.gem.x / 100 * heroW).toFixed(1));
+              ln.setAttribute('y1', (f.gem.y / 100 * heroH).toFixed(1));
+              ln.setAttribute('x2', (f.dot.x / 100 * heroW).toFixed(1));
+              ln.setAttribute('y2', (f.dot.y / 100 * heroH).toFixed(1));
+            }
+            if (tp) {
+              tp.setAttribute('cx', (f.gem.x / 100 * heroW).toFixed(1));
+              tp.setAttribute('cy', (f.gem.y / 100 * heroH).toFixed(1));
+            }
+            if (!d.classList.contains('on')) d.classList.add('on');
+          } else {
+            if (d.classList.contains('on')) d.classList.remove('on');
+            if (lines[it.id]) {
+              lines[it.id].classList.remove('on');
+              gsap.killTweensOf(lines[it.id]);
+              gsap.set(lines[it.id], { strokeDashoffset: 1 });
+            }
+            if (tips[it.id]) tips[it.id].classList.remove('on');
+            if (wasActive[it.id]) { wasActive[it.id] = false; closeCard(it); }
+          }
+        });
+        ITEMS.forEach(function (it) {
+          if (openCards[it.id] && cards[it.id] && !cards[it.id].hidden) positionCard(it);
+        });
+      }
+      gsap.ticker.add(loop);
+
+      /* 点击圆点：切换该首饰卡片 */
+      ITEMS.forEach(function (it) {
+        var d = dots[it.id];
+        if (d) d.addEventListener('click', function (e) {
+          e.stopPropagation();
+          if (openCards[it.id]) { closeCard(it); } else { openCard(it); }
+        });
+      });
+
+      /* 卡片关闭按钮 */
+      ITEMS.forEach(function (it) {
+        var e = cardEls[it.id];
+        if (e && e.close) e.close.addEventListener('click', function (ev) {
+          ev.stopPropagation();
+          closeCard(it);
+        });
+      });
+
+      /* 悬停卡片：暂停视频；移开：恢复播放 */
+      ITEMS.forEach(function (it) {
+        var c = cards[it.id];
+        if (!c) return;
+        c.addEventListener('mouseenter', function () {
+          hovered++;
+          if (hovered === 1 && !video.paused) {
+            pausedByHover = true;
+            video.pause();
+          }
+        });
+        c.addEventListener('mouseleave', function () {
+          hovered = Math.max(0, hovered - 1);
+          if (hovered === 0 && pausedByHover) {
+            pausedByHover = false;
+            video.play().catch(function () {});
+          }
+        });
+      });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAllCards(); });
+      document.addEventListener('click', function (e) {
+        if (e.target.classList.contains('pk-hero-hotspot')) return;
+        if (e.target.closest && e.target.closest('.pk-hero-intro')) return;
+        var anyOpen = ITEMS.some(function (it) { return openCards[it.id]; });
+        if (anyOpen) closeAllCards();
+      });
+    }
+    if (window.gsap) { bootGsap(); } else { document.addEventListener('DOMContentLoaded', bootGsap); }
+  })();
+{% endjavascript %}

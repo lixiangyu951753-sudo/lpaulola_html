@@ -1,0 +1,14 @@
+{
+  "1": {"class_type": "LoadImage", "inputs": {"image": "ltx_first_frame.png"}},
+  "2": {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": "PinkCherry_FineTune_Q5_K_M_v18_LTX23.gguf"}},
+  "3": {"class_type": "DualCLIPLoaderGGUF", "inputs": {"clip_name1": "gemma-3-12b-it-heretic-v2.safetensors", "clip_name2": "ltx-2.3_text_projection_bf16.safetensors", "type": "ltxv"}},
+  "4": {"class_type": "VAELoader", "inputs": {"vae_name": "LTX23_video_vae_bf16.safetensors"}},
+  "5": {"class_type": "CLIPTextEncode", "inputs": {"text": "cinematic luxury jewelry advertisement, elegant young woman wearing sparkling moissanite diamond bracelet on her wrist, graceful hand movement, soft warm studio lighting, bokeh background, 9:16 vertical composition, high detail, photorealistic, smooth motion", "clip": ["3", 0]}},
+  "6": {"class_type": "CLIPTextEncode", "inputs": {"text": "low quality, blurry, distorted, deformed hands, watermark, text, logo, jpeg artifacts", "clip": ["3", 0]}},
+  "7": {"class_type": "LTXVConditioning", "inputs": {"positive": ["5", 0], "negative": ["6", 0], "frame_rate": 25}},
+  "8": {"class_type": "ModelSamplingLTXV", "inputs": {"model": ["2", 0], "max_shift": 2.05, "base_shift": 0.95}},
+  "9": {"class_type": "LTXVImgToVideo", "inputs": {"positive": ["7", 0], "negative": ["7", 1], "vae": ["4", 0], "image": ["1", 0], "width": 384, "height": 672, "length": 97, "batch_size": 1, "strength": 1.0}},
+  "10": {"class_type": "KSampler", "inputs": {"model": ["8", 0], "seed": 12345, "steps": 15, "cfg": 2.0, "sampler_name": "euler", "scheduler": "simple", "positive": ["9", 0], "negative": ["9", 1], "latent_image": ["9", 2], "denoise": 1.0}},
+  "11": {"class_type": "VAEDecode", "inputs": {"samples": ["10", 0], "vae": ["4", 0]}},
+  "12": {"class_type": "VHS_VideoCombine", "inputs": {"images": ["11", 0], "frame_rate": 25, "loop_count": 0, "filename_prefix": "ltx_mobile_hero", "format": "video/h264-mp4", "pix_fmt": "yuv420p", "crf": 19, "save_output": true, "pingpong": false}}
+}

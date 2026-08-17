@@ -1,0 +1,39 @@
+<div class="pk-announce" style="background: {{ section.settings.background }}; color: {{ section.settings.text_color }};">
+  <span style="font-size: 13px; letter-spacing: 0.03em;">{{ section.settings.text }}</span>
+</div>
+
+{% schema %}
+{
+  "name": "公告欄",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "公告內容",
+      "default": "全館滿 HK$300 免運｜莫桑石終身保固｜30天無鑑退換"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "背景色",
+      "default": "#0F0F0F"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "文字色",
+      "default": "#C4A35A"
+    }
+  ],
+  "presets": [
+    {
+      "name": "公告欄"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+  .pk-announce { height: 36px; display: flex; align-items: center; justify-content: center; }
+{% endstylesheet %}

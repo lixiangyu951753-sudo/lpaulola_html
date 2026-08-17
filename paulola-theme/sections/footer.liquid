@@ -1,0 +1,41 @@
+<footer class="pk-footer" style="background: var(--pk-footer-bg); color: var(--pk-footer-text); padding: 56px 0 0;">
+  <div class="pk-container">
+    <div style="display:grid; grid-template-columns: 1.5fr 1fr 1fr; gap:40px; padding-bottom:40px;">
+      <div>
+        <h3 class="pk-serif" style="color:#fff; font-size:15px; font-weight:600; margin:0 0 16px; letter-spacing:0.03em;">PAULOLA 寶洛拉</h3>
+        <p style="font-size:14px; line-height:1.7; margin:0 0 16px; color: var(--pk-footer-text);">輕奢莫桑石珠寶品牌，致力於提供高品質、高性價比的永續珠寶。</p>
+      </div>
+      <div>
+        <h3 style="color:#fff; font-size:15px; font-weight:600; margin:0 0 16px;">購物指南</h3>
+        <a href="{{ routes.root_url }}" style="display:block; color: var(--pk-footer-text); font-size:14px; text-decoration:none; margin-bottom:10px;">關於我們</a>
+        <a href="{{ routes.root_url }}" style="display:block; color: var(--pk-footer-text); font-size:14px; text-decoration:none; margin-bottom:10px;">配送資訊</a>
+        <a href="{{ routes.root_url }}" style="display:block; color: var(--pk-footer-text); font-size:14px; text-decoration:none; margin-bottom:10px;">常見問題</a>
+      </div>
+      <div>
+        <h3 style="color:#fff; font-size:15px; font-weight:600; margin:0 0 16px;">聯絡我們</h3>
+        <p style="font-size:14px; line-height:1.8; color: var(--pk-footer-text); margin:0;">
+          香港上環德輔道中317-319號<br>
+          啟德商業大廈11樓1104A室<br>
+          support@paulola.com<br>
+          +852 9711 2975
+        </p>
+      </div>
+    </div>
+    <div style="border-top:1px solid #2A2520; padding:20px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+      <p style="font-size:13px; color: #8A8A8A; margin:0;">© {{ 'now' | date: '%Y' }} PAULOLA 寶洛拉珠寶. All Rights Reserved.</p>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "頁腳",
+  "tag": "footer",
+  "settings": [],
+  "presets": [
+    {
+      "name": "頁腳"
+    }
+  ]
+}
+{% endschema %}

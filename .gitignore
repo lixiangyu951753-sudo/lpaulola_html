@@ -1,0 +1,19 @@
+# ===== Generated / intermediate output (regenerable, not source) =====
+# Video frames extracted by the YOLO/sparkle tracking demo pipeline (~471MB)
+frames/
+
+# Python bytecode cache
+__pycache__/
+*.pyc
+
+# ===== Local agent data (not part of the project source) =====
+.workbuddy/
+
+# ===== OS / editor noise =====
+.DS_Store
+Thumbs.db
+*~
+
+# ===== Python env (if any created locally) =====
+venv/
+.env

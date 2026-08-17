@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar"
+    },
+    "hero": {
+      "type": "hero-video"
+    },
+    "footer": {
+      "type": "footer"
+    }
+  },
+  "order": [
+    "announcement",
+    "hero",
+    "footer"
+  ]
+}

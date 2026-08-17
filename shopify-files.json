@@ -1,0 +1,422 @@
+﻿node.exe : Loading stored store auth ...
+At C:\Users\PAULOLA\AppData\Roaming\npm\shopify.ps1:24 char:5
++     & "node$exe"  "$basedir/node_modules/@shopify/cli/bin/run.js" $ar ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Loading stored store auth ...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[2K[1A[2K[G
+Executing GraphQL operation ...
+[2K[1A[2K[G
+╭─ success ────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│  Operation succeeded.                                                        │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+{
+  "files": {
+    "nodes": [
+      {
+        "id": "gid://shopify/MediaImage/44408955830573",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44408962416941",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44408994693421",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44408997347629",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44408997970221",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44408998691117",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44409009013037",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44409009045805",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44409011175725",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44409014583597",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44409035325741",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44409035358509",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44409230065965",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44409230098733",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44409258869037",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44409258901805",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44409273975085",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44409405145389",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44409405178157",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410408730925",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410408763693",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410438353197",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410438385965",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410456572205",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410456604973",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410509721901",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410509754669",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410540327213",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410540392749",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410594984237",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410595017005",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410606846253",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410606911789",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410643480877",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410643546413",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410675593517",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44410675626285",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44411191034157",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44411192443181",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44411192475949",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44411203354925",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44411271381293",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44411273904429",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44411275280685",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44411275313453",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44540289581357",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44540289614125",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44540289679661",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44540289712429",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44540290335021",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44540290367789",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44540290400557",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44540290433325",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44540290466093",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44540290498861",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44540290531629",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44540290564397",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544779911469",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544779944237",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544779977005",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780009773",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780239149",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780271917",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780304685",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780337453",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780370221",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780402989",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780435757",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780468525",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780697901",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780730669",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780763437",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780796205",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780828973",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780861741",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780894509",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544780927277",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544781156653",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544781189421",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544781222189",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544781254957",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544781287725",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544781320493",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544781549869",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544781582637",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544781615405",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544781648173",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544781680941",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544781713709",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544781746477",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544781779245",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544782008621",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544782041389",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544782074157",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544782106925",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544782139693",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544782172461",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544782205229",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544782237997",
+        "__typename": "MediaImage"
+      },
+      {
+        "id": "gid://shopify/MediaImage/44544782467373",
+        "__typename": "MediaImage"
+      }
+    ]
+  }
+}

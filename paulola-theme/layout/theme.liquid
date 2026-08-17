@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#FFFFFF">
+    <title>{{ page_title }} | PAULOLA 寶洛拉</title>
+    <meta name="description" content="{{ page_description | escape }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+    {{ content_for_header }}
+    <style>
+      :root {
+        --pk-gold: #C4A35A;
+        --pk-gold-hover: #A98A45;
+        --pk-dark: #0F0F0F;
+        --pk-text-primary: #1A1A1A;
+        --pk-text-secondary: #666666;
+        --pk-text-muted: #999999;
+        --pk-border: #E5DDD5;
+        --pk-footer-bg: #0F0F0F;
+        --pk-footer-text: #CCCCCC;
+        --pk-font-serif: 'Noto Serif TC', 'Songti TC', serif;
+        --pk-font-sans: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: var(--pk-font-sans);
+        color: var(--pk-text-primary);
+        background: #FFFFFF;
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: inherit; }
+      .pk-serif { font-family: var(--pk-font-serif); }
+      .pk-container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+      .pk-section-pad { padding-top: 56px; padding-bottom: 56px; }
+      .pk-eyebrow { color: var(--pk-gold); font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600; }
+
+      /* 页眉 */
+      .pk-header { position: sticky; top: 0; z-index: 50; background: #FFFFFF; border-bottom: 1px solid var(--pk-border); }
+      .pk-header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; max-width: 1160px; margin: 0 auto; }
+      .pk-logo { font-family: var(--pk-font-serif); font-size: 24px; font-weight: 700; letter-spacing: 0.08em; text-decoration: none; color: var(--pk-text-primary); }
+      .pk-logo-sub { font-size: 10px; letter-spacing: 0.3em; color: var(--pk-text-muted); text-align: center; margin-top: 2px; }
+      .pk-header-right { font-size: 13px; color: var(--pk-text-secondary); font-weight: 500; }
+    </style>
+  </head>
+  <body class="template-{{ request.page_type | handle }}">
+    <header class="pk-header">
+      <div class="pk-header-inner">
+        <a href="{{ routes.root_url }}" class="pk-logo">PAULOLA</a>
+        <div class="pk-logo-sub">寶 洛 拉 珠 寶</div>
+        <div class="pk-header-right">{{ localization.country.iso_code }} {{ cart.currency.iso_code }}</div>
+      </div>
+    </header>
+    <main id="MainContent">{{ content_for_layout }}</main>
+  </body>
+</html>

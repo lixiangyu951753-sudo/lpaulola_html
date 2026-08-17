@@ -1,0 +1,12 @@
+query {
+  files(first: 50, query: "media_type:video") {
+    nodes {
+      id
+      __typename
+      ... on Video {
+        sources { url }
+      }
+    }
+    pageInfo { hasNextPage endCursor }
+  }
+}
