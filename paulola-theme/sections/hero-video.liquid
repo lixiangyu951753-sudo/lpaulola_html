@@ -46,7 +46,7 @@
     {%- endif -%}
     <div class="flex-wrap" style="display:flex; flex-wrap:wrap; gap:16px;">
       {%- if section.settings.btn_text != blank -%}
-        <a href="{{ section.settings.btn_link | default: routes.root_url }}" class="pk-btn-gold">{{ section.settings.btn_text }} →</a>
+        <a href="{{ section.settings.btn_link | default: '/collections/all' }}" class="pk-btn-gold">{{ section.settings.btn_text }} →</a>
       {%- endif -%}
       {%- if section.settings.btn2_text != blank -%}
         <a href="{{ section.settings.btn2_link | default: routes.root_url }}" class="pk-btn-outline">{{ section.settings.btn2_text }}</a>

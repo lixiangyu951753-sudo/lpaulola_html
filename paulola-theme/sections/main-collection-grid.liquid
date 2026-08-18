@@ -1,0 +1,110 @@
+{%- liquid
+  assign per_page = section.settings.products_per_page | default: 12
+  assign total_count = collection.products_count
+-%}
+<section class="cf-collection" aria-label="{{ collection.title | escape }}">
+  <div class="pk-container-inner">
+    <header class="cf-collection-head">
+      <div>
+        <h1 class="cf-collection-title">{{ collection.title | default: '全部商品' }}</h1>
+        {%- if total_count > 0 -%}
+          <p class="cf-collection-count">{{ total_count }} 件商品</p>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.show_sort -%}
+        <form class="cf-collection-sort" method="get" action="{{ collection.url }}">
+          <label for="cf-sort" class="cf-collection-sort-label">排序</label>
+          <select id="cf-sort" name="sort_by" class="cf-collection-sort-select" onchange="this.form.submit()">
+            {%- assign cur = collection.sort_by | default: collection.default_sort_by -%}
+            <option value="manual" {% if cur == 'manual' %}selected{% endif %}>綜合排序</option>
+            <option value="best-selling" {% if cur == 'best-selling' %}selected{% endif %}>熱銷優先</option>
+            <option value="created-descending" {% if cur == 'created-descending' %}selected{% endif %}>最新上架</option>
+            <option value="price-ascending" {% if cur == 'price-ascending' %}selected{% endif %}>價格：低至高</option>
+            <option value="price-descending" {% if cur == 'price-descending' %}selected{% endif %}>價格：高至低</option>
+          </select>
+        </form>
+      {%- endif -%}
+    </header>
+
+    {%- if total_count > 0 -%}
+      {%- paginate collection.products by per_page -%}
+        <div class="cf-prod-grid cf-collection-grid">
+          {%- for product in collection.products -%}
+            <a href="{{ product.url }}" class="cf-prod-card">
+              <div class="cf-prod-img">
+                {%- if product.compare_at_price != blank and product.compare_at_price > product.price -%}
+                  <span class="cf-prod-sale">SALE</span>
+                {%- endif -%}
+                {%- if product.featured_media -%}
+                  <img src="{{ product.featured_media | image_url: width: 600 }}" alt="{{ product.title | escape }}" width="600" height="600" loading="lazy">
+                {%- endif -%}
+              </div>
+              <div class="cf-prod-body">
+                <p class="cf-prod-name">{{ product.title }}</p>
+                <p class="cf-prod-price">{{ product.price | money }}</p>
+              </div>
+            </a>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="cf-pagination" role="navigation" aria-label="分頁">
+            {%- if paginate.previous -%}
+              <a class="cf-pagination-btn" href="{{ paginate.previous.url }}" rel="prev" aria-label="上一頁">&lsaquo;</a>
+            {%- endif -%}
+            <span class="cf-pagination-info">第 {{ paginate.current_page }} / {{ paginate.pages }} 頁</span>
+            {%- if paginate.next -%}
+              <a class="cf-pagination-btn" href="{{ paginate.next.url }}" rel="next" aria-label="下一頁">&rsaquo;</a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- else -%}
+      <p class="cf-empty">此分類暫無商品。</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "集合商品列表",
+  "tag": "section",
+  "settings": [
+    { "type": "range", "id": "products_per_page", "label": "每頁顯示數量", "min": 4, "max": 48, "step": 4, "default": 12 },
+    { "type": "checkbox", "id": "show_sort", "label": "顯示排序", "default": true }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+:root {
+  --pk-container-max: 1160px;
+  --pk-background: #ffffff;
+  --cf-cream: #f5ebd8;
+  --cf-cream-soft: #faf2e0;
+  --cf-cream-line: rgba(26,26,26,0.12);
+  --cf-text: #1a1a1a;
+  --cf-text-soft: #6b6b6b;
+  --cf-border: #e5ddd5;
+  --pk-font-serif: 'Noto Serif TC', 'Songti TC', serif;
+  --pk-font-sans: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+}
+.cf-collection { padding: 48px 24px 96px; background: var(--pk-background); }
+.cf-collection .pk-container-inner { max-width: var(--pk-container-max); margin: 0 auto; }
+.cf-collection-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 40px; flex-wrap: wrap; }
+.cf-collection-title { font-family: var(--pk-font-serif); font-size: 34px; font-weight: 600; margin: 0 0 6px; color: var(--cf-text); letter-spacing: -0.01em; }
+.cf-collection-count { font-size: 13px; color: var(--cf-text-soft); margin: 0; letter-spacing: 0.1em; text-transform: uppercase; }
+.cf-collection-sort { display: flex; align-items: center; gap: 10px; }
+.cf-collection-sort-label { font-size: 13px; color: var(--cf-text-soft); }
+.cf-collection-sort-select { font-family: var(--pk-font-sans); font-size: 13px; color: var(--cf-text); background: #fff; border: 1px solid var(--cf-border); border-radius: 6px; padding: 9px 12px; cursor: pointer; }
+.cf-collection-grid { margin-top: 0; }
+.cf-pagination { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 48px; }
+.cf-pagination-btn { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--cf-border); border-radius: 6px; color: var(--cf-text); font-size: 18px; text-decoration: none; transition: background .2s ease, border-color .2s ease; }
+.cf-pagination-btn:hover { background: var(--cf-cream); border-color: var(--cf-text); }
+.cf-pagination-info { font-size: 13px; color: var(--cf-text-soft); }
+@media (max-width: 768px) {
+  .cf-collection { padding: 32px 16px 64px; }
+  .cf-collection-title { font-size: 26px; }
+  .cf-collection-head { margin-bottom: 28px; }
+}
+{% endstylesheet %}

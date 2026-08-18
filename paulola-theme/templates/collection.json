@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-collection-grid",
+      "settings": {
+        "products_per_page": 12,
+        "show_sort": true
+      }
+    }
+  },
+  "order": ["main"]
+}
