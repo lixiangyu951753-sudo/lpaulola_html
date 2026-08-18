@@ -9,84 +9,32 @@
       <button class="cf-tab" data-tab="bestseller">熱銷</button>
       <button class="cf-tab" data-tab="new">新品</button>
     </div>
-    <div class="cf-prod-grid">
-      <a href="{{ routes.root_url }}" class="cf-prod-card">
-        <div class="cf-prod-img">
-          <span class="cf-prod-sale">SALE</span>
-          <img src="{{ 'collected-ring-sixclaw.png' | asset_url }}" alt="六爪莫桑石戒指" width="582" height="582" loading="lazy">
-        </div>
-        <div class="cf-prod-body">
-          <p class="cf-prod-name">六爪莫桑石戒指</p>
-          <p class="cf-prod-price">HK$8,800</p>
-        </div>
-      </a>
-      <a href="{{ routes.root_url }}" class="cf-prod-card">
-        <div class="cf-prod-img">
-          <span class="cf-prod-sale">SALE</span>
-          <img src="{{ 'collected-ring-heart.png' | asset_url }}" alt="心形求婚戒指" width="582" height="582" loading="lazy">
-        </div>
-        <div class="cf-prod-body">
-          <p class="cf-prod-name">心形求婚戒指</p>
-          <p class="cf-prod-price">HK$6,600</p>
-        </div>
-      </a>
-      <a href="{{ routes.root_url }}" class="cf-prod-card">
-        <div class="cf-prod-img">
-          <img src="{{ 'collected-bracelet-full.png' | asset_url }}" alt="滿鑲排鑽手鏈" width="582" height="582" loading="lazy">
-        </div>
-        <div class="cf-prod-body">
-          <p class="cf-prod-name">滿鑲排鑽手鏈</p>
-          <p class="cf-prod-price">HK$5,200</p>
-        </div>
-      </a>
-      <a href="{{ routes.root_url }}" class="cf-prod-card">
-        <div class="cf-prod-img">
-          <img src="{{ 'collected-bracelet-champagne.png' | asset_url }}" alt="香檳金莫桑石手鏈" width="582" height="582" loading="lazy">
-        </div>
-        <div class="cf-prod-body">
-          <p class="cf-prod-name">香檳金莫桑石手鏈</p>
-          <p class="cf-prod-price">HK$5,800</p>
-        </div>
-      </a>
-      <a href="{{ routes.root_url }}" class="cf-prod-card">
-        <div class="cf-prod-img">
-          <span class="cf-prod-sale">SALE</span>
-          <img src="{{ 'collected-earring-bubble.png' | asset_url }}" alt="泡泡莫桑石耳釘" width="582" height="582" loading="lazy">
-        </div>
-        <div class="cf-prod-body">
-          <p class="cf-prod-name">泡泡莫桑石耳釘</p>
-          <p class="cf-prod-price">HK$1,600</p>
-        </div>
-      </a>
-      <a href="{{ routes.root_url }}" class="cf-prod-card">
-        <div class="cf-prod-img">
-          <img src="{{ 'collected-earring-heart.png' | asset_url }}" alt="心形莫桑石耳釘" width="582" height="582" loading="lazy">
-        </div>
-        <div class="cf-prod-body">
-          <p class="cf-prod-name">心形莫桑石耳釘</p>
-          <p class="cf-prod-price">HK$1,500</p>
-        </div>
-      </a>
-      <a href="{{ routes.root_url }}" class="cf-prod-card">
-        <div class="cf-prod-img">
-          <span class="cf-prod-sale">SALE</span>
-          <img src="{{ 'collected-necklace-ox.png' | asset_url }}" alt="牛頭款莫桑石鎖骨鏈" width="582" height="582" loading="lazy">
-        </div>
-        <div class="cf-prod-body">
-          <p class="cf-prod-name">牛頭款莫桑石鎖骨鏈</p>
-          <p class="cf-prod-price">HK$3,200</p>
-        </div>
-      </a>
-      <a href="{{ routes.root_url }}" class="cf-prod-card">
-        <div class="cf-prod-img">
-          <img src="{{ 'collected-necklace-cross.png' | asset_url }}" alt="十字架莫桑石頸鏈" width="582" height="582" loading="lazy">
-        </div>
-        <div class="cf-prod-body">
-          <p class="cf-prod-name">十字架莫桑石頸鏈</p>
-          <p class="cf-prod-price">HK$2,800</p>
-        </div>
-      </a>
-    </div>
+    {%- assign featured_collection = collections[section.settings.collection] -%}
+    {%- if featured_collection == blank -%}
+      {%- assign featured_collection = collections['material-s925'] -%}
+    {%- endif -%}
+    {%- if featured_collection != blank and featured_collection.products_count > 0 -%}
+      <div class="cf-prod-grid">
+        {%- for product in featured_collection.products limit: 8 -%}
+          <a href="{{ product.url }}" class="cf-prod-card">
+            <div class="cf-prod-img">
+              {%- if product.compare_at_price != blank and product.compare_at_price > product.price -%}
+                <span class="cf-prod-sale">SALE</span>
+              {%- endif -%}
+              {%- if product.featured_media -%}
+                <img src="{{ product.featured_media | image_url: width: 600 }}" alt="{{ product.title | escape }}" width="600" height="600" loading="lazy">
+              {%- endif -%}
+            </div>
+            <div class="cf-prod-body">
+              <p class="cf-prod-name">{{ product.title }}</p>
+              <p class="cf-prod-price">{{ product.price | money }}</p>
+            </div>
+          </a>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <p class="cf-empty">精選商品暫無內容，請先在後台選擇商品集合。</p>
+    {%- endif -%}
   </div>
 </section>
 
@@ -94,7 +42,13 @@
 {
   "name": "精選商品",
   "tag": "section",
-  "settings": [],
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "精選商品集合（留空預設為「S925纯银」全系列）"
+    }
+  ],
   "presets": [
     {
       "name": "精選商品"
@@ -123,6 +77,7 @@
 .cf-prod-body { padding: 16px 4px 0; }
 .cf-prod-name { font-size: 14px; color: var(--cf-text); font-weight: 500; margin: 0 0 6px; line-height: 1.4; }
 .cf-prod-price { font-size: 15px; font-weight: 600; color: var(--cf-text); margin: 0; }
+.cf-empty { text-align: center; color: var(--cf-text-soft); font-size: 14px; padding: 40px 0; }
 @media (max-width: 1024px) {
   .cf-prod-grid { grid-template-columns: repeat(3, 1fr); }
 }
