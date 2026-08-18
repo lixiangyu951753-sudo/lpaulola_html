@@ -1,33 +1,51 @@
-<section class="cf-cats" aria-label="材質分類">
+<section class="cf-cats" aria-label="商品分類">
   <div class="cf-cat-grid">
-    <a href="{{ routes.root_url }}" class="cf-cat-card">
-      <img src="{{ 'asian-gold-necklace.png' | asset_url }}" alt="Gold Jewellery" width="832" height="1118" loading="lazy">
+    {%- assign cat_rings = collections['rings'] -%}
+    {%- assign cat_necklaces = collections['necklaces'] -%}
+    {%- assign cat_earrings = collections['earrings'] -%}
+
+    <a href="{{ cat_rings.url | default: '/collections/rings' }}" class="cf-cat-card">
+      {%- if cat_rings.products.first.featured_image -%}
+        <img src="{{ cat_rings.products.first.featured_image | image_url: width: 900 }}" alt="戒指系列" width="832" height="1118" loading="lazy">
+      {%- else -%}
+        <img src="{{ 'asian-diamond-rings.png' | asset_url }}" alt="戒指系列" width="832" height="1118" loading="lazy">
+      {%- endif -%}
       <div class="cf-cat-overlay"></div>
       <div class="cf-cat-content">
-        <h3 class="cf-cat-title">Gold<br>Jewellery</h3>
+        <h3 class="cf-cat-title">戒指<br>Rings</h3>
         <span class="cf-zigzag"><svg viewBox="0 0 84 8" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,4 6,1 12,7 18,1 24,7 30,1 36,7 42,1 48,7 54,1 60,7 66,1 72,7 78,1 84,4" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <p class="cf-cat-desc">Fine crafted pieces for your needs.</p>
-        <span class="cf-btn-outline-light">Explore Now</span>
+        <p class="cf-cat-desc">求婚訂婚 · 日常疊戴，嚴選莫桑石戒指</p>
+        <span class="cf-btn-outline-light">探索戒指 →</span>
       </div>
     </a>
-    <a href="{{ routes.root_url }}" class="cf-cat-card">
-      <img src="{{ 'asian-diamond-rings.png' | asset_url }}" alt="Diamond Jewellery" width="832" height="1118" loading="lazy">
+
+    <a href="{{ cat_necklaces.url | default: '/collections/necklaces' }}" class="cf-cat-card">
+      {%- if cat_necklaces.products.first.featured_image -%}
+        <img src="{{ cat_necklaces.products.first.featured_image | image_url: width: 900 }}" alt="項鏈系列" width="832" height="1118" loading="lazy">
+      {%- else -%}
+        <img src="{{ 'asian-gold-necklace.png' | asset_url }}" alt="項鏈系列" width="832" height="1118" loading="lazy">
+      {%- endif -%}
       <div class="cf-cat-overlay"></div>
       <div class="cf-cat-content">
-        <h3 class="cf-cat-title">Diamond<br>Jewellery</h3>
+        <h3 class="cf-cat-title">項鏈<br>Necklaces</h3>
         <span class="cf-zigzag"><svg viewBox="0 0 84 8" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,4 6,1 12,7 18,1 24,7 30,1 36,7 42,1 48,7 54,1 60,7 66,1 72,7 78,1 84,4" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <p class="cf-cat-desc">Fine crafted pieces for your needs.</p>
-        <span class="cf-btn-outline-light">Explore Now</span>
+        <p class="cf-cat-desc">鎖骨鏈 · 吊墜，點亮日常穿搭</p>
+        <span class="cf-btn-outline-light">探索項鏈 →</span>
       </div>
     </a>
-    <a href="{{ routes.root_url }}" class="cf-cat-card">
-      <img src="{{ 'asian-earring.png' | asset_url }}" alt="Platinum Jewellery" width="832" height="1118" loading="lazy">
+
+    <a href="{{ cat_earrings.url | default: '/collections/earrings' }}" class="cf-cat-card">
+      {%- if cat_earrings.products.first.featured_image -%}
+        <img src="{{ cat_earrings.products.first.featured_image | image_url: width: 900 }}" alt="耳飾系列" width="832" height="1118" loading="lazy">
+      {%- else -%}
+        <img src="{{ 'asian-earring.png' | asset_url }}" alt="耳飾系列" width="832" height="1118" loading="lazy">
+      {%- endif -%}
       <div class="cf-cat-overlay"></div>
       <div class="cf-cat-content">
-        <h3 class="cf-cat-title">Platinum<br>Jewellery</h3>
+        <h3 class="cf-cat-title">耳飾<br>Earrings</h3>
         <span class="cf-zigzag"><svg viewBox="0 0 84 8" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,4 6,1 12,7 18,1 24,7 30,1 36,7 42,1 48,7 54,1 60,7 66,1 72,7 78,1 84,4" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <p class="cf-cat-desc">Fine crafted pieces for your needs.</p>
-        <span class="cf-btn-outline-light">Explore Now</span>
+        <p class="cf-cat-desc">耳釘 · 耳扣，細節處見精緻</p>
+        <span class="cf-btn-outline-light">探索耳飾 →</span>
       </div>
     </a>
   </div>
@@ -35,12 +53,12 @@
 
 {% schema %}
 {
-  "name": "材質分類卡",
+  "name": "商品分類卡",
   "tag": "section",
   "settings": [],
   "presets": [
     {
-      "name": "材質分類卡"
+      "name": "商品分類卡"
     }
   ]
 }

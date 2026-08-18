@@ -1,0 +1,214 @@
+<section class="cf-pdp" aria-label="{{ product.title | escape }}">
+  <div class="cf-pdp__inner">
+    <div class="cf-pdp__media">
+      <div class="cf-pdp__main" data-pdp-main>
+        {%- if product.featured_image -%}
+          <img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" width="1200" height="1200" data-pdp-main-img>
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'cf-pdp__placeholder' }}
+        {%- endif -%}
+      </div>
+      {%- if product.media.size > 1 -%}
+        <div class="cf-pdp__thumbs" data-pdp-thumbs>
+          {%- for media in product.media limit: 6 -%}
+            <button type="button" class="cf-pdp__thumb{% if forloop.first %} is-active{% endif %}" data-pdp-thumb="{{ media.preview_image | image_url: width: 1200 }}" aria-label="查看第 {{ forloop.index }} 張圖片">
+              <img src="{{ media.preview_image | image_url: width: 120 }}" alt="{{ media.alt | default: product.title | escape }}" width="120" height="120" loading="lazy">
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="cf-pdp__info">
+      {%- if section.settings.show_vendor and product.vendor != blank -%}
+        <p class="cf-pdp__vendor">{{ product.vendor }}</p>
+      {%- endif -%}
+      <h1 class="cf-pdp__title">{{ product.title }}</h1>
+
+      {%- form 'product', product, id: 'product-form', class: 'cf-pdp__form' -%}
+        {%- assign current_variant = product.selected_or_first_available_variant -%}
+        <div class="cf-pdp__price" data-pdp-price>
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            <span class="cf-pdp__price-sale">{{ current_variant.price | money }}</span>
+            <span class="cf-pdp__price-compare">{{ current_variant.compare_at_price | money }}</span>
+          {%- else -%}
+            <span class="cf-pdp__price-now">{{ current_variant.price | money }}</span>
+          {%- endif -%}
+        </div>
+
+        {%- unless product.has_only_default_variant -%}
+          <div class="cf-pdp__variants">
+            {%- for option in product.options_with_values -%}
+              <fieldset class="cf-pdp__option">
+                <legend class="cf-pdp__option-label">{{ option.name }}</legend>
+                <div class="cf-pdp__option-values">
+                  {%- for value in option.values -%}
+                    <label class="cf-pdp__option-value">
+                      <input type="radio" name="options[{{ option.name | escape }}]" value="{{ value | escape }}"
+                        {% if option.selected_value == value %}checked{% endif %}
+                        data-variant-option data-option-name="{{ option.name | escape }}">
+                      <span>{{ value }}</span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              </fieldset>
+            {%- endfor -%}
+          </div>
+          <select name="id" class="cf-pdp__variant-select" data-variant-id>
+            {%- for variant in product.variants -%}
+              <option value="{{ variant.id }}" {% if variant == current_variant %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
+                {{ variant.title }}{% unless variant.available %}（售罄）{% endunless %}
+              </option>
+            {%- endfor -%}
+          </select>
+        {%- else -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+        {%- endunless -%}
+
+        {%- if section.settings.show_quantity -%}
+          <div class="cf-pdp__qty">
+            <label for="cf-pdp-qty" class="cf-pdp__qty-label">數量</label>
+            <input id="cf-pdp-qty" class="cf-pdp__qty-input" type="number" name="quantity" value="1" min="1">
+          </div>
+        {%- endif -%}
+
+        <button type="submit" name="add" class="cf-pdp__add" {% unless current_variant.available %}disabled{% endunless %}>
+          {%- if current_variant.available -%}加入購物袋{%- else -%}暫時售罄{%- endif -%}
+        </button>
+      {%- endform -%}
+
+      {%- if product.description != blank -%}
+        <div class="cf-pdp__desc">{{ product.description }}</div>
+      {%- endif -%}
+
+      <div class="cf-pdp__trust">
+        <div class="cf-pdp__trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>100% 安全付款</div>
+        <div class="cf-pdp__trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9"/><polyline points="3 3 3 8 8 8"/></svg>48 小時退換保障</div>
+        <div class="cf-pdp__trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/></svg>精美禮盒包裝</div>
+      </div>
+    </div>
+  </div>
+  <script type="application/json" data-variants-json>{{ product.variants | json }}</script>
+</section>
+
+{% schema %}
+{
+  "name": "商品詳情",
+  "tag": "section",
+  "settings": [
+    { "type": "checkbox", "id": "show_vendor", "label": "顯示品牌", "default": true },
+    { "type": "checkbox", "id": "show_quantity", "label": "顯示數量選擇", "default": true },
+    { "type": "select", "id": "media_size", "label": "圖片大小", "options": [{ "value": "small", "label": "小" }, { "value": "medium", "label": "中" }, { "value": "large", "label": "大" }], "default": "medium" }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+:root {
+  --pk-container-max: 1160px;
+  --cf-cream: #f5ebd8;
+  --cf-cream-soft: #faf2e0;
+  --cf-cream-line: rgba(26,26,26,0.12);
+  --cf-text: #1a1a1a;
+  --cf-text-soft: #6b6b6b;
+  --cf-border: #e5ddd5;
+  --cf-gold: #C4A35A;
+  --cf-gold-hover: #A98A45;
+  --pk-font-serif: 'Noto Serif TC', 'Songti TC', serif;
+  --pk-font-sans: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+}
+.cf-pdp { padding: 40px 24px 96px; background: #ffffff; }
+.cf-pdp__inner { max-width: var(--pk-container-max); margin: 0 auto; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 64px; align-items: start; }
+.cf-pdp__media { position: sticky; top: 96px; }
+.cf-pdp__main { aspect-ratio: 1/1; overflow: hidden; border-radius: 10px; background: var(--cf-cream-soft); }
+.cf-pdp__main img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cf-pdp__placeholder { width: 100%; height: 100%; }
+.cf-pdp__thumbs { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.cf-pdp__thumb { width: 72px; height: 72px; border-radius: 6px; overflow: hidden; border: 2px solid transparent; padding: 0; cursor: pointer; background: var(--cf-cream-soft); }
+.cf-pdp__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cf-pdp__thumb.is-active { border-color: var(--cf-gold); }
+.cf-pdp__info { }
+.cf-pdp__vendor { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--cf-gold); font-weight: 600; margin: 0 0 10px; }
+.cf-pdp__title { font-family: var(--pk-font-serif); font-size: 34px; font-weight: 600; margin: 0 0 16px; color: var(--cf-text); line-height: 1.2; letter-spacing: -0.01em; }
+.cf-pdp__price { display: flex; align-items: baseline; gap: 12px; margin-bottom: 28px; }
+.cf-pdp__price-now, .cf-pdp__price-sale { font-size: 26px; font-weight: 600; color: var(--cf-text); }
+.cf-pdp__price-sale { color: var(--cf-gold); }
+.cf-pdp__price-compare { font-size: 16px; color: var(--cf-text-soft); text-decoration: line-through; }
+.cf-pdp__option { border: none; padding: 0; margin: 0 0 18px; }
+.cf-pdp__option-label { font-size: 13px; font-weight: 600; color: var(--cf-text); margin-bottom: 10px; padding: 0; }
+.cf-pdp__option-values { display: flex; flex-wrap: wrap; gap: 8px; }
+.cf-pdp__option-value input { position: absolute; opacity: 0; pointer-events: none; }
+.cf-pdp__option-value span { display: inline-flex; align-items: center; padding: 9px 16px; border: 1px solid var(--cf-border); border-radius: 999px; font-size: 13px; cursor: pointer; transition: border-color .2s ease, background .2s ease; }
+.cf-pdp__option-value input:checked + span { border-color: var(--cf-gold); background: var(--cf-cream-soft); color: var(--cf-text); font-weight: 500; }
+.cf-pdp__variant-select { display: none; }
+.cf-pdp__qty { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
+.cf-pdp__qty-label { font-size: 13px; color: var(--cf-text-soft); }
+.cf-pdp__qty-input { width: 72px; border: 1px solid var(--cf-border); border-radius: 6px; padding: 10px 12px; font-size: 14px; text-align: center; }
+.cf-pdp__add { display: block; width: 100%; background: var(--cf-gold); color: #fff; border: none; border-radius: 999px; padding: 16px 32px; font-size: 15px; font-weight: 600; letter-spacing: .04em; cursor: pointer; transition: background .2s ease, transform .2s ease; }
+.cf-pdp__add:hover { background: var(--cf-gold-hover); transform: translateY(-1px); }
+.cf-pdp__add:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.cf-pdp__desc { margin: 32px 0; padding-top: 24px; border-top: 1px solid var(--cf-cream-line); font-size: 14px; line-height: 1.8; color: var(--cf-text-soft); }
+.cf-pdp__desc h2, .cf-pdp__desc h3 { font-family: var(--pk-font-serif); color: var(--cf-text); margin: 18px 0 10px; }
+.cf-pdp__desc ul { padding-left: 20px; }
+.cf-pdp__trust { display: flex; gap: 20px; flex-wrap: wrap; border-top: 1px solid var(--cf-cream-line); padding-top: 20px; }
+.cf-pdp__trust-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--cf-text-soft); }
+.cf-pdp__trust-item svg { width: 18px; height: 18px; color: var(--cf-gold); flex-shrink: 0; }
+@media (max-width: 900px) {
+  .cf-pdp__inner { grid-template-columns: 1fr; gap: 36px; }
+  .cf-pdp__media { position: static; }
+  .cf-pdp__title { font-size: 26px; }
+}
+{% endstylesheet %}
+
+{% javascript %}
+(function () {
+  var jsonEl = document.querySelector('[data-variants-json]');
+  var VARIANTS = jsonEl ? JSON.parse(jsonEl.textContent) : [];
+  var main = document.querySelector('[data-pdp-main-img]');
+  var thumbs = document.querySelectorAll('[data-pdp-thumb]');
+  if (!main || !thumbs.length) return;
+  thumbs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      main.src = t.getAttribute('data-pdp-thumb');
+      thumbs.forEach(function (x) { x.classList.remove('is-active'); });
+      t.classList.add('is-active');
+    });
+  });
+  var radios = document.querySelectorAll('[data-variant-option]');
+  var hidden = document.querySelector('[data-variant-id]');
+  if (radios.length && hidden) {
+    radios.forEach(function (r) {
+      r.addEventListener('change', function () {
+        var selected = {};
+        document.querySelectorAll('[data-variant-option]:checked').forEach(function (x) {
+          selected[x.getAttribute('data-option-name')] = x.value;
+        });
+        var variant = null;
+        VARIANTS.forEach(function (v) {
+          var match = true;
+          Object.keys(selected).forEach(function (opt) {
+            if (v.options[Object.keys(selected).indexOf(opt)] !== selected[opt]) match = false;
+          });
+          if (match && !variant) variant = v;
+        });
+        if (!variant) return;
+        hidden.value = variant.id;
+        var priceWrap = document.querySelector('[data-pdp-price]');
+        if (priceWrap) {
+          var fmt = function (c) { return (c / 100).toLocaleString('en-HK', { style: 'currency', currency: 'HKD' }); };
+          if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+            priceWrap.innerHTML = '<span class="cf-pdp__price-sale">' + fmt(variant.price) + '</span><span class="cf-pdp__price-compare">' + fmt(variant.compare_at_price) + '</span>';
+          } else {
+            priceWrap.innerHTML = '<span class="cf-pdp__price-now">' + fmt(variant.price) + '</span>';
+          }
+        }
+        var add = document.querySelector('.cf-pdp__add');
+        if (add) {
+          add.disabled = !variant.available;
+          add.textContent = variant.available ? '加入購物袋' : '暫時售罄';
+        }
+      });
+    });
+  }
+})();
+{% endjavascript %}

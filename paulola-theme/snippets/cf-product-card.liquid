@@ -1,0 +1,80 @@
+{%- liquid
+  assign tag_str = product.tags | join: ',' | downcase
+  assign series = ''
+  if tag_str contains 'moissanite'
+    assign series = 'moissanite'
+  elsif tag_str contains 'zircon'
+    assign series = 'zircon'
+  endif
+  assign primary_alt = product.featured_image.alt | default: product.title
+  assign has_sale = false
+  if product.compare_at_price != blank and product.compare_at_price > product.price
+    assign has_sale = true
+    assign discount = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round
+  endif
+-%}
+<a href="{{ product.url }}" class="cf-pcard" data-type="{{ product.type | escape }}" data-series="{{ series }}">
+  <div class="cf-pcard__media">
+    {%- if product.featured_image -%}
+      <img class="cf-pcard__img cf-pcard__img--primary" src="{{ product.featured_image | image_url: width: 720 }}" alt="{{ primary_alt | escape }}" width="720" height="720" loading="lazy">
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'cf-pcard__placeholder' }}
+    {%- endif -%}
+    {%- if product.media[1] != null and show_secondary -%}
+      <img class="cf-pcard__img cf-pcard__img--secondary" src="{{ product.media[1] | image_url: width: 720 }}" alt="{{ product.media[1].alt | default: product.title | escape }}" width="720" height="720" loading="lazy">
+    {%- endif -%}
+    {%- if series == 'moissanite' -%}
+      <span class="cf-pcard__tag cf-pcard__tag--moissanite">莫桑石</span>
+    {%- elsif series == 'zircon' -%}
+      <span class="cf-pcard__tag cf-pcard__tag--zircon">鋯石</span>
+    {%- endif -%}
+    {%- if product.available == false -%}
+      <span class="cf-pcard__badge cf-pcard__badge--soldout">售罄</span>
+    {%- elsif has_sale -%}
+      <span class="cf-pcard__badge cf-pcard__badge--sale">SALE</span>
+    {%- endif -%}
+  </div>
+  <div class="cf-pcard__info">
+    <h3 class="cf-pcard__name">{{ product.title }}</h3>
+    <div class="cf-pcard__price-wrap">
+      {%- if has_sale -%}
+        <span class="cf-pcard__price cf-pcard__price--sale">{{ product.price | money_without_trailing_zeros }}</span>
+        <span class="cf-pcard__price cf-pcard__price--compare">{{ product.compare_at_price | money_without_trailing_zeros }}</span>
+        <span class="cf-pcard__discount">-{{ discount }}%</span>
+      {%- else -%}
+        <span class="cf-pcard__price">{{ product.price | money_without_trailing_zeros }}</span>
+      {%- endif -%}
+    </div>
+    {%- unless product.available -%}
+      <div class="cf-pcard__soldout">售罄</div>
+    {%- endunless -%}
+  </div>
+</a>
+
+{% stylesheet %}
+.cf-pcard { display: block; text-decoration: none; color: inherit; transition: transform .25s ease; }
+.cf-pcard:hover { transform: translateY(-4px); }
+.cf-pcard__media { position: relative; aspect-ratio: 1/1; overflow: hidden; background: var(--cf-cream-soft); border-radius: 8px; }
+.cf-pcard__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .5s ease, transform .5s ease; }
+.cf-pcard__img--secondary { opacity: 0; }
+.cf-pcard:hover .cf-pcard__img--primary { transform: scale(1.05); }
+.cf-pcard:hover .cf-pcard__img--secondary { opacity: 1; }
+.cf-pcard__placeholder { width: 100%; height: 100%; }
+.cf-pcard__tag { position: absolute; top: 12px; left: 12px; font-size: 11px; font-weight: 600; letter-spacing: .06em; padding: 5px 10px; border-radius: 999px; z-index: 2; }
+.cf-pcard__tag--moissanite { background: var(--cf-gold); color: #fff; }
+.cf-pcard__tag--zircon { background: rgba(90, 110, 140, .85); color: #fff; }
+.cf-pcard__badge { position: absolute; top: 12px; right: 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; padding: 5px 10px; border-radius: 4px; z-index: 2; }
+.cf-pcard__badge--sale { background: var(--cf-text); color: #fff; }
+.cf-pcard__badge--soldout { background: rgba(140, 140, 140, .9); color: #fff; }
+.cf-pcard__info { padding: 14px 4px 0; }
+.cf-pcard__name { font-size: 14px; font-weight: 500; color: var(--cf-text); margin: 0 0 6px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 39px; }
+.cf-pcard__price-wrap { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.cf-pcard__price { font-size: 15px; font-weight: 600; color: var(--cf-text); }
+.cf-pcard__price--sale { color: var(--cf-gold); }
+.cf-pcard__price--compare { font-size: 13px; font-weight: 400; color: var(--cf-text-soft); text-decoration: line-through; }
+.cf-pcard__discount { font-size: 12px; font-weight: 600; color: #c0392b; }
+.cf-pcard__soldout { font-size: 11px; color: var(--cf-text-soft); margin-top: 4px; }
+@media (max-width: 768px) {
+  .cf-pcard__name { font-size: 13px; min-height: 36px; }
+}
+{% endstylesheet %}

@@ -1,0 +1,27 @@
+<nav class="cf-pdp-breadcrumb" aria-label="麵包屑">
+  <div class="cf-pdp-breadcrumb__inner">
+    <a href="{{ routes.root_url }}">首頁</a>
+    <span class="cf-pdp-breadcrumb__sep">/</span>
+    {%- if collection != blank -%}
+      <a href="{{ collection.url }}">{{ collection.title }}</a>
+      <span class="cf-pdp-breadcrumb__sep">/</span>
+    {%- endif -%}
+    <span>{{ product.title }}</span>
+  </div>
+</nav>
+
+{% schema %}
+{
+  "name": "麵包屑",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}
+
+{% stylesheet %}
+.cf-pdp-breadcrumb { background: #ffffff; padding: 20px 24px 0; }
+.cf-pdp-breadcrumb__inner { max-width: var(--pk-container-max); margin: 0 auto; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--cf-text-soft); flex-wrap: wrap; }
+.cf-pdp-breadcrumb a { color: var(--cf-text-soft); text-decoration: none; }
+.cf-pdp-breadcrumb a:hover { color: var(--cf-text); }
+.cf-pdp-breadcrumb__sep { opacity: .5; }
+{% endstylesheet %}

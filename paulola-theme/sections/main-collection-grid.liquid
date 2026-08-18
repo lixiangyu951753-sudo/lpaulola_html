@@ -1,67 +1,122 @@
 {%- liquid
   assign per_page = section.settings.products_per_page | default: 12
   assign total_count = collection.products_count
+  assign crumb_text = collection.title | default: '全部商品'
+  assign cur_sort = collection.sort_by | default: 'manual'
 -%}
-<section class="cf-collection" aria-label="{{ collection.title | escape }}">
-  <div class="pk-container-inner">
-    <header class="cf-collection-head">
-      <div>
-        <h1 class="cf-collection-title">{{ collection.title | default: '全部商品' }}</h1>
-        {%- if total_count > 0 -%}
-          <p class="cf-collection-count">{{ total_count }} 件商品</p>
-        {%- endif -%}
+<section class="cf-market" id="products" aria-label="{{ crumb_text | escape }}">
+  <div class="cf-market__inner">
+
+    {%- comment -%} 面包屑 {%- endcomment -%}
+    <nav class="cf-breadcrumb" aria-label="麵包屑">
+      <a href="{{ routes.root_url }}">首頁</a>
+      <span class="cf-breadcrumb__sep">/</span>
+      <span>{{ crumb_text | escape }}</span>
+    </nav>
+
+    {%- comment -%} 大标题 {%- endcomment -%}
+    <h1 class="cf-market__title">{{ crumb_text | escape }}</h1>
+
+    {%- comment -%} 筛选下拉组 {%- endcomment -%}
+    <div class="cf-filters">
+      <select class="cf-filter-select" aria-label="依類別" data-filter-select>
+        <option value="">依類別</option>
+        <option value="/collections/all" {% if collection.handle == 'all' %}selected{% endif %}>全部</option>
+        <option value="/collections/rings" {% if collection.handle == 'rings' %}selected{% endif %}>戒指</option>
+        <option value="/collections/necklaces" {% if collection.handle == 'necklaces' %}selected{% endif %}>項鏈</option>
+        <option value="/collections/earrings" {% if collection.handle == 'earrings' %}selected{% endif %}>耳飾</option>
+        <option value="/collections/bracelets" {% if collection.handle == 'bracelets' %}selected{% endif %}>手鏈</option>
+      </select>
+      <select class="cf-filter-select" aria-label="依材質" data-filter-select>
+        <option value="">依材質</option>
+        <option value="/collections/material-s925" {% if collection.handle == 'material-s925' %}selected{% endif %}>S925純銀</option>
+        <option value="/collections/moissanite" {% if collection.handle == 'moissanite' %}selected{% endif %}>莫桑石</option>
+        <option value="/collections/zircon" {% if collection.handle == 'zircon' %}selected{% endif %}>鋯石</option>
+      </select>
+      <select class="cf-filter-select" aria-label="依形狀" data-filter-select>
+        <option value="">依形狀</option>
+        <option value="/collections/shape-round" {% if collection.handle == 'shape-round' %}selected{% endif %}>圓形</option>
+        <option value="/collections/shape-heart" {% if collection.handle == 'shape-heart' %}selected{% endif %}>心形</option>
+        <option value="/collections/shape-pear" {% if collection.handle == 'shape-pear' %}selected{% endif %}>水滴</option>
+        <option value="/collections/shape-oval" {% if collection.handle == 'shape-oval' %}selected{% endif %}>橢圓</option>
+        <option value="/collections/shape-marquise" {% if collection.handle == 'shape-marquise' %}selected{% endif %}>馬眼</option>
+        <option value="/collections/shape-princess" {% if collection.handle == 'shape-princess' %}selected{% endif %}>公主方</option>
+      </select>
+      <select class="cf-filter-select" aria-label="依顏色" data-filter-select>
+        <option value="">依顏色</option>
+        <option value="/collections/color-white" {% if collection.handle == 'color-white' %}selected{% endif %}>白鑽</option>
+        <option value="/collections/color-blue" {% if collection.handle == 'color-blue' %}selected{% endif %}>藍鑽</option>
+        <option value="/collections/color-yellow" {% if collection.handle == 'color-yellow' %}selected{% endif %}>黃鑽</option>
+        <option value="/collections/color-pink" {% if collection.handle == 'color-pink' %}selected{% endif %}>粉鑽</option>
+        <option value="/collections/color-red" {% if collection.handle == 'color-red' %}selected{% endif %}>紅鑽</option>
+        <option value="/collections/color-green" {% if collection.handle == 'color-green' %}selected{% endif %}>綠鑽</option>
+        <option value="/collections/color-purple" {% if collection.handle == 'color-purple' %}selected{% endif %}>紫鑽</option>
+        <option value="/collections/color-champagne" {% if collection.handle == 'color-champagne' %}selected{% endif %}>香檳鑽</option>
+        <option value="/collections/color-multicolor" {% if collection.handle == 'color-multicolor' %}selected{% endif %}>彩色鑽</option>
+      </select>
+    </div>
+
+    {%- comment -%} 网格标题 + 数量 + 排序 {%- endcomment -%}
+    <div class="cf-market__grid-head">
+      <h2 class="cf-market__grid-title">{{ section.settings.grid_title | default: '全部商品' }}{% if total_count > 0 %} <span class="cf-market__count">({{ total_count }})</span>{% endif %}</h2>
+      <div class="cf-sort">
+        <label class="cf-sort__label" for="cf-sort">排序</label>
+        <select id="cf-sort" class="cf-sort__select" name="sort_by" data-sort-select>
+          <option value="manual" {% if cur_sort == 'manual' %}selected{% endif %}>綜合排序</option>
+          <option value="best-selling" {% if cur_sort == 'best-selling' %}selected{% endif %}>熱銷優先</option>
+          <option value="created-descending" {% if cur_sort == 'created-descending' %}selected{% endif %}>最新上架</option>
+          <option value="price-ascending" {% if cur_sort == 'price-ascending' %}selected{% endif %}>價格：低至高</option>
+          <option value="price-descending" {% if cur_sort == 'price-descending' %}selected{% endif %}>價格：高至低</option>
+        </select>
       </div>
-      {%- if section.settings.show_sort -%}
-        <form class="cf-collection-sort" method="get" action="{{ collection.url }}">
-          <label for="cf-sort" class="cf-collection-sort-label">排序</label>
-          <select id="cf-sort" name="sort_by" class="cf-collection-sort-select" onchange="this.form.submit()">
-            {%- assign cur = collection.sort_by | default: collection.default_sort_by -%}
-            <option value="manual" {% if cur == 'manual' %}selected{% endif %}>綜合排序</option>
-            <option value="best-selling" {% if cur == 'best-selling' %}selected{% endif %}>熱銷優先</option>
-            <option value="created-descending" {% if cur == 'created-descending' %}selected{% endif %}>最新上架</option>
-            <option value="price-ascending" {% if cur == 'price-ascending' %}selected{% endif %}>價格：低至高</option>
-            <option value="price-descending" {% if cur == 'price-descending' %}selected{% endif %}>價格：高至低</option>
-          </select>
-        </form>
-      {%- endif -%}
-    </header>
+    </div>
 
     {%- if total_count > 0 -%}
       {%- paginate collection.products by per_page -%}
-        <div class="cf-prod-grid cf-collection-grid">
+        <div class="cf-market__grid">
           {%- for product in collection.products -%}
-            <a href="{{ product.url }}" class="cf-prod-card">
-              <div class="cf-prod-img">
-                {%- if product.compare_at_price != blank and product.compare_at_price > product.price -%}
-                  <span class="cf-prod-sale">SALE</span>
-                {%- endif -%}
-                {%- if product.featured_media -%}
-                  <img src="{{ product.featured_media | image_url: width: 600 }}" alt="{{ product.title | escape }}" width="600" height="600" loading="lazy">
-                {%- endif -%}
-              </div>
-              <div class="cf-prod-body">
-                <p class="cf-prod-name">{{ product.title }}</p>
-                <p class="cf-prod-price">{{ product.price | money }}</p>
-              </div>
-            </a>
+            {%- render 'cf-product-card', product: product, show_secondary: section.settings.show_secondary_image -%}
           {%- endfor -%}
         </div>
 
         {%- if paginate.pages > 1 -%}
           <nav class="cf-pagination" role="navigation" aria-label="分頁">
-            {%- if paginate.previous -%}
-              <a class="cf-pagination-btn" href="{{ paginate.previous.url }}" rel="prev" aria-label="上一頁">&lsaquo;</a>
-            {%- endif -%}
-            <span class="cf-pagination-info">第 {{ paginate.current_page }} / {{ paginate.pages }} 頁</span>
-            {%- if paginate.next -%}
-              <a class="cf-pagination-btn" href="{{ paginate.next.url }}" rel="next" aria-label="下一頁">&rsaquo;</a>
-            {%- endif -%}
+            <div class="cf-pagination__inner">
+              {%- if paginate.previous -%}
+                <a class="cf-pagination__btn cf-pagination__btn--arrow" href="{{ paginate.previous.url }}#products" rel="prev" aria-label="上一頁">&lsaquo;</a>
+              {%- else -%}
+                <span class="cf-pagination__btn cf-pagination__btn--arrow cf-pagination__btn--disabled">&lsaquo;</span>
+              {%- endif -%}
+              <div class="cf-pagination__pages">
+                {%- for part in paginate.parts -%}
+                  {%- if part.is_link -%}
+                    <a class="cf-pagination__num" href="{{ part.url }}#products">{{ part.title }}</a>
+                  {%- elsif part.title == '&hellip;' -%}
+                    <span class="cf-pagination__num cf-pagination__num--ellipsis" aria-hidden="true">&hellip;</span>
+                  {%- else -%}
+                    <span class="cf-pagination__num cf-pagination__num--current" aria-current="page">{{ part.title }}</span>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              {%- if paginate.next -%}
+                <a class="cf-pagination__btn cf-pagination__btn--arrow" href="{{ paginate.next.url }}#products" rel="next" aria-label="下一頁">&rsaquo;</a>
+              {%- else -%}
+                <span class="cf-pagination__btn cf-pagination__btn--arrow cf-pagination__btn--disabled">&rsaquo;</span>
+              {%- endif -%}
+            </div>
+            <div class="cf-pagination__jump">
+              <span>跳至</span>
+              <input class="cf-pagination__jump-input" type="number" min="1" max="{{ paginate.pages }}" placeholder="{{ paginate.current_page }}" aria-label="跳轉頁碼" data-jump-input>
+              <span>頁</span>
+              <button type="button" class="cf-pagination__jump-btn" data-jump-btn>跳轉</button>
+            </div>
           </nav>
         {%- endif -%}
       {%- endpaginate -%}
     {%- else -%}
-      <p class="cf-empty">此分類暫無商品。</p>
+      <p class="cf-market__empty">{{ section.settings.empty_text | default: '此分類暫無商品。' }}</p>
     {%- endif -%}
+
   </div>
 </section>
 
@@ -70,8 +125,13 @@
   "name": "集合商品列表",
   "tag": "section",
   "settings": [
+    { "type": "header", "content": "商品來源" },
+    { "type": "checkbox", "id": "show_secondary_image", "label": "鼠標懸停顯示第二張圖", "default": true },
     { "type": "range", "id": "products_per_page", "label": "每頁顯示數量", "min": 4, "max": 48, "step": 4, "default": 12 },
-    { "type": "checkbox", "id": "show_sort", "label": "顯示排序", "default": true }
+    { "type": "header", "content": "標題" },
+    { "type": "text", "id": "grid_title", "label": "網格標題", "default": "全部商品" },
+    { "type": "header", "content": "空狀態" },
+    { "type": "text", "id": "empty_text", "label": "無商品提示", "default": "此分類暫無商品。" }
   ]
 }
 {% endschema %}
@@ -86,25 +146,79 @@
   --cf-text: #1a1a1a;
   --cf-text-soft: #6b6b6b;
   --cf-border: #e5ddd5;
+  --cf-gold: #C4A35A;
   --pk-font-serif: 'Noto Serif TC', 'Songti TC', serif;
   --pk-font-sans: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
 }
-.cf-collection { padding: 48px 24px 96px; background: var(--pk-background); }
-.cf-collection .pk-container-inner { max-width: var(--pk-container-max); margin: 0 auto; }
-.cf-collection-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 40px; flex-wrap: wrap; }
-.cf-collection-title { font-family: var(--pk-font-serif); font-size: 34px; font-weight: 600; margin: 0 0 6px; color: var(--cf-text); letter-spacing: -0.01em; }
-.cf-collection-count { font-size: 13px; color: var(--cf-text-soft); margin: 0; letter-spacing: 0.1em; text-transform: uppercase; }
-.cf-collection-sort { display: flex; align-items: center; gap: 10px; }
-.cf-collection-sort-label { font-size: 13px; color: var(--cf-text-soft); }
-.cf-collection-sort-select { font-family: var(--pk-font-sans); font-size: 13px; color: var(--cf-text); background: #fff; border: 1px solid var(--cf-border); border-radius: 6px; padding: 9px 12px; cursor: pointer; }
-.cf-collection-grid { margin-top: 0; }
-.cf-pagination { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 48px; }
-.cf-pagination-btn { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--cf-border); border-radius: 6px; color: var(--cf-text); font-size: 18px; text-decoration: none; transition: background .2s ease, border-color .2s ease; }
-.cf-pagination-btn:hover { background: var(--cf-cream); border-color: var(--cf-text); }
-.cf-pagination-info { font-size: 13px; color: var(--cf-text-soft); }
+.cf-market { padding: 32px 24px 96px; background: var(--pk-background); }
+.cf-market__inner { max-width: var(--pk-container-max); margin: 0 auto; }
+.cf-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--cf-text-soft); margin-bottom: 14px; }
+.cf-breadcrumb a { color: var(--cf-text-soft); text-decoration: none; }
+.cf-breadcrumb a:hover { color: var(--cf-text); }
+.cf-breadcrumb__sep { opacity: .5; }
+.cf-market__title { font-family: var(--pk-font-serif); font-size: 40px; font-weight: 600; margin: 0 0 28px; color: var(--cf-text); letter-spacing: -0.01em; }
+.cf-filters { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; }
+.cf-filter-select { font-family: var(--pk-font-sans); font-size: 13px; color: var(--cf-text); background: var(--cf-cream-soft); border: 1px solid var(--cf-border); border-radius: 999px; padding: 10px 16px; cursor: pointer; transition: border-color .2s ease; }
+.cf-filter-select:hover { border-color: var(--cf-gold); }
+.cf-market__grid-head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin-bottom: 28px; flex-wrap: wrap; border-bottom: 1px solid var(--cf-cream-line); padding-bottom: 16px; }
+.cf-market__grid-title { font-family: var(--pk-font-serif); font-size: 22px; font-weight: 600; margin: 0; color: var(--cf-text); }
+.cf-market__count { font-size: 14px; color: var(--cf-text-soft); font-weight: 400; margin-left: 4px; }
+.cf-sort { display: flex; align-items: center; gap: 10px; }
+.cf-sort__label { font-size: 13px; color: var(--cf-text-soft); }
+.cf-sort__select { font-family: var(--pk-font-sans); font-size: 13px; color: var(--cf-text); background: #fff; border: 1px solid var(--cf-border); border-radius: 6px; padding: 9px 12px; cursor: pointer; }
+.cf-market__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+.cf-pagination { margin-top: 48px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.cf-pagination__inner { display: flex; align-items: center; gap: 10px; }
+.cf-pagination__btn, .cf-pagination__num { display: inline-flex; align-items: center; justify-content: center; min-width: 38px; height: 38px; border: 1px solid var(--cf-border); border-radius: 6px; color: var(--cf-text); font-size: 14px; text-decoration: none; transition: border-color .2s ease, background .2s ease; }
+.cf-pagination__btn:hover, .cf-pagination__num:hover { border-color: var(--cf-gold); background: var(--cf-cream-soft); }
+.cf-pagination__btn--disabled { opacity: .35; pointer-events: none; }
+.cf-pagination__num--current { background: var(--cf-gold); border-color: var(--cf-gold); color: #fff; font-weight: 600; }
+.cf-pagination__num--ellipsis { border: none; }
+.cf-pagination__jump { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--cf-text-soft); }
+.cf-pagination__jump-input { width: 56px; border: 1px solid var(--cf-border); border-radius: 6px; padding: 7px 10px; font-size: 13px; text-align: center; }
+.cf-pagination__jump-btn { border: 1px solid var(--cf-text); background: transparent; color: var(--cf-text); border-radius: 6px; padding: 7px 14px; font-size: 13px; cursor: pointer; transition: background .2s ease, color .2s ease; }
+.cf-pagination__jump-btn:hover { background: var(--cf-text); color: #fff; }
+.cf-market__empty { text-align: center; color: var(--cf-text-soft); font-size: 14px; padding: 48px 0; }
+@media (max-width: 1024px) {
+  .cf-market__grid { grid-template-columns: repeat(3, 1fr); }
+}
 @media (max-width: 768px) {
-  .cf-collection { padding: 32px 16px 64px; }
-  .cf-collection-title { font-size: 26px; }
-  .cf-collection-head { margin-bottom: 28px; }
+  .cf-market { padding: 24px 16px 64px; }
+  .cf-market__title { font-size: 30px; margin-bottom: 20px; }
+  .cf-market__grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .cf-filter-select { font-size: 12px; padding: 8px 12px; }
 }
 {% endstylesheet %}
+
+{% javascript %}
+(function () {
+  var root = document.querySelector('.cf-market');
+  if (!root) return;
+  root.querySelectorAll('[data-filter-select]').forEach(function (sel) {
+    sel.addEventListener('change', function () {
+      if (sel.value) window.location.href = sel.value;
+    });
+  });
+  var sort = root.querySelector('[data-sort-select]');
+  if (sort) {
+    sort.addEventListener('change', function () {
+      var url = new URL(window.location.href);
+      url.searchParams.set('sort_by', sort.value);
+      window.location.href = url.toString() + '#products';
+    });
+  }
+  var jumpInput = root.querySelector('[data-jump-input]');
+  var jumpBtn = root.querySelector('[data-jump-btn]');
+  if (jumpInput && jumpBtn) {
+    function jump() {
+      var p = parseInt(jumpInput.value, 10);
+      if (!p || p < 1) return;
+      var url = new URL(window.location.href);
+      url.searchParams.set('page', p);
+      window.location.href = url.toString() + '#products';
+    }
+    jumpBtn.addEventListener('click', jump);
+    jumpInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); jump(); } });
+  }
+})();
+{% endjavascript %}
