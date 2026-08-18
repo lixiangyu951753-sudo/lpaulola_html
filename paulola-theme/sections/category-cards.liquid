@@ -5,11 +5,7 @@
     {%- assign cat_earrings = collections['earrings'] -%}
 
     <a href="{{ cat_rings.url | default: '/collections/rings' }}" class="cf-cat-card">
-      {%- if cat_rings.products.first.featured_image -%}
-        <img src="{{ cat_rings.products.first.featured_image | image_url: width: 900 }}" alt="戒指系列" width="832" height="1118" loading="lazy">
-      {%- else -%}
-        <img src="{{ 'asian-diamond-rings.png' | asset_url }}" alt="戒指系列" width="832" height="1118" loading="lazy">
-      {%- endif -%}
+      <img src="{{ 'asian-diamond-rings.png' | asset_url }}" alt="戒指系列" width="832" height="1118" loading="lazy">
       <div class="cf-cat-overlay"></div>
       <div class="cf-cat-content">
         <h3 class="cf-cat-title">戒指<br>Rings</h3>
@@ -20,11 +16,7 @@
     </a>
 
     <a href="{{ cat_necklaces.url | default: '/collections/necklaces' }}" class="cf-cat-card">
-      {%- if cat_necklaces.products.first.featured_image -%}
-        <img src="{{ cat_necklaces.products.first.featured_image | image_url: width: 900 }}" alt="項鏈系列" width="832" height="1118" loading="lazy">
-      {%- else -%}
-        <img src="{{ 'asian-gold-necklace.png' | asset_url }}" alt="項鏈系列" width="832" height="1118" loading="lazy">
-      {%- endif -%}
+      <img src="{{ 'asian-gold-necklace.png' | asset_url }}" alt="項鏈系列" width="832" height="1118" loading="lazy">
       <div class="cf-cat-overlay"></div>
       <div class="cf-cat-content">
         <h3 class="cf-cat-title">項鏈<br>Necklaces</h3>
@@ -35,11 +27,7 @@
     </a>
 
     <a href="{{ cat_earrings.url | default: '/collections/earrings' }}" class="cf-cat-card">
-      {%- if cat_earrings.products.first.featured_image -%}
-        <img src="{{ cat_earrings.products.first.featured_image | image_url: width: 900 }}" alt="耳飾系列" width="832" height="1118" loading="lazy">
-      {%- else -%}
-        <img src="{{ 'asian-earring.png' | asset_url }}" alt="耳飾系列" width="832" height="1118" loading="lazy">
-      {%- endif -%}
+      <img src="{{ 'asian-earring.png' | asset_url }}" alt="耳飾系列" width="832" height="1118" loading="lazy">
       <div class="cf-cat-overlay"></div>
       <div class="cf-cat-content">
         <h3 class="cf-cat-title">耳飾<br>Earrings</h3>
