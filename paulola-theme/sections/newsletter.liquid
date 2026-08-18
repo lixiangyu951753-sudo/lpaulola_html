@@ -1,0 +1,33 @@
+<section class="cf-newsletter" aria-label="訂閱電子報">
+  <h2>加入寶洛拉會員</h2>
+  <p>搶先獲得最新產品資訊與專屬優惠</p>
+  {% comment %} 可升級為 Shopify 訂閱表單：{% form 'customer' %} ... {% endform %} {% endcomment %}
+  <form class="cf-newsletter-form" onsubmit="return false;">
+    <input type="email" placeholder="請輸入您的電子信箱" aria-label="電子信箱">
+    <button type="submit">訂閱</button>
+  </form>
+</section>
+
+{% schema %}
+{
+  "name": "訂閱電子報",
+  "tag": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "訂閱電子報"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+.cf-newsletter { padding: 88px 24px; background: var(--cf-cream); text-align: center; }
+.cf-newsletter h2 { font-family: var(--pk-font-serif); font-size: 30px; font-weight: 600; margin: 0 0 12px; color: var(--cf-text); letter-spacing: -0.01em; }
+.cf-newsletter p { color: var(--cf-text-soft); font-size: 14px; margin: 0 0 32px; }
+.cf-newsletter-form { display: flex; max-width: 480px; margin: 0 auto; gap: 0; border: 1px solid var(--cf-text); border-radius: 0; overflow: hidden; }
+.cf-newsletter-form input { flex: 1; padding: 14px 20px; border: none; background: transparent; color: var(--cf-text); font-size: 14px; outline: none; font-family: var(--pk-font-sans); }
+.cf-newsletter-form input::placeholder { color: var(--cf-text-soft); }
+.cf-newsletter-form button { padding: 14px 32px; background: var(--cf-text); color: #fff; border: none; font-size: 14px; font-weight: 500; cursor: pointer; transition: background .2s ease; font-family: var(--pk-font-sans); }
+.cf-newsletter-form button:hover { background: #333; }
+{% endstylesheet %}

@@ -1,0 +1,60 @@
+<section class="cf-icons" aria-label="產品分類">
+  <div class="cf-icon-row">
+    <a href="{{ routes.root_url }}" class="cf-icon-item">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="14" r="6"/><path d="M14 14 C14 14 16 26 22 32 L26 36 L22 40"/><path d="M34 14 C34 14 32 26 26 32"/><circle cx="24" cy="40" r="3"/></svg>
+      <span class="cf-icon-label">Pendants</span>
+    </a>
+    <a href="{{ routes.root_url }}" class="cf-icon-item">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 10 L14 22"/><circle cx="14" cy="28" r="5"/><path d="M34 10 L34 22"/><circle cx="34" cy="28" r="5"/><circle cx="14" cy="8" r="2"/><circle cx="34" cy="8" r="2"/></svg>
+      <span class="cf-icon-label">Earrings</span>
+    </a>
+    <a href="{{ routes.root_url }}" class="cf-icon-item">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><polygon points="24,6 38,16 38,32 24,42 10,32 10,16"/><line x1="10" y1="16" x2="38" y2="16"/><line x1="24" y1="6" x2="24" y2="42"/></svg>
+      <span class="cf-icon-label">Gem &amp; stones</span>
+    </a>
+    <a href="{{ routes.root_url }}" class="cf-icon-item">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="13"/><circle cx="24" cy="11" r="3"/></svg>
+      <span class="cf-icon-label">Rings</span>
+    </a>
+    <a href="{{ routes.root_url }}" class="cf-icon-item">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="24" rx="14" ry="18"/><ellipse cx="24" cy="14" rx="14" ry="3"/></svg>
+      <span class="cf-icon-label">Bracelets</span>
+    </a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "產品分類圖標列",
+  "tag": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "產品分類圖標列"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+:root {
+  --pk-container-max: 1160px;
+  --pk-background: #FFFFFF;
+  --cf-cream: #f5ebd8;
+  --cf-cream-soft: #faf2e0;
+  --cf-cream-line: rgba(26,26,26,0.12);
+  --cf-text: #1a1a1a;
+  --cf-text-soft: #6b6b6b;
+}
+.cf-icons { padding: 56px 24px; background: var(--pk-background); }
+.cf-icon-row { max-width: 920px; margin: 0 auto; display: flex; justify-content: space-between; gap: 16px; }
+.cf-icon-item { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 8px 12px; color: var(--cf-text); text-decoration: none; transition: opacity .2s ease; flex: 1; }
+.cf-icon-item:hover { opacity: .65; }
+.cf-icon-item svg { width: 44px; height: 44px; stroke: var(--cf-text); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.cf-icon-item .cf-icon-label { font-size: 14px; font-weight: 500; letter-spacing: 0.02em; }
+@media (max-width: 768px) {
+  .cf-icons { padding: 36px 16px; }
+  .cf-icon-row { flex-wrap: wrap; gap: 18px 8px; justify-content: center; }
+  .cf-icon-item { flex: 0 0 30%; }
+}
+{% endstylesheet %}

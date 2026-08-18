@@ -1,0 +1,63 @@
+<section class="cf-blog" aria-label="最新資訊">
+  <div class="pk-container-inner">
+    <div class="cf-section-head">
+      <h2>最新資訊</h2>
+      <p>LATEST NEWS</p>
+    </div>
+    <div class="cf-blog-grid">
+      <article class="cf-blog-card">
+        <div class="cf-blog-img">
+          <span class="cf-blog-date">15 AUG</span>
+          <img src="{{ 'blog-pendant.png' | asset_url }}" alt="莫桑石與鑽石差異文章" width="1216" height="700" loading="lazy">
+        </div>
+        <div class="cf-blog-body">
+          <h3>莫桑石與鑽石：你需要知道的 5 個差異</h3>
+          <a href="{{ routes.root_url }}">閱讀更多</a>
+        </div>
+      </article>
+      <article class="cf-blog-card">
+        <div class="cf-blog-img">
+          <span class="cf-blog-date">08 AUG</span>
+          <img src="{{ 'blog-ring-marquis.png' | asset_url }}" alt="挑選訂婚戒指文章" width="1216" height="700" loading="lazy">
+        </div>
+        <div class="cf-blog-body">
+          <h3>如何挑選完美的訂婚戒指</h3>
+          <a href="{{ routes.root_url }}">閱讀更多</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "最新資訊",
+  "tag": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "最新資訊"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+.cf-blog { padding: 96px 24px; background: var(--cf-cream-soft); }
+.cf-blog .pk-container-inner { max-width: var(--pk-container-max); margin: 0 auto; }
+.cf-blog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 12px; }
+.cf-blog-card { background: #fff; border-radius: 6px; overflow: hidden; transition: transform .25s ease, box-shadow .25s ease; cursor: pointer; }
+.cf-blog-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(26,26,26,0.08); }
+.cf-blog-img { position: relative; aspect-ratio: 16/10; overflow: hidden; background: var(--cf-cream); }
+.cf-blog-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; display: block; }
+.cf-blog-card:hover .cf-blog-img img { transform: scale(1.04); }
+.cf-blog-date { position: absolute; top: 16px; left: 16px; background: var(--cf-text); color: #fff; font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 4px; z-index: 2; letter-spacing: 0.06em; }
+.cf-blog-body { padding: 24px; }
+.cf-blog-body h3 { font-family: var(--pk-font-serif); font-size: 20px; font-weight: 600; margin: 0 0 12px; color: var(--cf-text); line-height: 1.35; }
+.cf-blog-body a { color: var(--cf-text); font-size: 13px; font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--cf-text); padding-bottom: 2px; }
+.cf-blog-body a:hover { color: var(--cf-text-soft); border-color: var(--cf-text-soft); }
+@media (max-width: 768px) {
+  .cf-blog { padding: 64px 16px; }
+  .cf-blog-grid { grid-template-columns: 1fr; gap: 24px; }
+}
+{% endstylesheet %}

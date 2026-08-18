@@ -17,3 +17,19 @@ Thumbs.db
 # ===== Python env (if any created locally) =====
 venv/
 .env
+
+# ===== Local scraped/downloaded image batches (not project source) =====
+采集箱_最后两页图片/
+采集箱_manifest.json
+
+# ===== Shopify theme pull/verify temp copies =====
+theme-030-custom-pull/
+theme-030-verify/
+
+# ===== Ardot AI export staging =====
+outputs/
+
+# ===== Root-level preview screenshots =====
+/page-1-hero.png
+/page-2-products.png
+/page-3-category.png

@@ -1,0 +1,146 @@
+<section class="cf-products" id="products" aria-label="精選商品">
+  <div class="pk-container-inner">
+    <div class="cf-section-head">
+      <h2>精選商品</h2>
+      <p>FEATURED COLLECTION</p>
+    </div>
+    <div class="cf-tabs" role="tablist">
+      <button class="cf-tab cf-tab-active" data-tab="featured">精選</button>
+      <button class="cf-tab" data-tab="bestseller">熱銷</button>
+      <button class="cf-tab" data-tab="new">新品</button>
+    </div>
+    <div class="cf-prod-grid">
+      <a href="{{ routes.root_url }}" class="cf-prod-card">
+        <div class="cf-prod-img">
+          <span class="cf-prod-sale">SALE</span>
+          <img src="{{ 'collected-ring-sixclaw.png' | asset_url }}" alt="六爪莫桑石戒指" width="582" height="582" loading="lazy">
+        </div>
+        <div class="cf-prod-body">
+          <p class="cf-prod-name">六爪莫桑石戒指</p>
+          <p class="cf-prod-price">HK$8,800</p>
+        </div>
+      </a>
+      <a href="{{ routes.root_url }}" class="cf-prod-card">
+        <div class="cf-prod-img">
+          <span class="cf-prod-sale">SALE</span>
+          <img src="{{ 'collected-ring-heart.png' | asset_url }}" alt="心形求婚戒指" width="582" height="582" loading="lazy">
+        </div>
+        <div class="cf-prod-body">
+          <p class="cf-prod-name">心形求婚戒指</p>
+          <p class="cf-prod-price">HK$6,600</p>
+        </div>
+      </a>
+      <a href="{{ routes.root_url }}" class="cf-prod-card">
+        <div class="cf-prod-img">
+          <img src="{{ 'collected-bracelet-full.png' | asset_url }}" alt="滿鑲排鑽手鏈" width="582" height="582" loading="lazy">
+        </div>
+        <div class="cf-prod-body">
+          <p class="cf-prod-name">滿鑲排鑽手鏈</p>
+          <p class="cf-prod-price">HK$5,200</p>
+        </div>
+      </a>
+      <a href="{{ routes.root_url }}" class="cf-prod-card">
+        <div class="cf-prod-img">
+          <img src="{{ 'collected-bracelet-champagne.png' | asset_url }}" alt="香檳金莫桑石手鏈" width="582" height="582" loading="lazy">
+        </div>
+        <div class="cf-prod-body">
+          <p class="cf-prod-name">香檳金莫桑石手鏈</p>
+          <p class="cf-prod-price">HK$5,800</p>
+        </div>
+      </a>
+      <a href="{{ routes.root_url }}" class="cf-prod-card">
+        <div class="cf-prod-img">
+          <span class="cf-prod-sale">SALE</span>
+          <img src="{{ 'collected-earring-bubble.png' | asset_url }}" alt="泡泡莫桑石耳釘" width="582" height="582" loading="lazy">
+        </div>
+        <div class="cf-prod-body">
+          <p class="cf-prod-name">泡泡莫桑石耳釘</p>
+          <p class="cf-prod-price">HK$1,600</p>
+        </div>
+      </a>
+      <a href="{{ routes.root_url }}" class="cf-prod-card">
+        <div class="cf-prod-img">
+          <img src="{{ 'collected-earring-heart.png' | asset_url }}" alt="心形莫桑石耳釘" width="582" height="582" loading="lazy">
+        </div>
+        <div class="cf-prod-body">
+          <p class="cf-prod-name">心形莫桑石耳釘</p>
+          <p class="cf-prod-price">HK$1,500</p>
+        </div>
+      </a>
+      <a href="{{ routes.root_url }}" class="cf-prod-card">
+        <div class="cf-prod-img">
+          <span class="cf-prod-sale">SALE</span>
+          <img src="{{ 'collected-necklace-ox.png' | asset_url }}" alt="牛頭款莫桑石鎖骨鏈" width="582" height="582" loading="lazy">
+        </div>
+        <div class="cf-prod-body">
+          <p class="cf-prod-name">牛頭款莫桑石鎖骨鏈</p>
+          <p class="cf-prod-price">HK$3,200</p>
+        </div>
+      </a>
+      <a href="{{ routes.root_url }}" class="cf-prod-card">
+        <div class="cf-prod-img">
+          <img src="{{ 'collected-necklace-cross.png' | asset_url }}" alt="十字架莫桑石頸鏈" width="582" height="582" loading="lazy">
+        </div>
+        <div class="cf-prod-body">
+          <p class="cf-prod-name">十字架莫桑石頸鏈</p>
+          <p class="cf-prod-price">HK$2,800</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "精選商品",
+  "tag": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "精選商品"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+.cf-products { padding: 96px 24px; background: var(--pk-background); }
+.cf-products .pk-container-inner { max-width: var(--pk-container-max); margin: 0 auto; }
+.cf-section-head { text-align: center; margin-bottom: 28px; }
+.cf-section-head h2 { font-family: var(--pk-font-serif); font-size: 32px; font-weight: 600; margin: 0 0 8px; color: var(--cf-text); letter-spacing: -0.01em; }
+.cf-section-head p { color: var(--cf-text-soft); font-size: 13px; margin: 0; letter-spacing: 0.15em; text-transform: uppercase; }
+.cf-tabs { display: flex; justify-content: center; gap: 36px; margin-bottom: 48px; }
+.cf-tab { font-size: 14px; font-weight: 500; color: var(--cf-text-soft); padding: 8px 4px; border: none; background: none; cursor: pointer; position: relative; transition: color .2s ease; }
+.cf-tab.cf-tab-active { color: var(--cf-text); }
+.cf-tab.cf-tab-active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--cf-text); }
+.cf-prod-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+.cf-prod-card { background: transparent; transition: transform .25s ease; cursor: pointer; }
+.cf-prod-card:hover { transform: translateY(-4px); }
+.cf-prod-img { position: relative; aspect-ratio: 1/1; overflow: hidden; background: var(--cf-cream-soft); border-radius: 6px; }
+.cf-prod-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; display: block; }
+.cf-prod-card:hover .cf-prod-img img { transform: scale(1.05); }
+.cf-prod-sale { position: absolute; top: 12px; left: 12px; background: var(--cf-text); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; padding: 4px 10px; border-radius: 4px; z-index: 2; }
+.cf-prod-body { padding: 16px 4px 0; }
+.cf-prod-name { font-size: 14px; color: var(--cf-text); font-weight: 500; margin: 0 0 6px; line-height: 1.4; }
+.cf-prod-price { font-size: 15px; font-weight: 600; color: var(--cf-text); margin: 0; }
+@media (max-width: 1024px) {
+  .cf-prod-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .cf-prod-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .cf-products { padding: 64px 16px; }
+}
+{% endstylesheet %}
+
+{% javascript %}
+(function () {
+  var tabs = document.querySelectorAll('.cf-tab');
+  if (!tabs.length) return;
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      tabs.forEach(function (x) { x.classList.remove('cf-tab-active'); });
+      t.classList.add('cf-tab-active');
+    });
+  });
+})();
+{% endjavascript %}
