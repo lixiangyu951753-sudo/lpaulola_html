@@ -1,0 +1,111 @@
+<section class="cf-accordion" aria-label="商品資訊">
+  <div class="cf-accordion__container">
+    {%- for block in section.blocks -%}
+      {%- assign is_open = false -%}
+      {%- if forloop.first and section.settings.open_first -%}{%- assign is_open = true -%}{%- endif -%}
+      {%- if block.settings.open_default -%}{%- assign is_open = true -%}{%- endif -%}
+      <div class="cf-accordion__item{% if is_open %} is-open{% endif %}" {{ block.shopify_attributes }}>
+        <button type="button" class="cf-accordion__header" aria-expanded="{% if is_open %}true{% else %}false{% endif %}">
+          <span>{{ block.settings.heading }}</span>
+          <svg class="cf-accordion__chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="cf-accordion__body">
+          <div class="cf-accordion__inner">
+            {%- if block.settings.source == 'product_description' -%}
+              {%- if product.description != blank -%}
+                {{ product.description }}
+              {%- else -%}
+                {{ block.settings.content }}
+              {%- endif -%}
+            {%- else -%}
+              {{ block.settings.content }}
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "商品資訊手風琴",
+  "tag": "section",
+  "settings": [
+    { "type": "checkbox", "id": "open_first", "label": "預設展開第一項", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "摺疊行",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "標題", "default": "商品詳情" },
+        {
+          "type": "select",
+          "id": "source",
+          "label": "內容來源",
+          "options": [
+            { "value": "product_description", "label": "產品描述" },
+            { "value": "custom", "label": "自定義內容" }
+          ],
+          "default": "product_description"
+        },
+        { "type": "richtext", "id": "content", "label": "自定義內容", "default": "<p>內容</p>" },
+        { "type": "checkbox", "id": "open_default", "label": "預設展開此行", "default": false }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "商品資訊手風琴",
+      "blocks": [
+        { "type": "row", "settings": { "heading": "商品詳情", "source": "product_description", "open_default": true } },
+        { "type": "row", "settings": { "heading": "配送及退換", "source": "custom", "content": "<ul><li>訂單處理時間：1-3 個工作天</li><li>香港 / 台灣 / 新加坡：約 5-10 個工作天</li><li>其他地區：約 7-15 個工作天</li><li>滿指定金額可享免運，未達門檻於結帳時顯示運費</li></ul><p><strong>退換政策：</strong></p><ul><li>僅限商品明顯瑕疵或寄送錯誤，並於收貨後 48 小時內聯絡我們</li></ul>" } },
+        { "type": "row", "settings": { "heading": "材質與保養", "source": "custom", "content": "<p>S925 純銀含銀量 92.5%，經高溫鍛造後精密打磨，質感溫潤親膚。莫桑石硬度達 9.25（莫氏硬度），接近鑽石的 10，火彩璀璨持久。</p><p><strong>保養建議：</strong></p><ul><li>避免接觸化學品（香水、清潔劑等）</li><li>游泳或洗澡時請摘下</li><li>使用隨附擦銀布擦拭，保持光澤</li><li>不佩戴時，請存放於密封袋或首飾盒中</li></ul>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+:root {
+  --pk-container-max: 1160px;
+  --cf-cream: #f5ebd8;
+  --cf-cream-line: rgba(26,26,26,0.12);
+  --cf-text: #1a1a1a;
+  --cf-text-soft: #6b6b6b;
+  --cf-gold: #C4A35A;
+  --pk-font-serif: 'Noto Serif TC', 'Songti TC', serif;
+  --pk-font-sans: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+}
+.cf-accordion { padding: 8px 24px 72px; background: #ffffff; }
+.cf-accordion__container { max-width: var(--pk-container-max); margin: 0 auto; border-top: 1px solid var(--cf-cream-line); }
+.cf-accordion__item { border-bottom: 1px solid var(--cf-cream-line); }
+.cf-accordion__header { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 22px 4px; background: none; border: none; cursor: pointer; font-family: var(--pk-font-serif); font-size: 17px; font-weight: 600; color: var(--cf-text); text-align: left; }
+.cf-accordion__chevron { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s ease; }
+.cf-accordion__item.is-open .cf-accordion__chevron { transform: rotate(180deg); }
+.cf-accordion__body { display: none; }
+.cf-accordion__item.is-open .cf-accordion__body { display: block; }
+.cf-accordion__inner { padding: 4px 4px 28px; font-size: 14px; line-height: 1.8; color: var(--cf-text-soft); }
+.cf-accordion__inner h2, .cf-accordion__inner h3 { font-family: var(--pk-font-serif); color: var(--cf-text); margin: 16px 0 10px; font-size: 16px; }
+.cf-accordion__inner ul { padding-left: 20px; }
+.cf-accordion__inner p { margin: 0 0 10px; }
+@media (max-width: 768px) {
+  .cf-accordion { padding: 8px 16px 56px; }
+}
+{% endstylesheet %}
+
+{% javascript %}
+(function () {
+  document.querySelectorAll('.cf-accordion__item').forEach(function (item) {
+    var header = item.querySelector('.cf-accordion__header');
+    if (!header) return;
+    header.addEventListener('click', function () {
+      var isOpen = item.classList.toggle('is-open');
+      header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  });
+})();
+{% endjavascript %}

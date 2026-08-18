@@ -1,16 +1,18 @@
-<section class="cf-related" aria-label="{{ section.settings.heading | escape }}">
+<product-recommendations
+  class="cf-related"
+  data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}"
+>
   <div class="cf-related__inner">
-    <h2 class="cf-related__title">{{ section.settings.heading }}</h2>
-    {%- assign show = section.settings.products_to_show | default: 4 -%}
-    <div class="cf-market__grid cf-related__grid">
-      {%- for product in collections['material-s925'].products limit: show -%}
-        {%- if product.id != current_product.id -%}
-          {%- render 'cf-product-card', product: product, show_secondary: true -%}
-        {%- endif -%}
-      {%- endfor -%}
-    </div>
+    {%- if recommendations.performed and recommendations.products_count > 0 -%}
+      <h2 class="cf-related__title">{{ section.settings.heading }}</h2>
+      <div class="cf-market__grid cf-related__grid">
+        {%- for recommendation in recommendations.products -%}
+          {%- render 'cf-product-card', product: recommendation, show_secondary: section.settings.show_secondary_image -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
   </div>
-</section>
+</product-recommendations>
 
 {% schema %}
 {
@@ -18,14 +20,43 @@
   "tag": "section",
   "settings": [
     { "type": "text", "id": "heading", "label": "標題", "default": "你可能也喜歡" },
-    { "type": "range", "id": "products_to_show", "label": "顯示數量", "min": 1, "max": 8, "step": 1, "default": 4 }
+    { "type": "range", "id": "products_to_show", "label": "顯示數量", "min": 1, "max": 8, "step": 1, "default": 4 },
+    { "type": "checkbox", "id": "show_secondary_image", "label": "鼠標懸停顯示第二張圖", "default": true }
   ]
 }
 {% endschema %}
 
 {% stylesheet %}
-.cf-related { padding: 0 24px 96px; background: #ffffff; }
+:root {
+  --pk-container-max: 1160px;
+  --cf-cream-soft: #faf2e0;
+  --cf-cream-line: rgba(26,26,26,0.12);
+  --cf-text: #1a1a1a;
+  --cf-text-soft: #6b6b6b;
+  --cf-border: #e5ddd5;
+  --cf-gold: #C4A35A;
+  --pk-font-serif: 'Noto Serif TC', 'Songti TC', serif;
+  --pk-font-sans: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+}
+.cf-related { padding: 8px 24px 96px; background: #ffffff; }
 .cf-related__inner { max-width: var(--pk-container-max); margin: 0 auto; }
 .cf-related__title { font-family: var(--pk-font-serif); font-size: 24px; font-weight: 600; color: var(--cf-text); margin: 0 0 28px; letter-spacing: -0.01em; }
 .cf-related__grid { gap: 28px; }
 {% endstylesheet %}
+
+{% javascript %}
+(function () {
+  try {
+    var root = document.querySelector('product-recommendations[data-url]');
+    if (!root) return;
+    fetch(root.getAttribute('data-url'), { headers: { Accept: 'text/html' } })
+      .then(function (res) { return res.text(); })
+      .then(function (html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var src = doc.querySelector('.cf-related__inner');
+        var target = root.querySelector('.cf-related__inner');
+        if (src && target) target.innerHTML = src.innerHTML;
+      });
+  } catch (e) { /* noop */ }
+})();
+{% endjavascript %}
