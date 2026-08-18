@@ -1,0 +1,55 @@
+<section class="cf-craft" aria-label="匠心雕琢">
+  <div class="cf-craft-grid">
+    <div class="cf-craft-content">
+      <h2>Craft With Care</h2>
+      <span class="cf-zigzag"><svg viewBox="0 0 84 8" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,4 6,1 12,7 18,1 24,7 30,1 36,7 42,1 48,7 54,1 60,7 66,1 72,7 78,1 84,4" fill="none" stroke="#1a1a1a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="cf-pillar">
+        <h3>HIGH QUALITY</h3>
+        <p>精選 D 色 / VVS 級莫桑石，S925 純銀 / 18K 金雙工藝鍛造。每一顆寶石皆通過國際鑑定標準，為您帶來鑽石級的視覺體驗。</p>
+      </div>
+      <div class="cf-pillar">
+        <h3>EXPERT CRAFTSMANSHIP</h3>
+        <p>超過 30 道工序手工鑲嵌，由 15 年以上經驗的珠寶匠人親手打磨。從設計到出品，每一件作品都承載著匠人的溫度。</p>
+      </div>
+      <div class="cf-craft-btn">
+        <a href="{{ routes.root_url }}" class="cf-btn-outline-dark">Explore Now</a>
+      </div>
+    </div>
+    <div class="cf-craft-image">
+      <img src="{{ 'asian-lifestyle.png' | asset_url }}" alt="匠心雕琢" width="1216" height="765" loading="lazy">
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "匠心雕琢",
+  "tag": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "匠心雕琢"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+.cf-craft { padding: 96px 24px; background: var(--cf-cream); }
+.cf-craft-grid { max-width: var(--pk-container-max); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.cf-craft-content h2 { font-family: var(--pk-font-serif); font-size: 36px; font-weight: 600; margin: 0; color: var(--cf-text); line-height: 1.15; letter-spacing: -0.01em; }
+.cf-craft-content .cf-zigzag { margin: 14px 0 28px; }
+.cf-pillar { margin-bottom: 22px; }
+.cf-pillar h3 { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cf-text); margin: 0 0 10px; font-weight: 700; }
+.cf-pillar p { font-size: 14px; line-height: 1.75; color: var(--cf-text-soft); margin: 0; max-width: 460px; }
+.cf-craft-btn { margin-top: 28px; }
+.cf-btn-outline-dark { display: inline-flex; align-items: center; gap: 6px; padding: 12px 26px; border: 1px solid var(--cf-text); border-radius: 4px; color: var(--cf-text); font-size: 14px; font-weight: 500; background: transparent; text-decoration: none; transition: background .2s ease, color .2s ease; }
+.cf-btn-outline-dark:hover { background: var(--cf-text); color: #fff; }
+.cf-craft-image { aspect-ratio: 4/3; border-radius: 6px; overflow: hidden; box-shadow: 0 10px 28px rgba(26,26,26,0.10); }
+.cf-craft-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+@media (max-width: 768px) {
+  .cf-craft { padding: 64px 20px; }
+  .cf-craft-grid { grid-template-columns: 1fr; gap: 36px; }
+  .cf-craft-content h2 { font-size: 28px; }
+}
+{% endstylesheet %}

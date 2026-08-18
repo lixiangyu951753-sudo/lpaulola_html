@@ -1,18 +1,60 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "announcement": {
-      "type": "announcement-bar"
+      "type": "announcement-bar",
+      "settings": {}
     },
     "hero": {
-      "type": "hero-video"
+      "type": "hero-video",
+      "settings": {}
+    },
+    "icon-row": {
+      "type": "icon-row",
+      "settings": {}
+    },
+    "category-cards": {
+      "type": "category-cards",
+      "settings": {}
+    },
+    "craft": {
+      "type": "craft",
+      "settings": {}
+    },
+    "featured-products": {
+      "type": "featured-products",
+      "settings": {}
+    },
+    "blog-posts": {
+      "type": "blog-posts",
+      "settings": {}
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {}
     },
     "footer": {
-      "type": "footer"
+      "type": "footer",
+      "settings": {}
     }
   },
   "order": [
     "announcement",
     "hero",
+    "icon-row",
+    "category-cards",
+    "craft",
+    "featured-products",
+    "blog-posts",
+    "newsletter",
     "footer"
   ]
 }

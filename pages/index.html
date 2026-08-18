@@ -96,6 +96,93 @@
 }
 
     </style>
+    <style id="ag-gallery-css">
+      /* === AccordionGallery (React Bits, native port) === */
+      .accordion-gallery {
+        --ag-accent: #ffffff;
+        --ag-overlay: #060010;
+        --ag-text: #ffffff;
+        --ag-gap: 10px;
+        --ag-radius: 16px;
+        --ag-media-size: 320px;
+        display: flex;
+        flex-direction: row;
+        gap: var(--ag-gap);
+        width: 100%;
+        max-width: 100%;
+        perspective: 1400px;
+        perspective-origin: 50% 50%;
+      }
+      .ag-panel {
+        position: relative;
+        flex: 1 1 0;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border-radius: var(--ag-radius);
+        cursor: pointer;
+        display: block;
+        text-decoration: none;
+        outline: none;
+        transform-style: preserve-3d;
+        transform-origin: center center;
+        background: #0a0713;
+        box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.8);
+        will-change: flex-grow, transform;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .ag-panel:focus-visible {
+        box-shadow: 0 0 0 2px var(--ag-accent), 0 10px 30px -18px rgba(0, 0, 0, 0.8);
+      }
+      .ag-panel__frame { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; }
+      .ag-panel__media {
+        --ag-gray: 1;
+        --ag-dim: 0.35;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: var(--ag-media-size);
+        height: 100%;
+        filter: grayscale(var(--ag-gray));
+        will-change: transform, filter;
+      }
+      .ag-panel__media img { width: 100%; height: 100%; object-fit: cover; display: block; user-select: none; -webkit-user-drag: none; }
+      .ag-panel__overlay {
+        position: absolute; inset: 0; pointer-events: none;
+        background:
+          linear-gradient(180deg, transparent 45%, color-mix(in srgb, var(--ag-overlay) 78%, transparent) 100%),
+          color-mix(in srgb, var(--ag-overlay) calc(var(--ag-dim, 0.35) * 100%), transparent);
+      }
+      .ag-panel__label {
+        position: absolute; left: 20px; bottom: 20px; right: 20px;
+        display: flex; align-items: center; gap: 12px;
+        pointer-events: none; z-index: 2;
+      }
+      .ag-panel__bar {
+        flex: 0 0 auto; width: 3px; height: 26px; border-radius: 3px;
+        background: var(--ag-accent); opacity: 0;
+        box-shadow: 0 0 12px color-mix(in srgb, var(--ag-accent) 60%, transparent);
+      }
+      .ag-panel__text {
+        color: var(--ag-text);
+        font-family: var(--pk-font-sans), sans-serif;
+        font-weight: 600;
+        font-size: clamp(1rem, 1.4vw, 1.4rem);
+        letter-spacing: 0.01em;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        opacity: 0;
+        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
+      }
+      .cf-craft-gallery { min-width: 0; }
+      @media (max-width: 520px) {
+        .accordion-gallery { flex-direction: column; perspective: none; height: auto !important; }
+        .ag-panel { min-height: 84px; transform: none !important; }
+        .accordion-gallery .ag-panel__media { width: 100%; height: var(--ag-media-size); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .ag-panel, .ag-panel__media { will-change: auto; }
+      }
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
     <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
@@ -357,6 +444,157 @@
       @media (max-width: 480px) {
         .pk-product-grid { grid-template-columns: 1fr; }
       }
+
+      /* === Dark luxury override: unify below-hero sections with hero mood === */
+      .pk-promo-grid { background: var(--pk-dark-bg); }
+      .pk-promo-overlay { background: linear-gradient(180deg, rgba(8,8,8,0.5) 0%, rgba(8,8,8,0.85) 100%); }
+      .pk-promo-card img { filter: brightness(0.92) saturate(1.05); }
+      section.pk-section-pad h2 { color: var(--pk-dark-text); }
+      #products .pk-tab { color: var(--pk-dark-muted); }
+      #products .pk-tab.pk-tab-active { color: var(--pk-gold); }
+      .pk-product-card, .pk-cat-card, .pk-blog-card { background: var(--pk-dark-surface); border: 1px solid rgba(196,163,90,0.22); box-shadow: 0 10px 30px rgba(0,0,0,0.45); }
+      .pk-product-img-wrap { background: #0B0B0B; }
+      .pk-product-img-wrap img { object-fit: contain; padding: 10px; }
+      .pk-product-name, .pk-cat-body h3, .pk-blog-body h3 { color: var(--pk-dark-text); }
+      .pk-midpage-overlay { background: rgba(8,8,8,0.72); }
+
+      /* =========================================================== */
+      /* === Cartify Style Overrides (non-hero sections) =========== */
+      /* =========================================================== */
+      :root {
+        --cf-cream: #f5ebd8;
+        --cf-cream-soft: #faf2e0;
+        --cf-cream-line: rgba(26,26,26,0.12);
+        --cf-text: #1a1a1a;
+        --cf-text-soft: #6b6b6b;
+      }
+
+      /* Announcement Bar (cartify: cream) */
+      .pk-announce { background: var(--cf-cream); color: var(--cf-text); height: 40px; border-bottom: 1px solid rgba(0,0,0,0.04); }
+      .pk-announce span { color: var(--cf-text) !important; font-weight: 500; letter-spacing: 0.02em; }
+      /* Header: keep simple cartify (already white) */
+
+      /* === Cartify: 5 Category Icons Row === */
+      .cf-icons { padding: 56px 24px; background: var(--pk-background); }
+      .cf-icon-row { max-width: 920px; margin: 0 auto; display: flex; justify-content: space-between; gap: 16px; }
+      .cf-icon-item { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 8px 12px; color: var(--cf-text); text-decoration: none; transition: opacity .2s ease; flex: 1; }
+      .cf-icon-item:hover { opacity: .65; }
+      .cf-icon-item svg { width: 44px; height: 44px; stroke: var(--cf-text); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+      .cf-icon-item .cf-icon-label { font-size: 14px; font-weight: 500; letter-spacing: 0.02em; }
+
+      /* === Cartify: 3 Large Category Cards === */
+      .cf-cats { padding: 8px 24px 72px; background: var(--pk-background); }
+      .cf-cat-grid { max-width: var(--pk-container-max); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+      .cf-cat-card { position: relative; aspect-ratio: 3/4.2; border-radius: 6px; overflow: hidden; background: var(--cf-cream); display: block; text-decoration: none; cursor: pointer; }
+      .cf-cat-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.2,.8,.3,1); display: block; }
+      .cf-cat-card:hover img { transform: scale(1.06); }
+      .cf-cat-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.65) 100%); pointer-events: none; }
+      .cf-cat-content { position: absolute; left: 28px; right: 28px; bottom: 28px; color: #fff; z-index: 2; }
+      .cf-cat-title { font-family: var(--pk-font-serif); font-size: 28px; font-weight: 500; line-height: 1.15; margin: 0; letter-spacing: -0.01em; color: #fff; }
+      .cf-zigzag { display: inline-block; margin: 12px 0 14px; }
+      .cf-zigzag svg { width: 84px; height: 8px; display: block; }
+      .cf-cat-desc { font-size: 13px; opacity: 0.9; margin: 0 0 18px; color: #fff; line-height: 1.5; }
+      .cf-btn-outline-light { display: inline-flex; align-items: center; gap: 6px; padding: 10px 22px; border: 1px solid rgba(255,255,255,0.85); border-radius: 999px; color: #fff; font-size: 13px; font-weight: 500; background: transparent; text-decoration: none; transition: background .2s ease, color .2s ease, border-color .2s ease; }
+      .cf-btn-outline-light:hover { background: #fff; color: var(--cf-text); border-color: #fff; }
+
+      /* === Cartify: Craft With Care === */
+      .cf-craft { padding: 96px 24px; background: var(--cf-cream); }
+      .cf-craft-grid { max-width: var(--pk-container-max); margin: 0 auto; display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 64px; align-items: center; }
+      .cf-craft-content h2 { font-family: var(--pk-font-serif); font-size: 36px; font-weight: 600; margin: 0; color: var(--cf-text); line-height: 1.15; letter-spacing: -0.01em; }
+      .cf-craft-content .cf-zigzag { margin: 14px 0 28px; }
+      .cf-pillar { margin-bottom: 22px; }
+      .cf-pillar h3 { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cf-text); margin: 0 0 10px; font-weight: 700; }
+      .cf-pillar p { font-size: 14px; line-height: 1.75; color: var(--cf-text-soft); margin: 0; max-width: 460px; }
+      .cf-craft-btn { margin-top: 28px; }
+      .cf-btn-outline-dark { display: inline-flex; align-items: center; gap: 6px; padding: 12px 26px; border: 1px solid var(--cf-text); border-radius: 4px; color: var(--cf-text); font-size: 14px; font-weight: 500; background: transparent; text-decoration: none; transition: background .2s ease, color .2s ease; }
+      .cf-btn-outline-dark:hover { background: var(--cf-text); color: #fff; }
+      .cf-craft-image { aspect-ratio: 4/3; border-radius: 6px; overflow: hidden; box-shadow: 0 10px 28px rgba(26,26,26,0.10); }
+      .cf-craft-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+      /* === Cartify: Featured Products (grid) === */
+      .cf-products { padding: 96px 24px; background: var(--pk-background); }
+      .cf-products .pk-container-inner { max-width: var(--pk-container-max); margin: 0 auto; }
+      .cf-section-head { text-align: center; margin-bottom: 28px; }
+      .cf-section-head h2 { font-family: var(--pk-font-serif); font-size: 32px; font-weight: 600; margin: 0 0 8px; color: var(--cf-text); letter-spacing: -0.01em; }
+      .cf-section-head p { color: var(--cf-text-soft); font-size: 13px; margin: 0; letter-spacing: 0.15em; text-transform: uppercase; }
+      .cf-tabs { display: flex; justify-content: center; gap: 36px; margin-bottom: 48px; }
+      .cf-tab { font-size: 14px; font-weight: 500; color: var(--cf-text-soft); padding: 8px 4px; border: none; background: none; cursor: pointer; position: relative; transition: color .2s ease; }
+      .cf-tab.cf-tab-active { color: var(--cf-text); }
+      .cf-tab.cf-tab-active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--cf-text); }
+      .cf-prod-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+      .cf-prod-card { background: transparent; transition: transform .25s ease; cursor: pointer; }
+      .cf-prod-card:hover { transform: translateY(-4px); }
+      .cf-prod-img { position: relative; aspect-ratio: 1/1; overflow: hidden; background: var(--cf-cream-soft); border-radius: 6px; }
+      .cf-prod-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; display: block; }
+      .cf-prod-card:hover .cf-prod-img img { transform: scale(1.05); }
+      .cf-prod-sale { position: absolute; top: 12px; left: 12px; background: var(--cf-text); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; padding: 4px 10px; border-radius: 4px; z-index: 2; }
+      .cf-prod-body { padding: 16px 4px 0; }
+      .cf-prod-name { font-size: 14px; color: var(--cf-text); font-weight: 500; margin: 0 0 6px; line-height: 1.4; }
+      .cf-prod-price { font-size: 15px; font-weight: 600; color: var(--cf-text); margin: 0; }
+
+      /* === Cartify: Blog === */
+      .cf-blog { padding: 96px 24px; background: var(--cf-cream-soft); }
+      .cf-blog .pk-container-inner { max-width: var(--pk-container-max); margin: 0 auto; }
+      .cf-blog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 12px; }
+      .cf-blog-card { background: #fff; border-radius: 6px; overflow: hidden; transition: transform .25s ease, box-shadow .25s ease; cursor: pointer; }
+      .cf-blog-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(26,26,26,0.08); }
+      .cf-blog-img { position: relative; aspect-ratio: 16/10; overflow: hidden; background: var(--cf-cream); }
+      .cf-blog-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; display: block; }
+      .cf-blog-card:hover .cf-blog-img img { transform: scale(1.04); }
+      .cf-blog-date { position: absolute; top: 16px; left: 16px; background: var(--cf-text); color: #fff; font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 4px; z-index: 2; letter-spacing: 0.06em; }
+      .cf-blog-body { padding: 24px; }
+      .cf-blog-body h3 { font-family: var(--pk-font-serif); font-size: 20px; font-weight: 600; margin: 0 0 12px; color: var(--cf-text); line-height: 1.35; }
+      .cf-blog-body a { color: var(--cf-text); font-size: 13px; font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--cf-text); padding-bottom: 2px; }
+      .cf-blog-body a:hover { color: var(--cf-text-soft); border-color: var(--cf-text-soft); }
+
+      /* === Cartify: Newsletter === */
+      .cf-newsletter { padding: 88px 24px; background: var(--cf-cream); text-align: center; }
+      .cf-newsletter h2 { font-family: var(--pk-font-serif); font-size: 30px; font-weight: 600; margin: 0 0 12px; color: var(--cf-text); letter-spacing: -0.01em; }
+      .cf-newsletter p { color: var(--cf-text-soft); font-size: 14px; margin: 0 0 32px; }
+      .cf-newsletter-form { display: flex; max-width: 480px; margin: 0 auto; gap: 0; border: 1px solid var(--cf-text); border-radius: 0; overflow: hidden; }
+      .cf-newsletter-form input { flex: 1; padding: 14px 20px; border: none; background: transparent; color: var(--cf-text); font-size: 14px; outline: none; font-family: var(--pk-font-sans); }
+      .cf-newsletter-form input::placeholder { color: var(--cf-text-soft); }
+      .cf-newsletter-form button { padding: 14px 32px; background: var(--cf-text); color: #fff; border: none; font-size: 14px; font-weight: 500; cursor: pointer; transition: background .2s ease; font-family: var(--pk-font-sans); }
+      .cf-newsletter-form button:hover { background: #333; }
+
+      /* === Cartify: Footer === */
+      .cf-footer { background: #0F0F0F; color: #ccc; padding: 72px 0 24px; }
+      .cf-footer-grid { max-width: var(--pk-container-max); margin: 0 auto; padding: 0 24px 48px; display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.3fr; gap: 48px; }
+      .cf-footer-bottom { border-top: 1px solid #2a2520; padding: 24px; max-width: var(--pk-container-max); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+      .cf-footer h4 { color: #fff; font-size: 14px; font-weight: 600; margin: 0 0 20px; letter-spacing: 0.04em; }
+      .cf-footer a { color: #ccc; font-size: 14px; text-decoration: none; display: block; margin-bottom: 10px; transition: color .2s ease; }
+      .cf-footer a:hover { color: var(--pk-gold); }
+      .cf-footer-brand { font-family: var(--pk-font-serif); font-size: 22px; font-weight: 700; letter-spacing: 0.08em; color: #fff; margin-bottom: 16px; display: block; }
+      .cf-footer-tag { font-size: 14px; line-height: 1.7; margin-bottom: 24px; color: #aaa; max-width: 320px; }
+      .cf-social-icon { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border: 1px solid #2a2520; border-radius: 50%; color: #ccc; transition: all .2s ease; margin-right: 10px; }
+      .cf-social-icon:hover { border-color: var(--pk-gold); color: var(--pk-gold); }
+      .cf-payment-icon { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; padding: 4px 10px; border: 1px solid #2a2520; border-radius: 4px; color: #ccc; margin-right: 6px; }
+
+      /* === Cartify Responsive === */
+      @media (max-width: 1024px) {
+        .cf-cat-grid { grid-template-columns: repeat(2, 1fr); }
+        .cf-prod-grid { grid-template-columns: repeat(3, 1fr); }
+      }
+      @media (max-width: 768px) {
+        .cf-icons { padding: 36px 16px; }
+        .cf-icon-row { flex-wrap: wrap; gap: 18px 8px; justify-content: center; }
+        .cf-icon-item { flex: 0 0 30%; }
+        .cf-cat-grid { grid-template-columns: 1fr; gap: 16px; }
+        .cf-cats { padding: 8px 16px 48px; }
+        .cf-craft { padding: 64px 20px; }
+        .cf-craft-grid { grid-template-columns: 1fr; gap: 36px; }
+        .cf-craft-content h2 { font-size: 28px; }
+        .cf-prod-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+        .cf-products, .cf-blog { padding: 64px 16px; }
+        .cf-blog-grid { grid-template-columns: 1fr; gap: 24px; }
+        .cf-footer-grid { grid-template-columns: 1fr; gap: 32px; padding: 0 24px 32px; }
+        .cf-footer-bottom { flex-direction: column; text-align: center; padding: 20px 24px; }
+        .cf-newsletter h2 { font-size: 24px; }
+      }
+      @media (max-width: 480px) {
+        .cf-prod-grid { grid-template-columns: 1fr; }
+        .cf-tabs { gap: 20px; }
+      }
     </style>
 
     <!-- Section 1: Announcement Bar -->
@@ -459,295 +697,295 @@
       </div>
     </section>
 
-    <!-- Section 4: Promotional Banners -->
-    <section class="pk-promo-grid">
-      <div class="pk-promo-card">
-        <img src="../assets/banner-02-engagement.jpg" alt="訂婚戒指系列">
-        <div class="pk-promo-overlay"></div>
-        <div class="pk-promo-content">
-          <h2 class="pk-serif" style="color:#fff; font-size:24px; font-weight:600; margin-bottom:8px;">訂婚戒指</h2>
-          <p style="color:rgba(255,255,255,0.75); font-size:14px; margin-bottom:20px;">經典六爪鑲嵌·璀璨永恆</p>
-          <a href="#" style="color: var(--pk-gold); font-size:14px; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">立即選購 <i data-lucide="arrow-right" style="width:16px;height:16px;"></i></a>
-        </div>
-      </div>
-      <div class="pk-promo-card">
-        <img src="../assets/banner-03-wedding.jpg" alt="限時優惠">
-        <div class="pk-promo-overlay"></div>
-        <div style="position:absolute; top:20px; right:20px; width:56px; height:56px; border-radius:50%; background: var(--pk-gold); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; z-index:3;">SALE</div>
-        <div class="pk-promo-content">
-          <h2 class="pk-serif" style="color:#fff; font-size:24px; font-weight:600; margin-bottom:8px;">限時優惠</h2>
-          <p style="color:rgba(255,255,255,0.75); font-size:14px; margin-bottom:20px;">精選商品限時折扣中</p>
-          <a href="#" style="color: var(--pk-gold); font-size:14px; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">搶購商品 <i data-lucide="arrow-right" style="width:16px;height:16px;"></i></a>
-        </div>
+    <!-- ===== Cartify Style: non-hero sections ===== -->
+
+    <!-- Section: Category Icons Row -->
+    <section class="cf-icons" aria-label="產品分類">
+      <div class="cf-icon-row">
+        <a href="#" class="cf-icon-item">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="14" r="6"/><path d="M14 14 C14 14 16 26 22 32 L26 36 L22 40"/><path d="M34 14 C34 14 32 26 26 32"/><circle cx="24" cy="40" r="3"/></svg>
+          <span class="cf-icon-label">Pendants</span>
+        </a>
+        <a href="#" class="cf-icon-item">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 10 L14 22"/><circle cx="14" cy="28" r="5"/><path d="M34 10 L34 22"/><circle cx="34" cy="28" r="5"/><circle cx="14" cy="8" r="2"/><circle cx="34" cy="8" r="2"/></svg>
+          <span class="cf-icon-label">Earrings</span>
+        </a>
+        <a href="#" class="cf-icon-item">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><polygon points="24,6 38,16 38,32 24,42 10,32 10,16"/><line x1="10" y1="16" x2="38" y2="16"/><line x1="24" y1="6" x2="24" y2="42"/></svg>
+          <span class="cf-icon-label">Gem &amp; stones</span>
+        </a>
+        <a href="#" class="cf-icon-item">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="13"/><circle cx="24" cy="11" r="3"/></svg>
+          <span class="cf-icon-label">Rings</span>
+        </a>
+        <a href="#" class="cf-icon-item">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="24" rx="14" ry="18"/><ellipse cx="24" cy="14" rx="14" ry="3"/></svg>
+          <span class="cf-icon-label">Bracelets</span>
+        </a>
       </div>
     </section>
 
-    <!-- Section 5: Product Grid with Tabs -->
-    <section id="products" class="pk-section-pad" style="background: var(--pk-background);">
-      <div class="pk-container">
-        <div class="text-center mb-10">
-          <p class="pk-eyebrow" style="margin-bottom:8px;">FEATURED COLLECTION</p>
-          <h2 class="pk-serif" style="font-size: var(--pk-h2-size); font-weight:600;">精選商品</h2>
+    <!-- Section: 3 Large Category Cards (Asian Model) -->
+    <section class="cf-cats" aria-label="材質分類">
+      <div class="cf-cat-grid">
+        <!-- Gold Jewellery -->
+        <a href="#" class="cf-cat-card">
+          <img src="../assets/cartify/asian-gold-necklace.png" alt="Gold Jewellery">
+          <div class="cf-cat-overlay"></div>
+          <div class="cf-cat-content">
+            <h3 class="cf-cat-title">Gold<br>Jewellery</h3>
+            <span class="cf-zigzag"><svg viewBox="0 0 84 8" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,4 6,1 12,7 18,1 24,7 30,1 36,7 42,1 48,7 54,1 60,7 66,1 72,7 78,1 84,4" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <p class="cf-cat-desc">Fine crafted pieces for your needs.</p>
+            <span class="cf-btn-outline-light">Explore Now</span>
+          </div>
+        </a>
+        <!-- Diamond Jewellery -->
+        <a href="#" class="cf-cat-card">
+          <img src="../assets/cartify/asian-diamond-rings.png" alt="Diamond Jewellery">
+          <div class="cf-cat-overlay"></div>
+          <div class="cf-cat-content">
+            <h3 class="cf-cat-title">Diamond<br>Jewellery</h3>
+            <span class="cf-zigzag"><svg viewBox="0 0 84 8" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,4 6,1 12,7 18,1 24,7 30,1 36,7 42,1 48,7 54,1 60,7 66,1 72,7 78,1 84,4" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <p class="cf-cat-desc">Fine crafted pieces for your needs.</p>
+            <span class="cf-btn-outline-light">Explore Now</span>
+          </div>
+        </a>
+        <!-- Platinum Jewellery -->
+        <a href="#" class="cf-cat-card">
+          <img src="../assets/cartify/asian-earring.png" alt="Platinum Jewellery">
+          <div class="cf-cat-overlay"></div>
+          <div class="cf-cat-content">
+            <h3 class="cf-cat-title">Platinum<br>Jewellery</h3>
+            <span class="cf-zigzag"><svg viewBox="0 0 84 8" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,4 6,1 12,7 18,1 24,7 30,1 36,7 42,1 48,7 54,1 60,7 66,1 72,7 78,1 84,4" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <p class="cf-cat-desc">Fine crafted pieces for your needs.</p>
+            <span class="cf-btn-outline-light">Explore Now</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Section: Craft With Care -->
+    <section class="cf-craft" aria-label="匠心雕琢">
+      <div class="cf-craft-grid">
+        <div class="cf-craft-content">
+          <h2>Craft With Care</h2>
+          <span class="cf-zigzag"><svg viewBox="0 0 84 8" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,4 6,1 12,7 18,1 24,7 30,1 36,7 42,1 48,7 54,1 60,7 66,1 72,7 78,1 84,4" fill="none" stroke="#1a1a1a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <div class="cf-pillar">
+            <h3>HIGH QUALITY</h3>
+            <p>D 色 / VVS 級莫桑石，S925 純銀 / 18K 金雙工藝鍛造。</p>
+          </div>
+          <div class="cf-pillar">
+            <h3>EXPERT CRAFTSMANSHIP</h3>
+            <p>超過 30 道工序手工鑲嵌，件件承載匠人溫度。</p>
+          </div>
+          <div class="cf-craft-btn">
+            <a href="#" class="cf-btn-outline-dark">Explore Now</a>
+          </div>
         </div>
-        <div class="pk-tabs">
-          <button class="pk-tab pk-tab-active">精選</button>
-          <button class="pk-tab">熱銷</button>
-          <button class="pk-tab">新品</button>
-        </div>
-        <div class="pk-product-grid">
-          <!-- Product 1 -->
-          <div class="pk-product-card">
-            <div class="pk-product-img-wrap">
-              <span class="pk-sale-badge">SALE</span>
-              <img src="../assets/prod-engagement-solitaire.jpg" alt="六爪經典訂婚戒">
-            </div>
-            <div class="pk-product-body">
-              <p class="pk-product-name">六爪經典訂婚戒</p>
-              <p class="pk-product-price">HK$8,800</p>
-              <button class="pk-add-cart-btn">加入購物車</button>
-            </div>
-          </div>
-          <!-- Product 2 -->
-          <div class="pk-product-card">
-            <div class="pk-product-img-wrap">
-              <span class="pk-sale-badge">SALE</span>
-              <img src="../assets/prod-couple-heart-ring.jpg" alt="心形情侶對戒">
-            </div>
-            <div class="pk-product-body">
-              <p class="pk-product-name">心形情侶對戒</p>
-              <p class="pk-product-price">HK$6,600</p>
-              <button class="pk-add-cart-btn">加入購物車</button>
-            </div>
-          </div>
-          <!-- Product 3 -->
-          <div class="pk-product-card">
-            <div class="pk-product-img-wrap">
-              <img src="../assets/prod-couple-necklace.jpg" alt="雙心情侶項鍊">
-            </div>
-            <div class="pk-product-body">
-              <p class="pk-product-name">雙心情侶項鍊</p>
-              <p class="pk-product-price">HK$4,800</p>
-              <button class="pk-add-cart-btn">加入購物車</button>
-            </div>
-          </div>
-          <!-- Product 4 -->
-          <div class="pk-product-card">
-            <div class="pk-product-img-wrap">
-              <img src="../assets/prod-wedding-vow.jpg" alt="永恆誓約婚戒">
-            </div>
-            <div class="pk-product-body">
-              <p class="pk-product-name">永恆誓約婚戒</p>
-              <p class="pk-product-price">HK$12,800</p>
-              <button class="pk-add-cart-btn">加入購物車</button>
-            </div>
-          </div>
-          <!-- Product 5 -->
-          <div class="pk-product-card">
-            <div class="pk-product-img-wrap">
-              <span class="pk-sale-badge">SALE</span>
-              <img src="../assets/feat-engagement-ring.jpg" alt="古典莫桑石訂戒">
-            </div>
-            <div class="pk-product-body">
-              <p class="pk-product-name">古典莫桑石訂戒</p>
-              <p class="pk-product-price">HK$9,800</p>
-              <button class="pk-add-cart-btn">加入購物車</button>
-            </div>
-          </div>
-          <!-- Product 6 -->
-          <div class="pk-product-card">
-            <div class="pk-product-img-wrap">
-              <img src="../assets/feat-couple-jewelry.jpg" alt="經典對戒組合">
-            </div>
-            <div class="pk-product-body">
-              <p class="pk-product-name">經典對戒組合</p>
-              <p class="pk-product-price">HK$7,200</p>
-              <button class="pk-add-cart-btn">加入購物車</button>
-            </div>
-          </div>
-          <!-- Product 7 -->
-          <div class="pk-product-card">
-            <div class="pk-product-img-wrap">
-              <span class="pk-sale-badge">SALE</span>
-              <img src="../assets/feat-wedding-bands.jpg" alt="鉑金對戒">
-            </div>
-            <div class="pk-product-body">
-              <p class="pk-product-name">鉑金對戒</p>
-              <p class="pk-product-price">HK$15,800</p>
-              <button class="pk-add-cart-btn">加入購物車</button>
-            </div>
-          </div>
-          <!-- Product 8 -->
-          <div class="pk-product-card">
-            <div class="pk-product-img-wrap">
-              <img src="../assets/hero-dear-you.jpg" alt="Dear You 系列">
-            </div>
-            <div class="pk-product-body">
-              <p class="pk-product-name">Dear You 系列</p>
-              <p class="pk-product-price">HK$5,600</p>
-              <button class="pk-add-cart-btn">加入購物車</button>
-            </div>
+        <div class="cf-craft-gallery">
+          <div class="cf-craft-image">
+            <img src="../assets/cartify/asian-lifestyle.png" alt="匠心雕琢" width="1216" height="765" loading="lazy">
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Section 6: Mid-Page CTA Banner -->
-    <section id="craft" class="pk-midpage">
-      <img src="../assets/banner-06-craftsman.jpg" alt="匠心工藝">
-      <div class="pk-midpage-overlay"></div>
-      <div class="pk-midpage-content">
-        <h2 class="pk-serif" style="color:#fff; font-size:30px; font-weight:600; margin-bottom:16px;">匠心工藝</h2>
-        <p style="color:rgba(255,255,255,0.75); font-size:16px; line-height:1.6; margin-bottom:32px;">每一件莫桑石珠寶，都經過大師級手工鑲嵌</p>
-        <a href="#" class="pk-btn-gold">探索製程 <i data-lucide="arrow-right" style="width:18px;height:18px;"></i></a>
+    <!-- Section: Featured Products -->
+    <section class="cf-products" aria-label="精選商品">
+      <div class="pk-container-inner">
+        <div class="cf-section-head">
+          <h2>精選商品</h2>
+          <p>FEATURED COLLECTION</p>
+        </div>
+        <div class="cf-tabs" role="tablist">
+          <button class="cf-tab cf-tab-active" data-tab="featured">精選</button>
+          <button class="cf-tab" data-tab="bestseller">熱銷</button>
+          <button class="cf-tab" data-tab="new">新品</button>
+        </div>
+        <div class="cf-prod-grid">
+          <a href="#" class="cf-prod-card">
+            <div class="cf-prod-img">
+              <span class="cf-prod-sale">SALE</span>
+              <img src="../assets/collected/collected-ring-sixclaw.png" alt="六爪莫桑石戒指">
+            </div>
+            <div class="cf-prod-body">
+              <p class="cf-prod-name">六爪莫桑石戒指</p>
+              <p class="cf-prod-price">HK$8,800</p>
+            </div>
+          </a>
+          <a href="#" class="cf-prod-card">
+            <div class="cf-prod-img">
+              <span class="cf-prod-sale">SALE</span>
+              <img src="../assets/collected/collected-ring-heart.png" alt="心形求婚戒指">
+            </div>
+            <div class="cf-prod-body">
+              <p class="cf-prod-name">心形求婚戒指</p>
+              <p class="cf-prod-price">HK$6,600</p>
+            </div>
+          </a>
+          <a href="#" class="cf-prod-card">
+            <div class="cf-prod-img">
+              <img src="../assets/collected/collected-bracelet-full.png" alt="滿鑲排鑽手鏈">
+            </div>
+            <div class="cf-prod-body">
+              <p class="cf-prod-name">滿鑲排鑽手鏈</p>
+              <p class="cf-prod-price">HK$5,200</p>
+            </div>
+          </a>
+          <a href="#" class="cf-prod-card">
+            <div class="cf-prod-img">
+              <img src="../assets/collected/collected-bracelet-champagne.png" alt="香檳金莫桑石手鏈">
+            </div>
+            <div class="cf-prod-body">
+              <p class="cf-prod-name">香檳金莫桑石手鏈</p>
+              <p class="cf-prod-price">HK$5,800</p>
+            </div>
+          </a>
+          <a href="#" class="cf-prod-card">
+            <div class="cf-prod-img">
+              <span class="cf-prod-sale">SALE</span>
+              <img src="../assets/collected/collected-earring-bubble.png" alt="泡泡莫桑石耳釘">
+            </div>
+            <div class="cf-prod-body">
+              <p class="cf-prod-name">泡泡莫桑石耳釘</p>
+              <p class="cf-prod-price">HK$1,600</p>
+            </div>
+          </a>
+          <a href="#" class="cf-prod-card">
+            <div class="cf-prod-img">
+              <img src="../assets/collected/collected-earring-heart.png" alt="心形莫桑石耳釘">
+            </div>
+            <div class="cf-prod-body">
+              <p class="cf-prod-name">心形莫桑石耳釘</p>
+              <p class="cf-prod-price">HK$1,500</p>
+            </div>
+          </a>
+          <a href="#" class="cf-prod-card">
+            <div class="cf-prod-img">
+              <span class="cf-prod-sale">SALE</span>
+              <img src="../assets/collected/collected-necklace-ox.png" alt="牛頭款莫桑石鎖骨鏈">
+            </div>
+            <div class="cf-prod-body">
+              <p class="cf-prod-name">牛頭款莫桑石鎖骨鏈</p>
+              <p class="cf-prod-price">HK$3,200</p>
+            </div>
+          </a>
+          <a href="#" class="cf-prod-card">
+            <div class="cf-prod-img">
+              <img src="../assets/collected/collected-necklace-cross.png" alt="十字架莫桑石頸鏈">
+            </div>
+            <div class="cf-prod-body">
+              <p class="cf-prod-name">十字架莫桑石頸鏈</p>
+              <p class="cf-prod-price">HK$2,800</p>
+            </div>
+          </a>
+        </div>
       </div>
     </section>
 
-    <!-- Section 7: Category Section -->
-    <section class="pk-section-pad" style="background: var(--pk-background);">
-      <div class="pk-container">
-        <div class="text-center mb-10">
-          <p class="pk-eyebrow" style="margin-bottom:8px; letter-spacing:0.1em;">SHOP ALL CATEGORIES</p>
-          <h2 class="pk-serif" style="font-size: var(--pk-h2-size); font-weight:600;">全部分類</h2>
+    <!-- Section: Blog / Latest News -->
+    <section class="cf-blog" aria-label="最新資訊">
+      <div class="pk-container-inner">
+        <div class="cf-section-head">
+          <h2>最新資訊</h2>
+          <p>LATEST NEWS</p>
         </div>
-        <div class="pk-cat-grid">
-          <div class="pk-cat-card">
-            <div class="pk-cat-img-wrap">
-              <img src="../assets/cat-engagement-ring.jpg" alt="訂婚戒指">
+        <div class="cf-blog-grid">
+          <article class="cf-blog-card">
+            <div class="cf-blog-img">
+              <span class="cf-blog-date">15 AUG</span>
+              <img src="../assets/collected/blog-pendant.png" alt="莫桑石與鑽石差異文章">
             </div>
-            <div class="pk-cat-body">
-              <p style="color: var(--pk-gold); font-size:12px; letter-spacing:0.1em; margin-bottom:6px;">ENGAGEMENT RINGS</p>
-              <h3 class="pk-serif" style="font-size:20px; font-weight:600; margin-bottom:12px;">訂婚戒指</h3>
-              <a href="#" style="color: var(--pk-gold); font-size:14px; font-weight:600; text-decoration:none;">查看更多 →</a>
-            </div>
-          </div>
-          <div class="pk-cat-card">
-            <div class="pk-cat-img-wrap">
-              <img src="../assets/cat-couple-jewelry.jpg" alt="情侶珠寶">
-            </div>
-            <div class="pk-cat-body">
-              <p style="color: var(--pk-gold); font-size:12px; letter-spacing:0.1em; margin-bottom:6px;">COUPLE JEWELLERY</p>
-              <h3 class="pk-serif" style="font-size:20px; font-weight:600; margin-bottom:12px;">情侶珠寶</h3>
-              <a href="#" style="color: var(--pk-gold); font-size:14px; font-weight:600; text-decoration:none;">查看更多 →</a>
-            </div>
-          </div>
-          <div class="pk-cat-card">
-            <div class="pk-cat-img-wrap">
-              <img src="../assets/cat-gift-jewelry.jpg" alt="禮品首飾">
-            </div>
-            <div class="pk-cat-body">
-              <p style="color: var(--pk-gold); font-size:12px; letter-spacing:0.1em; margin-bottom:6px;">GIFT JEWELLERY</p>
-              <h3 class="pk-serif" style="font-size:20px; font-weight:600; margin-bottom:12px;">禮品首飾</h3>
-              <a href="#" style="color: var(--pk-gold); font-size:14px; font-weight:600; text-decoration:none;">查看更多 →</a>
-            </div>
-          </div>
-          <div class="pk-cat-card">
-            <div class="pk-cat-img-wrap">
-              <img src="../assets/cat-wedding-bands.jpg" alt="婚戒">
-            </div>
-            <div class="pk-cat-body">
-              <p style="color: var(--pk-gold); font-size:12px; letter-spacing:0.1em; margin-bottom:6px;">WEDDING BANDS</p>
-              <h3 class="pk-serif" style="font-size:20px; font-weight:600; margin-bottom:12px;">婚戒</h3>
-              <a href="#" style="color: var(--pk-gold); font-size:14px; font-weight:600; text-decoration:none;">查看更多 →</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 8: Latest News / Blog -->
-    <section class="pk-section-pad" style="background: var(--pk-surface-light);">
-      <div class="pk-container">
-        <div class="text-center mb-10">
-          <p class="pk-eyebrow" style="margin-bottom:8px;">LATEST NEWS</p>
-          <h2 class="pk-serif" style="font-size: var(--pk-h2-size); font-weight:600;">最新資訊</h2>
-        </div>
-        <div class="pk-blog-grid">
-          <article class="pk-blog-card">
-            <div class="pk-blog-img-wrap">
-              <span class="pk-blog-date">15 AUG</span>
-              <img src="../assets/banner-01-dearyou.jpg" alt="莫桑石與鑽石差異文章">
-            </div>
-            <div class="pk-blog-body">
-              <h3 class="pk-serif" style="font-size:18px; font-weight:600; line-height:1.4; margin-bottom:12px;">莫桑石與鑽石：你需要知道的5個差異</h3>
-              <a href="#" style="color: var(--pk-gold); font-size:14px; font-weight:600; text-decoration:none;">閱讀更多 →</a>
+            <div class="cf-blog-body">
+              <h3>莫桑石與鑽石：你需要知道的 5 個差異</h3>
+              <a href="#">閱讀更多</a>
             </div>
           </article>
-          <article class="pk-blog-card">
-            <div class="pk-blog-img-wrap">
-              <span class="pk-blog-date">08 AUG</span>
-              <img src="../assets/banner-05-gift.jpg" alt="挑選訂婚戒指文章">
+          <article class="cf-blog-card">
+            <div class="cf-blog-img">
+              <span class="cf-blog-date">08 AUG</span>
+              <img src="../assets/collected/blog-ring-marquis.png" alt="挑選訂婚戒指文章">
             </div>
-            <div class="pk-blog-body">
-              <h3 class="pk-serif" style="font-size:18px; font-weight:600; line-height:1.4; margin-bottom:12px;">如何挑選完美的訂婚戒指</h3>
-              <a href="#" style="color: var(--pk-gold); font-size:14px; font-weight:600; text-decoration:none;">閱讀更多 →</a>
+            <div class="cf-blog-body">
+              <h3>如何挑選完美的訂婚戒指</h3>
+              <a href="#">閱讀更多</a>
             </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- Section 9: Newsletter -->
-    <section class="pk-newsletter">
-      <div style="max-width:560px; margin:0 auto;">
-        <h2 class="pk-serif" style="color:#fff; font-size:24px; font-weight:600; margin-bottom:12px;">加入寶洛拉會員</h2>
-        <p style="color: var(--pk-dark-muted); font-size:14px; margin-bottom:28px;">搶先獲得最新產品資訊與專屬優惠</p>
-        <form class="pk-newsletter-form" onsubmit="return false;">
-          <input type="email" class="pk-newsletter-input" placeholder="請輸入您的電子信箱" aria-label="電子信箱">
-          <button type="submit" class="pk-btn-gold" style="white-space:nowrap;">訂閱</button>
-        </form>
-      </div>
+    <!-- Section: Newsletter -->
+    <section class="cf-newsletter" aria-label="訂閱電子報">
+      <h2>加入寶洛拉會員</h2>
+      <p>搶先獲得最新產品資訊與專屬優惠</p>
+      <form class="cf-newsletter-form" onsubmit="return false;">
+        <input type="email" placeholder="請輸入您的電子信箱" aria-label="電子信箱">
+        <button type="submit">訂閱</button>
+      </form>
     </section>
 
-    <!-- Section 10: Footer -->
-    <footer class="pk-footer">
-      <div class="pk-container">
-        <div class="pk-footer-grid">
+    <!-- Section: Footer -->
+    <footer class="cf-footer">
+      <div class="cf-footer-grid">
+        <div>
+          <span class="cf-footer-brand">PAULOLA</span>
+          <p class="cf-footer-tag">輕奢莫桑石珠寶品牌，致力於提供高品質、高性價比的永續珠寶。</p>
           <div>
-            <h3 class="pk-footer-heading pk-serif">PAULOLA 寶洛拉</h3>
-            <p style="font-size:14px; line-height:1.7; margin-bottom:20px; color: var(--pk-footer-text);">輕奢莫桑石珠寶品牌，致力於提供高品質、高性價比的永續珠寶。</p>
-            <div>
-              <a href="#" class="pk-social-icon" aria-label="Facebook"><i data-lucide="facebook" style="width:18px;height:18px;"></i></a>
-              <a href="#" class="pk-social-icon" aria-label="Instagram"><i data-lucide="instagram" style="width:18px;height:18px;"></i></a>
-              <a href="#" class="pk-social-icon" aria-label="LINE"><i data-lucide="message-circle" style="width:18px;height:18px;"></i></a>
-            </div>
-          </div>
-          <div>
-            <h3 class="pk-footer-heading">我的帳戶</h3>
-            <a href="#">會員中心</a>
-            <a href="#">訂單查詢</a>
-            <a href="#">退換貨政策</a>
-            <a href="#">願望清單</a>
-          </div>
-          <div>
-            <h3 class="pk-footer-heading">購物指南</h3>
-            <a href="#">關於我們</a>
-            <a href="#">配送資訊</a>
-            <a href="#">隱私政策</a>
-            <a href="#">常見問題</a>
-          </div>
-          <div>
-            <h3 class="pk-footer-heading">聯絡我們</h3>
-            <p style="font-size:14px; line-height:1.8; color: var(--pk-footer-text);">
-              香港上環德輔道中317-319號<br>
-              啟德商業大廈11樓1104A室<br>
-              support@paulola.com<br>
-              +852 9711 2975
-            </p>
+            <a href="#" class="cf-social-icon" aria-label="Facebook"><i data-lucide="facebook" style="width:18px;height:18px;"></i></a>
+            <a href="#" class="cf-social-icon" aria-label="Instagram"><i data-lucide="instagram" style="width:18px;height:18px;"></i></a>
+            <a href="#" class="cf-social-icon" aria-label="LINE"><i data-lucide="message-circle" style="width:18px;height:18px;"></i></a>
           </div>
         </div>
-        <div class="pk-footer-bottom">
-          <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <span class="pk-payment-icon">VISA</span>
-            <span class="pk-payment-icon">Mastercard</span>
-            <span class="pk-payment-icon">LINE Pay</span>
-            <span class="pk-payment-icon">ATM</span>
-          </div>
-          <p style="font-size:13px; color: var(--pk-dark-muted);">© 2026 PAULOLA 寶洛拉珠寶. All Rights Reserved.</p>
+        <div>
+          <h4>我的帳戶</h4>
+          <a href="#">會員中心</a>
+          <a href="#">訂單查詢</a>
+          <a href="#">退換貨政策</a>
+          <a href="#">願望清單</a>
         </div>
+        <div>
+          <h4>購物指南</h4>
+          <a href="#">關於我們</a>
+          <a href="#">配送資訊</a>
+          <a href="#">隱私政策</a>
+          <a href="#">常見問題</a>
+        </div>
+        <div>
+          <h4>聯絡我們</h4>
+          <p style="font-size:14px; line-height:1.8; color:#aaa;">
+            香港上環德輔道中 317-319 號<br>
+            啟德商業大廈 11 樓 1104A 室<br>
+            support@paulola.com<br>
+            +852 9711 2975
+          </p>
+        </div>
+      </div>
+      <div class="cf-footer-bottom">
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <span class="cf-payment-icon">VISA</span>
+          <span class="cf-payment-icon">Mastercard</span>
+          <span class="cf-payment-icon">LINE Pay</span>
+          <span class="cf-payment-icon">ATM</span>
+        </div>
+        <p style="font-size:13px; color:#888; margin:0;">© 2026 PAULOLA 寶洛拉珠寶. All Rights Reserved.</p>
       </div>
     </footer>
     </main>
     <script>lucide.createIcons();</script>
+    <script>
+    /* Cartify tab 切換（簡單視覺切換；如需載入不同資料，可改 fetch） */
+    (function () {
+      var tabs = document.querySelectorAll('.cf-tab');
+      if (!tabs.length) return;
+      tabs.forEach(function (t) {
+        t.addEventListener('click', function () {
+          tabs.forEach(function (x) { x.classList.remove('cf-tab-active'); });
+          t.classList.add('cf-tab-active');
+        });
+      });
+    })();
+    </script>
     <script>
     /* 响应式视频：手机端（<768px）切换为竖屏 9:16 智能跟焦版 */
     (function () {
@@ -1083,6 +1321,94 @@
           var anyOpen = ITEMS.some(function (it) { return openCards[it.id]; });
           if (anyOpen) closeAllCards();
         });
+      }
+    })();
+    </script>
+    <script>
+    /* === AccordionGallery native port (React Bits → vanilla GSAP) === */
+    (function () {
+      'use strict';
+      var root = document.getElementById('agGallery');
+      if (!root || typeof gsap === 'undefined') return;
+      var panels = Array.prototype.slice.call(root.querySelectorAll('.ag-panel'));
+      if (!panels.length) return;
+      var medias = panels.map(function (p) { return p.querySelector('.ag-panel__media'); });
+      var bars = panels.map(function (p) { return p.querySelector('.ag-panel__bar'); });
+      var texts = panels.map(function (p) { return p.querySelector('.ag-panel__text'); });
+      var count = panels.length;
+      var cfg = {
+        expandRatio: 0.52, duration: 0.6, ease: 'power3.out',
+        parallax: 0.5, tilt: 8, stagger: 0.06, grayscale: true, gap: 10, trigger: 'hover'
+      };
+      var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var mediaSize = 320;
+      var active = Math.min(Math.max(2, 0), count - 1);
+      var firstRun = true;
+      var tl = null;
+
+      function applyLayout(animate) {
+        if (tl) tl.kill();
+        var r = Math.min(Math.max(cfg.expandRatio, 0.2), 0.9);
+        var grow = count > 1 ? (r * (count - 1)) / (1 - r) : 1;
+        var dur = animate && !reduced ? cfg.duration : 0;
+        var t = gsap.timeline();
+        panels.forEach(function (panel, i) {
+          var isActive = i === active;
+          var rot = isActive ? 0 : (i < active ? cfg.tilt : -cfg.tilt);
+          t.to(panel, { flexGrow: isActive ? grow : 1, rotateY: rot, duration: dur, ease: cfg.ease }, 0);
+          var m = medias[i];
+          if (m) {
+            var drift = Math.max(-1.5, Math.min(1.5, active - i));
+            var shift = drift * cfg.parallax * mediaSize * 0.06;
+            var gray = cfg.grayscale ? (isActive ? 0 : 1) : 0;
+            t.to(m, {
+              xPercent: -50, yPercent: -50, x: isActive ? 0 : shift,
+              '--ag-gray': gray, '--ag-dim': isActive ? 0 : 0.35,
+              duration: dur, ease: cfg.ease
+            }, 0);
+          }
+          if (bars[i] && texts[i]) {
+            if (isActive) {
+              t.to([bars[i], texts[i]], { opacity: 1, x: 0, duration: dur, ease: cfg.ease, stagger: reduced ? 0 : cfg.stagger }, 0);
+            } else {
+              t.to([bars[i], texts[i]], { opacity: 0, x: -14, duration: dur * 0.6, ease: cfg.ease }, 0);
+            }
+          }
+        });
+        tl = t;
+      }
+
+      function measure() {
+        var rect = root.getBoundingClientRect();
+        var total = rect.width;
+        var usable = Math.max(total - cfg.gap * (count - 1), 120);
+        var size = Math.max(140, usable * Math.min(Math.max(cfg.expandRatio, 0.2), 0.9) * 1.22);
+        mediaSize = size;
+        root.style.setProperty('--ag-media-size', size + 'px');
+        applyLayout(!firstRun);
+      }
+
+      function setActive(i) {
+        if (i === active) return;
+        active = i;
+        applyLayout(true);
+      }
+
+      panels.forEach(function (p, i) {
+        p.addEventListener('mouseenter', function () { if (cfg.trigger !== 'click') setActive(i); });
+        p.addEventListener('click', function (e) { if (i !== active) { e.preventDefault(); setActive(i); } });
+        p.addEventListener('focus', function () { setActive(i); });
+        p.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); setActive((i + 1) % count); }
+          else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); setActive((i - 1 + count) % count); }
+        });
+      });
+
+      measure();
+      firstRun = false;
+      if (window.ResizeObserver) {
+        var ro = new ResizeObserver(measure);
+        ro.observe(root);
       }
     })();
     </script>

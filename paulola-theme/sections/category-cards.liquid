@@ -1,0 +1,70 @@
+<section class="cf-cats" aria-label="材質分類">
+  <div class="cf-cat-grid">
+    <a href="{{ routes.root_url }}" class="cf-cat-card">
+      <img src="{{ 'asian-gold-necklace.png' | asset_url }}" alt="Gold Jewellery" width="832" height="1118" loading="lazy">
+      <div class="cf-cat-overlay"></div>
+      <div class="cf-cat-content">
+        <h3 class="cf-cat-title">Gold<br>Jewellery</h3>
+        <span class="cf-zigzag"><svg viewBox="0 0 84 8" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,4 6,1 12,7 18,1 24,7 30,1 36,7 42,1 48,7 54,1 60,7 66,1 72,7 78,1 84,4" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <p class="cf-cat-desc">Fine crafted pieces for your needs.</p>
+        <span class="cf-btn-outline-light">Explore Now</span>
+      </div>
+    </a>
+    <a href="{{ routes.root_url }}" class="cf-cat-card">
+      <img src="{{ 'asian-diamond-rings.png' | asset_url }}" alt="Diamond Jewellery" width="832" height="1118" loading="lazy">
+      <div class="cf-cat-overlay"></div>
+      <div class="cf-cat-content">
+        <h3 class="cf-cat-title">Diamond<br>Jewellery</h3>
+        <span class="cf-zigzag"><svg viewBox="0 0 84 8" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,4 6,1 12,7 18,1 24,7 30,1 36,7 42,1 48,7 54,1 60,7 66,1 72,7 78,1 84,4" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <p class="cf-cat-desc">Fine crafted pieces for your needs.</p>
+        <span class="cf-btn-outline-light">Explore Now</span>
+      </div>
+    </a>
+    <a href="{{ routes.root_url }}" class="cf-cat-card">
+      <img src="{{ 'asian-earring.png' | asset_url }}" alt="Platinum Jewellery" width="832" height="1118" loading="lazy">
+      <div class="cf-cat-overlay"></div>
+      <div class="cf-cat-content">
+        <h3 class="cf-cat-title">Platinum<br>Jewellery</h3>
+        <span class="cf-zigzag"><svg viewBox="0 0 84 8" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,4 6,1 12,7 18,1 24,7 30,1 36,7 42,1 48,7 54,1 60,7 66,1 72,7 78,1 84,4" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <p class="cf-cat-desc">Fine crafted pieces for your needs.</p>
+        <span class="cf-btn-outline-light">Explore Now</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "材質分類卡",
+  "tag": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "材質分類卡"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+.cf-cats { padding: 8px 24px 72px; background: var(--pk-background); }
+.cf-cat-grid { max-width: var(--pk-container-max); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.cf-cat-card { position: relative; aspect-ratio: 3/4.2; border-radius: 6px; overflow: hidden; background: var(--cf-cream); display: block; text-decoration: none; cursor: pointer; }
+.cf-cat-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.2,.8,.3,1); display: block; }
+.cf-cat-card:hover img { transform: scale(1.06); }
+.cf-cat-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.65) 100%); pointer-events: none; }
+.cf-cat-content { position: absolute; left: 28px; right: 28px; bottom: 28px; color: #fff; z-index: 2; }
+.cf-cat-title { font-family: var(--pk-font-serif); font-size: 28px; font-weight: 500; line-height: 1.15; margin: 0; letter-spacing: -0.01em; color: #fff; }
+.cf-zigzag { display: inline-block; margin: 12px 0 14px; }
+.cf-zigzag svg { width: 84px; height: 8px; display: block; }
+.cf-cat-desc { font-size: 13px; opacity: 0.9; margin: 0 0 18px; color: #fff; line-height: 1.5; }
+.cf-btn-outline-light { display: inline-flex; align-items: center; gap: 6px; padding: 10px 22px; border: 1px solid rgba(255,255,255,0.85); border-radius: 999px; color: #fff; font-size: 13px; font-weight: 500; background: transparent; text-decoration: none; transition: background .2s ease, color .2s ease, border-color .2s ease; }
+.cf-btn-outline-light:hover { background: #fff; color: var(--cf-text); border-color: #fff; }
+@media (max-width: 1024px) {
+  .cf-cat-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .cf-cat-grid { grid-template-columns: 1fr; gap: 16px; }
+  .cf-cats { padding: 8px 16px 48px; }
+}
+{% endstylesheet %}
