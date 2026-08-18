@@ -166,7 +166,10 @@
 .cf-sort { display: flex; align-items: center; gap: 10px; }
 .cf-sort__label { font-size: 13px; color: var(--cf-text-soft); }
 .cf-sort__select { font-family: var(--pk-font-sans); font-size: 13px; color: var(--cf-text); background: #fff; border: 1px solid var(--cf-border); border-radius: 6px; padding: 9px 12px; cursor: pointer; }
-.cf-market__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+.cf-market__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
+.cf-market__grid .cf-pcard { min-width: 0; }
+.cf-market__grid .cf-pcard__media { aspect-ratio: 1/1; overflow: hidden; }
+.cf-market__grid .cf-pcard__img { width: 100%; height: 100%; max-width: 100%; object-fit: cover; }
 .cf-pagination { margin-top: 48px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .cf-pagination__inner { display: flex; align-items: center; gap: 10px; }
 .cf-pagination__btn, .cf-pagination__num { display: inline-flex; align-items: center; justify-content: center; min-width: 38px; height: 38px; border: 1px solid var(--cf-border); border-radius: 6px; color: var(--cf-text); font-size: 14px; text-decoration: none; transition: border-color .2s ease, background .2s ease; }
@@ -180,12 +183,12 @@
 .cf-pagination__jump-btn:hover { background: var(--cf-text); color: #fff; }
 .cf-market__empty { text-align: center; color: var(--cf-text-soft); font-size: 14px; padding: 48px 0; }
 @media (max-width: 1024px) {
-  .cf-market__grid { grid-template-columns: repeat(3, 1fr); }
+  .cf-market__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 768px) {
   .cf-market { padding: 24px 16px 64px; }
   .cf-market__title { font-size: 30px; margin-bottom: 20px; }
-  .cf-market__grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .cf-market__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
   .cf-filter-select { font-size: 12px; padding: 8px 12px; }
 }
 {% endstylesheet %}

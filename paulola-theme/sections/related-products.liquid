@@ -41,7 +41,12 @@
 .cf-related { padding: 8px 24px 96px; background: #ffffff; }
 .cf-related__inner { max-width: var(--pk-container-max); margin: 0 auto; }
 .cf-related__title { font-family: var(--pk-font-serif); font-size: 24px; font-weight: 600; color: var(--cf-text); margin: 0 0 28px; letter-spacing: -0.01em; }
-.cf-related__grid { gap: 28px; }
+.cf-related__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
+.cf-related__grid .cf-pcard { min-width: 0; }
+.cf-related__grid .cf-pcard__media { aspect-ratio: 1/1; overflow: hidden; }
+.cf-related__grid .cf-pcard__img { width: 100%; height: 100%; max-width: 100%; object-fit: cover; }
+@media (max-width: 1024px) { .cf-related__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 768px) { .cf-related__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; } }
 {% endstylesheet %}
 
 {% javascript %}
