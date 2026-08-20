@@ -1,0 +1,188 @@
+{%- liquid
+  assign block_count = section.blocks.size
+-%}
+<section class="pakyuet-category-cards ir-category-cards ir-category-cards--{{ section.settings.background }}{% if section.settings.square_media %} ir-category-cards--square{% endif %}">
+  <div class="ir-category-cards__wrap">
+    {%- if section.settings.heading != blank -%}
+      {%- liquid
+        assign sec_heading = section.settings.heading
+        assign sec_subheading = section.settings.subheading
+        if localization.language.iso_code == 'en'
+          case sec_heading
+          when '熱門分類'
+            assign sec_heading = 'Popular Categories'
+          when '推薦系列'
+            assign sec_heading = 'Featured Collections'
+          endcase
+          case sec_subheading
+          when '嚴選莫桑石系列，找到屬於您的永恆光芒'
+            assign sec_subheading = 'Handpicked moissanite collections to find the piece that shines for you'
+          when '職人嚴選，每一件都值得珍藏'
+            assign sec_subheading = 'Curated by our craftsmen — every piece worth treasuring'
+          endcase
+        endif
+      -%}
+      <div class="ir-sec-head">
+        <h2 class="ir-sec-head__title">{{ sec_heading }}</h2>
+        {%- if section.settings.subheading != blank -%}
+          <p class="ir-sec-head__sub">{{ sec_subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    <div class="ir-category-cards__inner">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign col = block.settings.collection
+          assign card_img_override = block.settings.image_override
+          assign card_img_asset = block.settings.image_asset
+          assign card_img = blank
+          assign card_products = 0
+          if col != blank
+            assign card_products = col.products_count
+            if card_img_override == blank and card_img_asset == blank
+              assign card_img = col.featured_image
+              if card_img == blank
+                assign card_img = col.products.first.featured_image
+              endif
+            endif
+          endif
+          assign card_title = block.settings.title | default: col.title
+          assign card_link = block.settings.link | default: col.url
+          assign cta_text = block.settings.cta_text
+          if localization.language.iso_code == 'en'
+            case card_title
+            when '莫桑石戒指'
+              assign card_title = 'Moissanite Rings'
+            when '莫桑石項鏈'
+              assign card_title = 'Moissanite Necklaces'
+            when '莫桑石耳飾'
+              assign card_title = 'Moissanite Earrings'
+            when '莫桑石手鏈'
+              assign card_title = 'Moissanite Bracelets'
+            when '星空物語'
+              assign card_title = 'Starry Stories'
+            when '花語系列'
+              assign card_title = 'Floral Series'
+            when '水光系列'
+              assign card_title = 'Water Glow Collection'
+            when '愛心系列'
+              assign card_title = 'Heart Collection'
+            when '探索系列'
+              assign card_title = 'Explore Collection'
+            endcase
+            case cta_text
+            when '探索系列'
+              assign cta_text = 'Explore Collection'
+            endcase
+          endif
+        -%}
+        {%- if col != blank -%}
+          <a href="{{ card_link }}" class="ir-category-card" {{ block.shopify_attributes }}>
+            <div class="ir-category-card__img-wrap">
+              {%- if card_img_override != blank -%}
+                {{
+                  card_img_override
+                  | image_url: width: 600
+                  | image_tag:
+                    widths: '300, 600',
+                    sizes: '(min-width: 1100px) 280px, (min-width: 700px) calc((100vw - 60px) / 3), calc((100vw - 36px) / 2)',
+                    class: 'ir-category-card__img',
+                    loading: 'lazy',
+                    alt: card_title
+                }}
+              {%- elsif card_img_asset != blank -%}
+                <img
+                  src="{{ card_img_asset | asset_url }}"
+                  alt="{{ card_title | escape }}"
+                  class="ir-category-card__img"
+                  width="600"
+                  height="600"
+                  loading="lazy"
+                >
+              {%- elsif card_img != blank -%}
+                {{
+                  card_img
+                  | image_url: width: 600
+                  | image_tag:
+                    widths: '300, 600',
+                    sizes: '(min-width: 1100px) 280px, (min-width: 700px) calc((100vw - 60px) / 3), calc((100vw - 36px) / 2)',
+                    class: 'ir-category-card__img',
+                    loading: 'lazy',
+                    alt: card_title
+                }}
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag: 'ir-category-card__placeholder' }}
+              {%- endif -%}
+              {%- if block.settings.badge != blank -%}
+                <span class="ir-category-card__badge">{{ block.settings.badge }}</span>
+              {%- endif -%}
+            </div>
+            <div class="ir-category-card__body">
+              <div class="ir-category-card__title">{{ card_title | escape }}</div>
+              {%- if card_products > 0 and section.settings.show_count -%}
+                <div class="ir-category-card__count">{{ card_products }} 件</div>
+              {%- endif -%}
+              {%- if block.settings.cta_text != blank -%}
+                <div class="ir-category-card__cta">{{ cta_text }}</div>
+              {%- endif -%}
+            </div>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "PAKYUET 分類入口卡",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "header",
+      "content": "區塊標題"
+    },
+    { "type": "text", "id": "heading", "label": "標題", "default": "熱門分類" },
+    { "type": "text", "id": "subheading", "label": "副標題" },
+    {
+      "type": "select",
+      "id": "background",
+      "label": "背景",
+      "options": [
+        { "value": "none", "label": "無 (白)" },
+        { "value": "light", "label": "淺 (米白)" },
+        { "value": "warm", "label": "暖 (米金)" }
+      ],
+      "default": "none"
+    },
+    { "type": "checkbox", "id": "square_media", "label": "正方形圖片 (1:1)", "default": false },
+    { "type": "checkbox", "id": "show_count", "label": "顯示商品數量", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "分類卡片",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "分類合集", "info": "選擇真實有商品的 collection。" },
+        { "type": "text", "id": "link", "label": "連結覆寫", "info": "留空則用分類合集 URL；可用組合篩選路徑，如 /collections/rings/莫桑石" },
+        { "type": "image_picker", "id": "image_override", "label": "自訂封面圖", "info": "選取後優先顯示；未選時用「素材檔名」或分類首圖" },
+        { "type": "text", "id": "image_asset", "label": "素材檔名 (assets/)", "info": "直接使用主題 assets 內圖檔，如 cat-engagement-ring.jpg" },
+        { "type": "text", "id": "title", "label": "卡片標題", "info": "留空則用 collection 標題" },
+        { "type": "text", "id": "badge", "label": "角標文字", "info": "可選，如「熱賣」" },
+        { "type": "text", "id": "cta_text", "label": "底部連結文字", "info": "可選，如「view more」/「探索系列」" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PAKYUET 分類入口卡",
+      "blocks": [
+        { "type": "card", "settings": { "title": "戒指" } },
+        { "type": "card", "settings": { "title": "項鏈" } },
+        { "type": "card", "settings": { "title": "耳飾" } },
+        { "type": "card", "settings": { "title": "手鏈" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

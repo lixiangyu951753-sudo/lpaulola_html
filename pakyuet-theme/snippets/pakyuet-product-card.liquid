@@ -1,0 +1,75 @@
+{% doc %}
+@param {product} product - The product to render
+@param {boolean} show_secondary_image - Show hover secondary image
+{% enddoc %}
+{%- liquid
+  assign tag_str = product.tags | join: ',' | downcase
+  assign series = ''
+  if tag_str contains 'moissanite'
+    assign series = 'moissanite'
+  elsif tag_str contains 'daily'
+    assign series = 'daily'
+  endif
+  assign card_sizes = '(min-width: 1201px) 260px, (min-width: 1025px) calc((100vw - 96px) / 4), (min-width: 769px) calc((100vw - 80px) / 3), calc((100vw - 60px) / 2)'
+  assign card_widths = '165, 360, 533, 720, 940'
+  assign primary_alt = product.featured_image.alt | default: product.title
+  if product.media[1] != null
+    assign secondary_alt = product.media[1].alt | default: product.title
+  endif
+-%}
+<a href="{{ product.url }}" class="pakyuet-product-card" data-type="{{ product.type | escape }}" data-series="{{ series }}" data-price="{{ product.price }}" data-date="{{ product.created_at | date: '%s' }}">
+  <div class="product-card__image-wrap media media--hover-effect">
+    {%- if product.featured_image -%}
+      {{
+        product.featured_image
+        | image_url: width: 940
+        | image_tag:
+          widths: card_widths,
+          sizes: card_sizes,
+          class: 'product-card__img product-card__img--primary',
+          loading: 'lazy',
+          alt: primary_alt
+      }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'pakyuet-product-card__placeholder' }}
+    {%- endif -%}
+    {%- if product.media[1] != null and show_secondary_image -%}
+      {{
+        product.media[1]
+        | image_url: width: 940
+        | image_tag:
+          widths: card_widths,
+          sizes: card_sizes,
+          class: 'product-card__img product-card__img--secondary',
+          loading: 'lazy',
+          alt: secondary_alt
+      }}
+    {%- endif -%}
+    {%- if series == 'moissanite' -%}
+      <span class="product-card__tag product-card__tag--moissanite">{% if localization.language.iso_code == 'en' %}Moissanite{% else %}莫桑石{% endif %}</span>
+    {%- elsif series == 'daily' -%}
+      <span class="product-card__tag product-card__tag--daily">{% if localization.language.iso_code == 'en' %}Everyday{% else %}日常{% endif %}</span>
+    {%- endif -%}
+    {%- if product.available == false -%}
+      <span class="product-card__badge product-card__badge--soldout">{% if localization.language.iso_code == 'en' %}Sold out{% else %}售罄{% endif %}</span>
+    {%- elsif product.compare_at_price > product.price -%}
+      <span class="product-card__badge product-card__badge--sale">SALE</span>
+    {%- endif -%}
+  </div>
+  <div class="product-card__info">
+    <div class="product-card__name">{{ product.title }}</div>
+    <div class="product-card__price-wrap">
+      {%- capture cur_symbol %}{% render 'currency-symbol' %}{% endcapture -%}
+      {%- if product.compare_at_price > product.price -%}
+        <span class="product-card__price product-card__price--sale">{{ cur_symbol }}{{ product.price | money_without_trailing_zeros | remove_first: '$' }}</span>
+        <span class="product-card__price product-card__price--compare">{{ cur_symbol }}{{ product.compare_at_price | money_without_trailing_zeros | remove_first: '$' }}</span>
+        <span class="product-card__discount">-{%- assign discount = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}{{ discount }}%</span>
+      {%- else -%}
+        <span class="product-card__price">{{ cur_symbol }}{{ product.price | money_without_trailing_zeros | remove_first: '$' }}</span>
+      {%- endif -%}
+    </div>
+    {%- unless product.available -%}
+      <div class="product-card__soldout">{% if localization.language.iso_code == 'en' %}Sold out{% else %}售罄{% endif %}</div>
+    {%- endunless -%}
+  </div>
+</a>

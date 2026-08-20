@@ -1,0 +1,13 @@
+/* 2026-08-12 悬浮按钮「白底白字」修复
+   根因：.ir-float-btn 用 background: var(--ir-primary)，但 --ir-primary 只定义在
+   .ir-header 作用域（pakyuet.css），悬浮按钮位于 body 层、header 之外 →
+   变量解析失败 → 透明底 + 白色文字，浅色/灰色背景下文字看不见。
+   独立新文件名：Cloudflare 忽略 query 按路径缓存 /cdn/*.css 1 年，同名覆盖不生效。
+   写死 hex，不依赖变量（同 hero CTA 先例）。 */
+.ir-float-btn {
+  background: #c4a35a;
+  color: #ffffff;
+}
+.ir-float-btn:hover {
+  background: #a8893f;
+}

@@ -1,0 +1,13 @@
+/* 2026-08-11 (v2) PAKYUET hero 高度修复
+   v1 用了 max-height:780px → 2K 屏容器被压成 ~3.28:1，16:9 图 cover 裁切上下 ~46%，裁太多。
+   改法：桌面 hero 高度 = 视口高 − 页眉 125px，首屏 header+hero 正好完整放下；
+         图片 object-fit:cover 裁切仅 ~9%(2K)/~12%(1080p)，主体完整、不再巨大、不再截断。
+   手机(≤768px)不应用，保持 9:16 原图。
+   独立新文件名原因：Cloudflare 忽略 query 按路径缓存 /cdn/*.css 1 年，同名覆盖不生效。 */
+@media (min-width: 769px) {
+  .ir-bhero__carousel {
+    height: calc(100vh - 125px);
+    min-height: 420px;
+    aspect-ratio: auto;
+  }
+}

@@ -1,0 +1,66 @@
+<section class="pakyuet-features">
+  <div class="container">
+    <div class="pakyuet-features__grid">
+      {%- for block in section.blocks -%}
+        <div class="features-bar__item" {{ block.shopify_attributes }}>
+          <div class="features-bar__icon">
+            {%- case block.settings.icon -%}
+              {%- when 'silver' -%}
+                <svg viewBox="0 0 24 24"><path d="M12 2L9 9l-7 1 5 5-1.5 7L12 19l4.5 3-1.5-7 5-5-7-1z"/></svg>
+              {%- when 'design' -%}
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l2 2 4-4"/></svg>
+              {%- when 'shipping' -%}
+                <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v5a1 1 0 0 1-1 1H16"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              {%- when 'return' -%}
+                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            {%- endcase -%}
+          </div>
+          <div class="features-bar__text">
+            <div class="features-bar__text-primary">{{ block.settings.title }}</div>
+            <div class="features-bar__text-secondary">{{ block.settings.desc }}</div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "PAKYUET 特性欄",
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "特性",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "圖標",
+          "options": [
+            { "value": "silver", "label": "925純銀（星）" },
+            { "value": "design", "label": "極簡設計（勾）" },
+            { "value": "shipping", "label": "發貨（卡車）" },
+            { "value": "return", "label": "退換（信封）" }
+          ],
+          "default": "silver"
+        },
+        { "type": "text", "id": "title", "label": "主標題", "default": "925純銀材質" },
+        { "type": "text", "id": "desc", "label": "副標題", "default": "溫和親膚" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PAKYUET 特性欄",
+      "blocks": [
+        { "type": "feature", "settings": { "icon": "silver", "title": "925純銀材質", "desc": "溫和親膚" } },
+        { "type": "feature", "settings": { "icon": "design", "title": "極簡設計", "desc": "百搭穿搭" } },
+        { "type": "feature", "settings": { "icon": "shipping", "title": "香港發貨", "desc": "3-5日送達" } },
+        { "type": "feature", "settings": { "icon": "return", "title": "7天退換", "desc": "無憂購物" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

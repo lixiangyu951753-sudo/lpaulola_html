@@ -1,0 +1,208 @@
+{%- liquid
+  assign fallback_images = 'hand-wearing-ring.jpg, moissanite-series.jpg, daily-collection.jpg' | split: ', '
+-%}
+
+<div class="pakyuet-brand-stories section-{{ section.id }}-padding">
+  {%- for block in section.blocks -%}
+    {%- liquid
+      assign idx = forloop.index0 | modulo: 3
+      assign fallback = fallback_images[idx]
+      if block.settings.image != blank
+        assign story_img = block.settings.image | image_url: width: 1200
+        assign story_w = block.settings.image.width
+        assign story_h = block.settings.image.height
+      elsif block.settings.image_asset != blank
+        assign story_img = block.settings.image_asset | asset_url
+        assign story_w = 800
+        assign story_h = 1000
+      else
+        assign story_img = fallback | asset_url
+        assign story_w = 800
+        assign story_h = 1000
+      endif
+
+      assign heading_out = block.settings.heading
+      assign text_out = block.settings.text
+      assign button_out = block.settings.button_label
+
+      if localization.language.iso_code == 'en'
+        case block.settings.heading
+          when '莫桑石戒指'
+            assign heading_out = 'Moissanite Rings'
+          when '訂婚戒指'
+            assign heading_out = 'Engagement Rings'
+          when '星空物語 / 愛心系列'
+            assign heading_out = 'Starry Stories / Heart Collection'
+        endcase
+
+        case block.settings.text
+          when '<p>嚴選 S925 純銀與莫桑石，以精湛鑲嵌工藝打造，讓承諾閃耀永恆光芒。從經典六爪到華麗車工，為您獻上最動人的求婚之選。</p>'
+            assign text_out = "<p>Crafted from premium S925 sterling silver and moissanite, our engagement designs are set with meticulous craftsmanship to make your promise shine forever. From timeless six-prong solitaires to brilliant-cut styles, we present the most touching choice for your proposal.</p>"
+          when '<p>嚴選 PAKYUET 代表之作，簡約俐落的線條設計，象徵兩人相守的承諾。舒適貼手的戒身弧度，讓愛在歲月中恆久陪伴。</p>'
+            assign text_out = "<p>Discover PAKYUET's signature designs — clean, understated lines that symbolize a promise shared by two. The comfortable, well-fitted band lets love accompany you through the years.</p>"
+          when '<p>從日常配戴到重要紀念，星空、愛心與花語系列為妳的愛情留下獨特印記，每一件都能刻字，傳遞專屬心意。</p>'
+            assign text_out = "<p>From everyday wear to special milestones, the Starry, Heart and Floral collections leave a unique mark on your love story. Each piece can be engraved to carry a message just for you.</p>"
+        endcase
+
+        case block.settings.button_label
+          when '探索系列'
+            assign button_out = 'Explore Collection'
+        endcase
+      endif
+    -%}
+    <section class="pakyuet-brand-story pakyuet-brand-story--{{ block.settings.layout }}" {{ block.shopify_attributes }}>
+      <div class="page-width">
+        <div class="pakyuet-brand-story__inner">
+          <div class="pakyuet-brand-story__image-wrap">
+            <img
+              src="{{ story_img }}"
+              alt="{{ heading_out | escape }}"
+              width="{{ story_w }}"
+              height="{{ story_h }}"
+              loading="lazy"
+            >
+          </div>
+          <div class="pakyuet-brand-story__text-wrap">
+            {%- if block.settings.label != blank -%}
+              <p class="pakyuet-brand-story__label">{{ block.settings.label }}</p>
+            {%- endif -%}
+            {%- if block.settings.heading != blank -%}
+              <h2 class="pakyuet-brand-story__heading">{{ heading_out }}</h2>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <div class="pakyuet-brand-story__body rte">{{ text_out }}</div>
+            {%- endif -%}
+            {%- if block.settings.button_label != blank -%}
+              <a
+                {% if block.settings.button_link != blank %}href="{{ block.settings.button_link }}"{% endif %}
+                class="pakyuet-brand-story__button"
+              >
+                {{- button_out -}}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </section>
+  {%- endfor -%}
+</div>
+
+{%- style -%}
+  .pakyuet-brand-stories.section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .pakyuet-brand-stories.section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "PAKYUET 品牌故事",
+  "tag": "section",
+  "class": "section pakyuet-brand-stories-section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "每個 block 為一段圖文。未選圖時依序使用內建圖(佩戴效果 / 莫桑石系列 / 日常系列)。"
+    },
+    {
+      "type": "header",
+      "content": "間距"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "上間距",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "下間距",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "story",
+      "name": "故事段落",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "圖片",
+          "info": "未選取時使用內建圖"
+        },
+        {
+          "type": "text",
+          "id": "image_asset",
+          "label": "素材檔名 (assets/)",
+          "info": "未選圖片時用此檔名，如 feat-engagement-ring.jpg"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "小標籤(金色大寫)",
+          "default": "PAKYUET STORY"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "標題",
+          "default": "閃耀如你"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "正文",
+          "default": "<p>每一顆莫桑石的璀璨,都源於對光影的極致追求。真正的美在你日常的每一刻自然流露。</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "按鈕文字(可留空)"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "按鈕連結"
+        },
+        {
+          "type": "select",
+          "id": "layout",
+          "label": "佈局",
+          "options": [
+            { "value": "image_first", "label": "圖左文右" },
+            { "value": "text_first", "label": "文左圖右" }
+          ],
+          "default": "image_first"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PAKYUET 品牌故事",
+      "blocks": [
+        { "type": "story", "settings": { "label": "PAKYUET STORY", "heading": "閃耀如你", "layout": "image_first" } },
+        { "type": "story", "settings": { "label": "CRAFTSMANSHIP", "heading": "匠心之作", "layout": "text_first" } },
+        { "type": "story", "settings": { "label": "PERFECT GIFT", "heading": "完美禮物", "layout": "image_first" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

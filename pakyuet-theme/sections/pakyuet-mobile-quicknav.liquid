@@ -1,0 +1,60 @@
+<nav class="pakyuet-mobile-quicknav ir-quicknav" aria-label="熱門分類快捷">
+  {%- for block in section.blocks -%}
+    {%- liquid
+      assign q_img = blank
+      if block.settings.image != blank
+        assign q_img = block.settings.image | image_url: width: 240
+      elsif block.settings.image_asset != blank
+        assign q_img = block.settings.image_asset | asset_url
+      endif
+      assign q_col = block.settings.collection
+      assign q_title = block.settings.title | default: q_col.title
+      assign q_url = block.settings.link
+      if q_url == blank and q_col != blank
+        assign q_url = q_col.url
+      endif
+      if q_url == blank
+        assign q_url = '/pages/shop'
+      endif
+    -%}
+    <a href="{{ q_url }}" class="ir-quicknav__item" {{ block.shopify_attributes }}>
+      {%- if q_img != blank -%}
+        <span class="ir-quicknav__icon" style="background-image:url('{{ q_img }}')"></span>
+      {%- else -%}
+        <span class="ir-quicknav__icon ir-quicknav__icon--fallback"></span>
+      {%- endif -%}
+      <span class="ir-quicknav__label">{{ q_title | escape }}</span>
+    </a>
+  {%- endfor -%}
+</nav>
+
+{% schema %}
+{
+  "name": "PAKYUET 手機快捷導航",
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "item",
+      "name": "快捷項目",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "分類合集", "info": "選擇 collection，連結與標題自動取用" },
+        { "type": "url", "id": "link", "label": "自訂連結", "info": "可選，優先於 collection" },
+        { "type": "text", "id": "title", "label": "短標題", "info": "留空用 collection 標題，如「戒指」" },
+        { "type": "image_picker", "id": "image", "label": "圓形圖示" },
+        { "type": "text", "id": "image_asset", "label": "素材檔名 (assets/)", "info": "未選圖示時用此檔名，如 cat-engagement-ring.jpg" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PAKYUET 手機快捷導航",
+      "blocks": [
+        { "type": "item", "settings": { "title": "戒指" } },
+        { "type": "item", "settings": { "title": "項鏈" } },
+        { "type": "item", "settings": { "title": "耳飾" } },
+        { "type": "item", "settings": { "title": "手鏈" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

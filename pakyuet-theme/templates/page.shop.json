@@ -1,0 +1,155 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "pakyuet-hero",
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "image": "",
+            "label": "PAKYUET&nbsp;ACCESSORIES",
+            "heading": "莫桑石項鍊、戒指推薦",
+            "subtitle": "永恆璀璨 · 專屬妳的動人時刻",
+            "button_label": "立即選購",
+            "button_link": "/collections/necklaces"
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "image": "",
+            "label": "PAKYUET&nbsp;ACCESSORIES",
+            "heading": "求婚訂婚莫桑石戒系列",
+            "subtitle": "璀璨承諾 · 永世相伴",
+            "button_label": "查看系列",
+            "button_link": "/collections/rings"
+          }
+        },
+        "slide_3": {
+          "type": "slide",
+          "settings": {
+            "image": "",
+            "label": "PAKYUET&nbsp;ACCESSORIES",
+            "heading": "定情對戒系列",
+            "subtitle": "嚴選臻品 · 傳遞專屬心意",
+            "button_label": "PAKYUET 推薦",
+            "button_link": "/collections/pakyuet-recommended"
+          }
+        }
+      },
+      "block_order": [
+        "slide_1",
+        "slide_2",
+        "slide_3"
+      ],
+      "settings": {}
+    },
+    "market": {
+      "type": "pakyuet-market",
+      "blocks": {
+        "g0": {
+          "type": "group",
+          "settings": {
+            "title": "依系列",
+            "items": "全部|/collections/all\n星空物語|/collections/theme-star\n花語系列|/collections/theme-flower\n水光系列|/collections/theme-water\n國風系列|/collections/theme-gf\n愛心系列|/collections/theme-love\n珍珠系列|/collections/theme-pearl"
+          }
+        },
+        "g1": {
+          "type": "group",
+          "settings": {
+            "title": "依材質",
+            "items": "全部|/collections/all\nS925純銀|/collections/material-s925\n銅|/collections/material-copper"
+          }
+        },
+        "g2": {
+          "type": "group",
+          "settings": {
+            "title": "依類別",
+            "items": "全部|/collections/all\n戒指|/collections/rings\n手鏈|/collections/bracelets\n耳飾|/collections/earrings\n項鏈|/collections/necklaces\n吊墜|/collections/pendants"
+          }
+        },
+        "g3": {
+          "type": "group",
+          "settings": {
+            "title": "依顏色",
+            "items": "全部|/collections/all\n白鑽|/collections/color-white\n黃鑽|/collections/color-yellow\n粉鑽|/collections/color-pink\n藍鑽|/collections/color-blue\n綠鑽|/collections/color-green\n紅鑽|/collections/color-red\n黑鑽|/collections/color-black\n紫鑽|/collections/color-purple\n香檳鑽|/collections/color-champagne\n彩色鑽|/collections/color-multicolor"
+          }
+        },
+        "g4": {
+          "type": "group",
+          "settings": {
+            "title": "依形狀",
+            "items": "全部|/collections/all\n圓形|/collections/shape-round\n公主方|/collections/shape-princess\n橢圓|/collections/shape-oval\n枕形|/collections/shape-cushion\n水滴|/collections/shape-pear\n心形|/collections/shape-heart\n祖母綠|/collections/shape-emerald\n馬眼|/collections/shape-marquise\n阿斯切|/collections/shape-asscher\n雷迪恩|/collections/shape-radiant"
+          }
+        },
+        "g5": {
+          "type": "group",
+          "settings": {
+            "title": "依風格",
+            "items": "全部|/collections/all\n清新風|/collections/style-fresh\n韓系風|/collections/style-ins\n奢華風|/collections/style-luxury\n極簡風|/collections/style-minimal\n復古風|/collections/style-vintage"
+          }
+        },
+        "g6": {
+          "type": "group",
+          "settings": {
+            "title": "依電鍍",
+            "items": "全部|/collections/all\n白金色|/collections/plating-whitegold\n玫瑰金色|/collections/plating-rosegold\n黃金色|/collections/plating-gold\n黑化|/collections/plating-black\n香檳色|/collections/plating-champagne\n雙色|/collections/plating-twotone"
+          }
+        },
+        "g7": {
+          "type": "group",
+          "settings": {
+            "title": "依石材",
+            "items": "全部|/collections/all\n莫桑石|/collections/moissanite\n鋯石|/collections/zircon\n高碳鑽|/collections/high-carbon-diamond\n彩寶|/collections/colored-gemstone\n珍珠|/collections/pearl"
+          }
+        }
+      },
+      "block_order": [
+        "g0",
+        "g7",
+        "g1",
+        "g2",
+        "g3",
+        "g4",
+        "g5",
+        "g6"
+      ],
+      "settings": {
+        "breadcrumb_text": "莫桑石",
+        "title": "莫桑石項鍊、戒指推薦",
+        "collection": "",
+        "show_secondary_image": true,
+        "products_to_show": 24,
+        "grid_title": "全部商品",
+        "sort_default_label": "綜合排序",
+        "sort_newest_label": "最新上架",
+        "sort_price_asc_label": "價格由低到高",
+        "sort_price_desc_label": "價格由高到低",
+        "empty_text": "店鋪暫無商品，請先上架商品。"
+      }
+    },
+    "newsletter": {
+      "type": "pakyuet-newsletter",
+      "settings": {
+        "heading": "訂閱 PAKYUET 電子報，率先獲取新品與優惠資訊",
+        "placeholder": "輸入你的電郵地址",
+        "button_text": "訂閱",
+        "success_text": "感謝訂閱！"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "market",
+    "newsletter"
+  ]
+}

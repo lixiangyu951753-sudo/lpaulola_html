@@ -1,0 +1,123 @@
+/* ================================================================
+   PAKYUET 数字分页 + 跳转页
+   新文件（独立路径绕 Cloudflare 对 /cdn/*.css 的 1 年缓存）
+   注意：pakyuet.css 有 `.pakyuet-pagination a, span` 通用规则（特异性 0,1,1），
+   本文件全部规则都带 `.pakyuet-pagination` 前缀（0,2,0+）以确保覆盖。
+   ================================================================ */
+
+.pakyuet-pagination .pakyuet-pagination__pages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pakyuet-pagination .pakyuet-pagination__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 6px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--color-text-primary);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.pakyuet-pagination .pakyuet-pagination__num--current {
+  background: var(--color-dark);
+  color: #fff;
+  border-color: var(--color-dark);
+  cursor: default;
+}
+
+.pakyuet-pagination .pakyuet-pagination__num--ellipsis {
+  background: transparent;
+  border-color: transparent;
+  color: var(--color-text-secondary);
+  cursor: default;
+}
+
+.pakyuet-pagination .pakyuet-pagination__jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 4px;
+}
+
+.pakyuet-pagination .pakyuet-pagination__jump-label {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  min-width: 0;
+  height: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.pakyuet-pagination .pakyuet-pagination__jump-input {
+  width: 58px;
+  height: 38px;
+  padding: 0 8px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  text-align: center;
+  color: var(--color-text-primary);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  -moz-appearance: textfield;
+}
+
+.pakyuet-pagination .pakyuet-pagination__jump-input::-webkit-outer-spin-button,
+.pakyuet-pagination .pakyuet-pagination__jump-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.pakyuet-pagination .pakyuet-pagination__jump-btn {
+  height: 38px;
+  padding: 0 14px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  background: var(--color-dark);
+  border: 1px solid var(--color-dark);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  white-space: nowrap;
+}
+
+.pakyuet-pagination .pakyuet-pagination__jump-btn:hover {
+  background: var(--color-accent-gold);
+  border-color: var(--color-accent-gold);
+}
+
+@media screen and (max-width: 767px) {
+  .pakyuet-pagination__inner {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 8px;
+  }
+  .pakyuet-pagination .pakyuet-pagination__num {
+    min-width: 34px;
+    height: 34px;
+    font-size: 14px;
+  }
+  .pakyuet-pagination .pakyuet-pagination__jump {
+    margin-left: 0;
+  }
+}

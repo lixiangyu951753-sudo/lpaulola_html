@@ -1,0 +1,252 @@
+/* ===================================================================
+   PAKYUET 静态首页楼层 (烤图 hero / 手机快捷导航 / 分类入口 / 专业服务 / 联络我们)
+   独立文件：绕过 Cloudflare 对旧 /cdn/*.css 的一年缓存
+   2026-08-09 · 全新 draft 主题专用
+   =================================================================== */
+
+/* ---------- 通用楼层标题 ---------- */
+.ir-sec-head { text-align: center; margin-bottom: 36px; }
+.ir-sec-head__title {
+  font-family: var(--font-serif, 'Noto Serif TC', serif);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--ir-text, #333333);
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+.ir-sec-head__sub {
+  font-size: 14px;
+  color: var(--ir-text-sec, #666666);
+  margin: 8px 0 0;
+}
+
+/* ---------- 烤图 Hero 轮播 ---------- */
+.pakyuet-baked-hero { background: #fff; }
+.ir-bhero__carousel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #f2ece4;
+}
+.ir-bhero__slide {
+  position: absolute;
+  inset: 0;
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease, visibility 0.8s;
+}
+.ir-bhero__slide.active { opacity: 1; visibility: visible; z-index: 1; }
+.ir-bhero__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ir-bhero__img--mobile { display: none; }
+.ir-bhero__prev,
+.ir-bhero__next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ir-text, #333333);
+  font-size: 22px;
+  line-height: 1;
+  padding: 0;
+  z-index: 5;
+  transition: background 0.2s, transform 0.2s;
+}
+.ir-bhero__prev:hover { background: rgba(255, 255, 255, 0.95); transform: translateY(-50%) scale(1.08); }
+.ir-bhero__next:hover { background: rgba(255, 255, 255, 0.95); transform: translateY(-50%) scale(1.08); }
+.ir-bhero__prev { left: 18px; }
+.ir-bhero__next { right: 18px; }
+.ir-bhero__dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 6;
+}
+.ir-bhero__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(51, 51, 51, 0.28);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.3s, width 0.3s;
+}
+.ir-bhero__dot.active { background: var(--ir-primary, #c4a35a); width: 28px; }
+
+/* ---------- 手机快捷导航 ---------- */
+.pakyuet-mobile-quicknav { display: none; }
+
+/* ---------- 分类入口卡 (首页风格) ---------- */
+.ir-category-cards--square { padding: 0; }
+.ir-category-cards--square .ir-category-cards__wrap { padding: 60px 24px; }
+.ir-category-cards--light { background: #faf6f2; }
+.ir-category-cards--warm { background: #f5ede5; }
+.ir-category-cards--square .ir-category-card__img-wrap { aspect-ratio: 1 / 1; }
+.ir-category-card__cta {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--ir-primary, #c4a35a);
+}
+
+/* ---------- 专业服务 4 卡 ---------- */
+.ir-service-cards { background: #ffffff; }
+.ir-service-cards__wrap { max-width: 1200px; margin: 0 auto; padding: 60px 24px; }
+.ir-service-cards__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.ir-service-card {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.ir-service-card:hover { transform: translateY(-4px); box-shadow: 0 4px 16px rgba(196, 163, 90, 0.2); }
+.ir-service-card__media {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-size: cover;
+  background-position: center;
+  background-color: #f5ede5;
+}
+.ir-service-card__text { padding: 16px 20px 6px; flex: 1; }
+.ir-service-card__title {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ir-text, #333333);
+  margin: 0 0 6px;
+}
+.ir-service-card__desc {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ir-text-sec, #666666);
+  margin: 0;
+}
+.ir-service-card__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 20px 20px;
+  padding: 11px 20px;
+  border-radius: 999px;
+  background: #2a2520;
+  color: #cccccc;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.ir-service-card__cta:hover { background: var(--ir-primary, #c4a35a); color: #ffffff; }
+
+/* ---------- 联络我们 4 卡 ---------- */
+.ir-contact-cards { background: #f5ede5; }
+.ir-contact-cards__wrap { max-width: 1200px; margin: 0 auto; padding: 60px 24px; }
+.ir-contact-cards__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.ir-contact-card {
+  padding: 24px;
+  border: 1px solid #e5ddd5;
+  border-radius: 8px;
+  background: #ffffff;
+}
+.ir-contact-card__title {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ir-text, #333333);
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ir-contact-card__icon { color: var(--ir-primary, #c4a35a); }
+.ir-contact-card__row {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ir-text-sec, #666666);
+  margin: 6px 0;
+}
+.ir-contact-card__link {
+  color: var(--ir-primary, #c4a35a);
+  font-weight: 500;
+  text-decoration: none;
+}
+.ir-contact-card__link:hover { text-decoration: underline; }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 1024px) {
+  .ir-service-cards__grid { grid-template-columns: repeat(2, 1fr); }
+  .ir-contact-cards__grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .ir-bhero__carousel { aspect-ratio: 1080 / 1624; }
+  .ir-bhero__img--desktop { display: none; }
+  .ir-bhero__img--mobile { display: block; }
+  .ir-bhero__prev,
+  .ir-bhero__next { width: 36px; height: 36px; font-size: 18px; }
+  .ir-bhero__dots { bottom: 14px; gap: 8px; }
+
+  /* 手机快捷导航 */
+  .pakyuet-mobile-quicknav { display: block; background: #ffffff; }
+  .ir-quicknav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 14px 16px 8px;
+  }
+  .ir-quicknav__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+  }
+  .ir-quicknav__icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 999px;
+    background-color: #f5ede5;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+  .ir-quicknav__label {
+    font-size: 12px;
+    color: var(--ir-text, #333333);
+  }
+}
+@media (max-width: 640px) {
+  .ir-category-cards--square .ir-category-cards__wrap { padding: 40px 16px; }
+  .ir-service-cards__wrap { padding: 40px 16px; }
+  .ir-contact-cards__wrap { padding: 40px 16px; }
+  .ir-service-cards__grid { grid-template-columns: 1fr; }
+  .ir-contact-cards__grid { grid-template-columns: 1fr; }
+  .ir-sec-head { margin-bottom: 28px; }
+  .ir-sec-head__title { font-size: 24px; }
+}

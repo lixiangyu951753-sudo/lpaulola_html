@@ -1,0 +1,59 @@
+{%- comment -%}
+  Alternate template: 输出 JSON 格式商品数据，供主页 AJAX 排序/翻页使用。
+  访问: /collections/all-color-sorted?view=data&sort_by=xxx&page=N&page_size=24
+  Shopify collection 模板原生支持 ?sort_by= 参数，自动应用排序。
+
+  注意：本主题的 request.params / request.query 在 alternate template 下为空（实测 null），
+  page_size 参数无法读到，故统一回退为 24（与首页/分类 pakyuet-market 的 products_to_show 一致）。
+{%- endcomment -%}
+{%- layout none -%}
+{%- assign page_size = request.params.page_size | default: 24 | times: 1 -%}
+{%- if page_size == 0 or page_size > 50 -%}{%- assign page_size = 24 -%}{%- endif -%}
+{%- capture cur_symbol %}{% render 'currency-symbol' %}{% endcapture -%}
+{%- paginate collection.products by page_size -%}
+{
+  "products": [
+    {%- for product in collection.products -%}
+    {%- liquid
+      assign tag_str = product.tags | join: ',' | downcase
+      assign series = ''
+      if tag_str contains 'moissanite'
+        assign series = 'moissanite'
+      elsif tag_str contains 'daily'
+        assign series = 'daily'
+      endif
+      assign image_url = ''
+      if product.featured_image
+        assign image_url = product.featured_image | image_url: width: 940
+      endif
+      assign secondary_image_url = ''
+      if product.media[1] != null
+        assign secondary_image_url = product.media[1] | image_url: width: 940
+      endif
+      assign price_clean = product.price | money_without_trailing_zeros | remove_first: '$'
+      assign price_formatted = cur_symbol | append: price_clean
+      assign compare_clean = product.compare_at_price | default: 0 | money_without_trailing_zeros | remove_first: '$'
+      assign compare_formatted = cur_symbol | append: compare_clean
+    -%}
+    {
+      "title": {{ product.title | json }},
+      "url": {{ product.url | json }},
+      "price": {{ product.price }},
+      "price_formatted": {{ price_formatted | json }},
+      "compare_at_price": {{ product.compare_at_price | default: 0 }},
+      "compare_at_price_formatted": {{ compare_formatted | json }},
+      "available": {{ product.available }},
+      "image": {{ image_url | json }},
+      "secondary_image": {{ secondary_image_url | json }},
+      "series": {{ series | json }},
+      "created_at": {{ product.created_at | date: '%s' }},
+      "type": {{ product.type | json }}
+    }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ],
+  "pagination": {
+    "current_page": {{ paginate.current_page }},
+    "pages": {{ paginate.pages }}
+  }
+}
+{%- endpaginate -%}

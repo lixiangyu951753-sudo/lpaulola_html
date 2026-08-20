@@ -1,0 +1,260 @@
+/* ============================================================
+   PAKYUET 移動端 IR 布局復刻 (2026-08-04)
+   - 分類頁篩選摺疊成「展開篩選」按鈕 (≤768px)
+   - 漢堡頁眉 + 抽屜導航 (≤768px)
+   - 商品格手機 2 列
+   獨立新文件繞 Cloudflare CDN 快取（見 pakyuet-cdn-cache-poisoning）。
+   必須在 pakyuet.css 之後加載，覆蓋移動端規則。
+   ============================================================ */
+
+/* ========== 篩選摺疊 ========== */
+.ir-filter-collapse { position: relative; }
+
+/* 展開/收起按鈕：桌面隱藏，手機顯示（對齊 IR「展開篩選」） */
+.ir-filter-toggle {
+  display: none;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: #ffffff;
+  border: 1px solid var(--ir-line, #e4e4e4);
+  border-radius: 2px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ir-text, #333333);
+  cursor: pointer;
+  font-family: inherit;
+}
+.ir-filter-toggle svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.2s;
+}
+.ir-filter-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+/* 面板：桌面常開；手機摺疊成 max-height:0 */
+.ir-filter-panel { max-height: none; }
+
+@media (max-width: 768px) {
+  .ir-filter-toggle { display: flex; }
+  .ir-filter-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+  }
+  .ir-filter-collapse.active .ir-filter-panel {
+    max-height: 600px;
+  }
+  /* 展開後 select 豎排通欄（對齊 IR 手機：下拉縱向堆疊） */
+  .ir-filter-panel .ir-filters {
+    flex-direction: column;
+    align-items: stretch;
+    overflow: visible;
+    gap: 10px;
+  }
+  .ir-filter-panel .ir-filter-select { width: 100%; }
+}
+
+/* ========== 漢堡按鈕 + 抽屜導航 (≤768px) ========== */
+.ir-hamburger {
+  display: none;
+  /* 不占满剩余宽度，避免把居中 logo 挤到图标上（logo 遮挡根因） */
+  flex: 0 0 auto;
+  /* 三横线必须纵向堆叠，否则 flex 默认 row 会把三条线排成一条横线（对齐 IR 三横汉堡） */
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: var(--ir-text, #333333);
+}
+.ir-hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: currentColor;
+  margin: 2px 0;
+  border-radius: 1px;
+}
+
+/* ========== 滾動收起公告欄（只留白色導航條，對齊 IR） ========== */
+.ir-announcement,
+.ir-announcement2 {
+  transition: height 0.3s ease, opacity 0.3s ease;
+}
+.ir-announcement {
+  overflow: hidden;
+}
+/* 副公告欄內含語言切換（下拉列表），平時須可溢出顯示；滾動收起時再裁剪 */
+.ir-announcement2 {
+  overflow: visible;
+}
+.ir-header--scrolled .ir-announcement,
+.ir-header--scrolled .ir-announcement2 {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+/* 抽屜：右側滑入 */
+.ir-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(86vw, 420px);
+  max-width: 100%;
+  background: #ffffff;
+  z-index: 120;
+  transform: translateX(100%);
+  transition: transform 0.28s ease;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  visibility: hidden;
+}
+.ir-drawer.open { transform: translateX(0); visibility: visible; }
+.ir-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--ir-line, #e4e4e4);
+  flex: 0 0 auto;
+}
+.ir-drawer__brand {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--ir-text, #333333);
+}
+.ir-drawer__close {
+  background: none;
+  border: 0;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--ir-text, #333333);
+  cursor: pointer;
+  padding: 0 4px;
+}
+.ir-drawer__nav {
+  padding: 12px 18px 32px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  -webkit-overflow-scrolling: touch;
+}
+.ir-drawer__link,
+.ir-drawer__summary {
+  display: block;
+  padding: 13px 4px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ir-text, #333333);
+  border-bottom: 1px solid var(--ir-line, #f0f0f0);
+  text-decoration: none;
+  cursor: pointer;
+  list-style: none;
+}
+.ir-drawer__summary::-webkit-details-marker { display: none; }
+.ir-drawer__summary::after {
+  content: '▸';
+  float: right;
+  color: var(--ir-text-sec, #999999);
+  font-size: 14px;
+  transition: transform 0.2s;
+}
+.ir-drawer__group[open] .ir-drawer__summary::after { transform: rotate(90deg); }
+.ir-drawer__children { padding: 0 0 6px 16px; }
+.ir-drawer__child {
+  display: block;
+  padding: 9px 4px;
+  font-size: 13.5px;
+  color: var(--ir-text-sec, #666666);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ir-line, #f5f5f5);
+}
+.ir-drawer__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 119;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.28s ease;
+}
+.ir-drawer__backdrop.open { opacity: 1; visibility: visible; }
+body.ir-menu-open { overflow: hidden; }
+
+@media (max-width: 768px) {
+  .ir-hamburger { display: flex; }
+  .ir-nav { position: relative; justify-content: space-between; }
+  .ir-logo { position: absolute; left: 50%; transform: translateX(-50%); }
+  /* 汉堡与右侧图标按自然宽度（不再 flex:1 占满），给绝对居中的 logo 让出空间，避免 logo 被图标遮挡 */
+  .ir-nav__right { flex: 0 0 auto; justify-content: flex-end; }
+  /* 手机端隐藏「門市資訊」文字按钮（对齐 IR：手机页眉只留图标） */
+  .ir-store-btn { display: none; }
+}
+
+
+/* ========== 頁腳社交圖標（對齊線上 Dawn 頁腳：實心白、無圓圈、公司列 WhatsApp 下方） ==========
+   原 pakyuet.css 沒有 .pakyuet-footer__social 任何規則 → 內聯 SVG 無尺寸渲成巨型黑塊。
+   這裡限制尺寸；FB/X 用填充、IG 用描邊。 */
+.pakyuet-footer__social {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 18px;
+}
+.pakyuet-footer__social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.pakyuet-footer__social a:hover { opacity: 0.65; }
+.pakyuet-footer__social svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+/* Facebook / X：填充風 */
+.pakyuet-footer__social a[aria-label="Facebook"] svg,
+.pakyuet-footer__social a[aria-label="X"] svg {
+  fill: currentColor;
+  stroke: none;
+}
+/* Instagram：feather 線條風 */
+.pakyuet-footer__social a[aria-label="Instagram"] svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ========== 頁腳背景對齊線上 Dawn（藏青 #242833，非近黑） ========== */
+.pakyuet-footer { background: #242833; }
+
+/* ========== 商品格手機 2 列（覆蓋 pakyuet.css 的 3→1 列） ========== */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .ir-market__grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .ir-market__grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+}
+@media (max-width: 480px) {
+  .ir-market__grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+}

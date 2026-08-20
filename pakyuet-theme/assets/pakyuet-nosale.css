@@ -1,0 +1,10 @@
+/* PAKYUET 隐藏 SALE 徽章（独立文件，确保绕过 Cloudflare 旧 CSS 缓存强制回源）。
+   pakyuet.com 的 CDN 忽略 query、缓存 /cdn/shop/t/20/assets/*.css 长达 1 年，
+   改旧文件访客看不到，新增文件路径从未被缓存 → 所有访客立即生效。
+
+   划线价是演示用的（compare_at_price = price × 1.2），红色 SALE 角标不是真实促销，
+   用户明确要求去掉。仅隐藏 SALE 徽章，保留划线价、-17% 折扣角标和售罄徽章。
+   nosale-v1 */
+.product-card__badge--sale {
+  display: none !important;
+}

@@ -1,0 +1,210 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "pakyuet_header": {
+      "type": "pakyuet-header",
+      "blocks": {
+        "nav_1": {
+          "type": "nav_link",
+          "settings": {
+            "label": "系列",
+            "link_url": "/collections/moissanite",
+            "child_label_1": "莫桑石",
+            "child_url_1": "/collections/moissanite",
+            "child_label_2": "鋯石",
+            "child_url_2": "/collections/zircon",
+            "child_label_3": "高碳鑽",
+            "child_url_3": "/collections/high-carbon-diamond",
+            "child_label_4": "日常系列",
+            "child_url_4": "/collections/daily-essentials",
+            "child_label_5": "珍珠系列",
+            "child_url_5": "/collections/theme-pearl",
+            "promo_slug": "moissanite",
+            "promo_link": "/collections/moissanite",
+            "promo_alt": "莫桑石系列"
+          }
+        },
+        "nav_2": {
+          "type": "nav_link",
+          "settings": {
+            "label": "戒指",
+            "link_url": "/collections/rings",
+            "child_label_1": "925純銀",
+            "child_url_1": "/collections/rings/material_s925",
+            "child_label_2": "星空物語",
+            "child_url_2": "/collections/rings/theme_star",
+            "child_label_3": "花語系列",
+            "child_url_3": "/collections/rings/theme_flower",
+            "child_label_4": "水光系列",
+            "child_url_4": "/collections/rings/theme_water",
+            "child_label_5": "極簡風",
+            "child_url_5": "/collections/rings/style_minimal",
+            "child_label_6": "奢華風",
+            "child_url_6": "/collections/rings/style_luxury",
+            "promo_slug": "rings",
+            "promo_link": "/collections/rings",
+            "promo_alt": "戒指系列"
+          }
+        },
+        "nav_3": {
+          "type": "nav_link",
+          "settings": {
+            "label": "項鏈",
+            "link_url": "/collections/necklaces",
+            "child_label_1": "925純銀",
+            "child_url_1": "/collections/necklaces/material_s925",
+            "child_label_2": "星空物語",
+            "child_url_2": "/collections/necklaces/theme_star",
+            "child_label_3": "珍珠系列",
+            "child_url_3": "/collections/necklaces/theme_pearl",
+            "child_label_4": "國風系列",
+            "child_url_4": "/collections/necklaces/theme_gf",
+            "child_label_5": "極簡風",
+            "child_url_5": "/collections/necklaces/style_minimal",
+            "child_label_6": "復古風",
+            "child_url_6": "/collections/necklaces/style_vintage",
+            "promo_slug": "necklace",
+            "promo_link": "/collections/necklaces",
+            "promo_alt": "項鏈系列"
+          }
+        },
+        "nav_8": {
+          "type": "nav_link",
+          "settings": {
+            "label": "吊墜",
+            "link_url": "/collections/pendants",
+            "child_label_1": "925純銀",
+            "child_url_1": "/collections/pendants/material_s925",
+            "child_label_2": "星空物語",
+            "child_url_2": "/collections/pendants/theme_star",
+            "child_label_3": "花語系列",
+            "child_url_3": "/collections/pendants/theme_flower",
+            "child_label_4": "國風系列",
+            "child_url_4": "/collections/pendants/theme_gf",
+            "child_label_5": "極簡風",
+            "child_url_5": "/collections/pendants/style_minimal",
+            "child_label_6": "奢華風",
+            "child_url_6": "/collections/pendants/style_luxury",
+            "promo_slug": "pendant",
+            "promo_link": "/collections/pendants",
+            "promo_alt": "吊墜系列"
+          }
+        },
+        "nav_4": {
+          "type": "nav_link",
+          "settings": {
+            "label": "耳飾",
+            "link_url": "/collections/earrings",
+            "child_label_1": "925純銀",
+            "child_url_1": "/collections/earrings/material_s925",
+            "child_label_2": "花語系列",
+            "child_url_2": "/collections/earrings/theme_flower",
+            "child_label_3": "水光系列",
+            "child_url_3": "/collections/earrings/theme_water",
+            "child_label_4": "愛心系列",
+            "child_url_4": "/collections/earrings/theme_love",
+            "child_label_5": "韓系風",
+            "child_url_5": "/collections/earrings/style_ins",
+            "child_label_6": "清新風",
+            "child_url_6": "/collections/earrings/style_fresh",
+            "promo_slug": "earrings",
+            "promo_link": "/collections/earrings",
+            "promo_alt": "耳飾系列"
+          }
+        },
+        "nav_5": {
+          "type": "nav_link",
+          "settings": {
+            "label": "手鏈",
+            "link_url": "/collections/bracelets",
+            "child_label_1": "925純銀",
+            "child_url_1": "/collections/bracelets/material_s925",
+            "child_label_2": "水光系列",
+            "child_url_2": "/collections/bracelets/theme_water",
+            "child_label_3": "國風系列",
+            "child_url_3": "/collections/bracelets/theme_gf",
+            "child_label_4": "珍珠系列",
+            "child_url_4": "/collections/bracelets/theme_pearl",
+            "child_label_5": "復古風",
+            "child_url_5": "/collections/bracelets/style_vintage",
+            "child_label_6": "奢華風",
+            "child_url_6": "/collections/bracelets/style_luxury",
+            "promo_slug": "bracelet",
+            "promo_link": "/collections/bracelets",
+            "promo_alt": "手鏈系列"
+          }
+        },
+        "nav_6": {
+          "type": "nav_link",
+          "settings": {
+            "label": "客戶服務",
+            "link_url": "/pages/contact",
+            "child_label_1": "常見問題",
+            "child_url_1": "/pages/%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C",
+            "child_label_2": "佩戴指南",
+            "child_url_2": "/pages/%E4%BD%A9%E6%88%B4%E6%8C%87%E5%8D%97",
+            "child_label_3": "材質與保養",
+            "child_url_3": "/pages/%E6%9D%90%E8%B3%AA%E8%88%87%E4%BF%9D%E9%A4%8A",
+            "child_label_4": "設計理念",
+            "child_url_4": "/pages/%E8%A8%AD%E8%A8%88%E7%90%86%E5%BF%B5",
+            "child_label_5": "門市資訊",
+            "child_url_5": "/pages/contact",
+            "child_label_6": "關於我們",
+            "child_url_6": "/pages/aboutus",
+            "promo_slug": "customer-service",
+            "promo_link": "/pages/contact",
+            "promo_alt": "客戶服務"
+          }
+        },
+        "nav_7": {
+          "type": "nav_link",
+          "settings": {
+            "label": "BLOG",
+            "link_url": "/blogs/jewelry-knowledge",
+            "blog_handle": "jewelry-knowledge"
+          }
+        }
+      },
+      "block_order": [
+        "nav_1",
+        "nav_2",
+        "nav_3",
+        "nav_8",
+        "nav_4",
+        "nav_5",
+        "nav_6",
+        "nav_7"
+      ],
+      "settings": {
+        "show_announcement": true,
+        "announcement_text": "莫桑石珠寶設計　匠心工藝　爲妳而作",
+        "show_announcement2": true,
+        "announcement2_text": "藝人見證的安心工藝 · 懂妳才懂做的戒指專家",
+        "logo_text": "PAKYUET",
+        "show_search": true,
+        "search_placeholder": "搜尋商品...",
+        "show_account": true,
+        "login_text": "登入",
+        "show_cart": true,
+        "cart_label": "購物車",
+        "help_text": "幫助中心",
+        "help_link": "",
+        "store_btn_text": "門市資訊",
+        "store_btn_link": "/pages/contact"
+      }
+    }
+  },
+  "order": [
+    "pakyuet_header"
+  ]
+}

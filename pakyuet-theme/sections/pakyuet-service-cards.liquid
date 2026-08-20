@@ -1,0 +1,130 @@
+<section class="pakyuet-service-cards ir-service-cards">
+  <div class="ir-service-cards__wrap">
+    {%- if section.settings.heading != blank -%}
+      {%- liquid
+        assign heading_text = section.settings.heading
+        if localization.language.iso_code == 'en'
+          case heading_text
+            when '專業服務'
+              assign heading_text = 'Our Services'
+          endcase
+        endif
+      -%}
+      <div class="ir-sec-head">
+        <h2 class="ir-sec-head__title">{{ heading_text }}</h2>
+        {%- if section.settings.subheading != blank -%}
+          {%- liquid
+            assign subheading_text = section.settings.subheading
+            if localization.language.iso_code == 'en'
+              case subheading_text
+                when '完整售後保障，讓您的珠寶歷久彌新'
+                  assign subheading_text = 'Complete after-sales care to keep your jewelry as brilliant as day one'
+              endcase
+            endif
+          -%}
+          <p class="ir-sec-head__sub">{{ subheading_text }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    <div class="ir-service-cards__grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign svc_img = blank
+          if block.settings.image != blank
+            assign svc_img = block.settings.image | image_url: width: 600
+          elsif block.settings.image_asset != blank
+            assign svc_img = block.settings.image_asset | asset_url
+          endif
+        -%}
+        <div class="ir-service-card" {{ block.shopify_attributes }}>
+          {%- liquid
+            assign card_title = block.settings.title
+            assign card_desc = block.settings.desc
+            assign card_btn = block.settings.button_label
+            if localization.language.iso_code == 'en'
+              case card_title
+                when '貼心售後服務'
+                  assign card_title = 'Attentive After-Sales Care'
+                when '專屬訂製推薦'
+                  assign card_title = 'Personalized Recommendations'
+                when '專業飾品保養'
+                  assign card_title = 'Professional Jewelry Care'
+                when '莫桑石知識分享'
+                  assign card_title = 'Moissanite Knowledge'
+              endcase
+              case card_desc
+                when 'PAKYUET 嚴選 S925 純銀與莫桑石，提供貼心售後與飾品清潔保養服務，讓珠寶歷久彌新。'
+                  assign card_desc = 'PAKYUET uses premium S925 sterling silver and moissanite, and offers thoughtful after-sales care and professional jewelry cleaning to keep your pieces beautiful for years.'
+                when '為您一對一推薦專屬飾品，依預算與場合挑選最契合的款式，讓心意與風格完美契合。'
+                  assign card_desc = 'Our team offers one-on-one recommendations to help you choose the perfect piece for your budget and occasion, matching your sentiment and style.'
+                when '每個珠寶飾品承載了深刻的回憶與意義，PAKYUET 提供專業保養修復，保存送禮與收禮的情意。'
+                  assign card_desc = 'Every piece carries meaningful memories. PAKYUET provides professional care and restoration to preserve the sentiment behind each gift.'
+                when '買婚戒前必看：莫桑石、鋯石與高碳鑽的差異，品質與常見問題全解析。'
+                  assign card_desc = 'A must-read before buying an engagement ring: the differences between moissanite, zircon and high-carbon diamond, with quality guides and FAQs.'
+              endcase
+              case card_btn
+                when '了解更多'
+                  assign card_btn = 'Learn More'
+              endcase
+            endif
+          -%}
+          {%- if svc_img != blank -%}
+            <div class="ir-service-card__media" style="background-image:url('{{ svc_img }}')"></div>
+          {%- endif -%}
+          <div class="ir-service-card__text">
+            {%- if block.settings.title != blank -%}
+              <h4 class="ir-service-card__title">{{ card_title }}</h4>
+            {%- endif -%}
+            {%- if block.settings.desc != blank -%}
+              <p class="ir-service-card__desc">{{ card_desc }}</p>
+            {%- endif -%}
+          </div>
+          {%- if block.settings.button_label != blank -%}
+            <a
+              {% if block.settings.button_link != blank %}href="{{ block.settings.button_link }}"{% endif %}
+              class="ir-service-card__cta"
+            >
+              {{ card_btn }}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "PAKYUET 專業服務卡",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "區塊標題", "default": "專業服務" },
+    { "type": "text", "id": "subheading", "label": "副標題", "default": "完整售後保障，讓您的珠寶歷久彌新" }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "服務卡片",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "圖片" },
+        { "type": "text", "id": "image_asset", "label": "素材檔名 (assets/)", "info": "未選圖片時用此檔名，如 svc-aftercare.jpg" },
+        { "type": "text", "id": "title", "label": "標題", "default": "貼心售後服務" },
+        { "type": "textarea", "id": "desc", "label": "描述", "default": "PAKYUET 嚴選 S925 純銀與莫桑石，提供貼心售後與飾品清潔保養服務，讓珠寶歷久彌新。" },
+        { "type": "text", "id": "button_label", "label": "按鈕文字", "default": "了解更多" },
+        { "type": "url", "id": "button_link", "label": "按鈕連結" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PAKYUET 專業服務卡",
+      "blocks": [
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" }
+      ]
+    }
+  ]
+}
+{% endschema %}

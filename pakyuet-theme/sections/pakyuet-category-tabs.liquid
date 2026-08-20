@@ -1,0 +1,193 @@
+{%- liquid
+  assign current_path = request.path
+-%}
+<section class="pakyuet-category-tabs">
+  <div class="category-tabs__inner" data-category-tabs>
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign link_url = block.settings.link_url
+        assign is_active = false
+        assign href = link_url
+        if link_url != blank
+          assign clean = link_url | split: '#' | first | split: '?' | first
+          assign clean_trim = clean | remove: request.host_url
+          if clean_trim == '/'
+            assign href = '/#products'
+            if current_path == '/'
+              assign is_active = true
+            endif
+          elsif clean_trim == current_path or clean == current_path
+            assign is_active = true
+          endif
+        else
+          assign href = '#'
+        endif
+      -%}
+      <a href="{{ href }}" class="category-tab{% if is_active %} active{% endif %}" {{ block.shopify_attributes }}>
+        {%- liquid
+          assign label_en = block.settings.label
+          if localization.language.iso_code == 'en'
+            case block.settings.label
+              when '依系列'
+                assign label_en = 'By Collection'
+              when '依材質'
+                assign label_en = 'By Material'
+              when '依類別'
+                assign label_en = 'By Category'
+              when '依顏色'
+                assign label_en = 'By Color'
+              when '依形狀'
+                assign label_en = 'By Shape'
+              when '依風格'
+                assign label_en = 'By Style'
+              when '依電鍍'
+                assign label_en = 'By Plating'
+              when '依石材'
+                assign label_en = 'By Stone'
+              when '全部'
+                assign label_en = 'All'
+              when '展開篩選'
+                assign label_en = 'Show Filters'
+              when '星空物語'
+                assign label_en = 'Starry Stories'
+              when '花語系列'
+                assign label_en = 'Floral Series'
+              when '水光系列'
+                assign label_en = 'Water Glow Collection'
+              when '國風系列'
+                assign label_en = 'Oriental Heritage'
+              when '愛心系列'
+                assign label_en = 'Heart Collection'
+              when '珍珠系列'
+                assign label_en = 'Pearl Collection'
+              when 'S925純銀'
+                assign label_en = '925 Sterling Silver'
+              when '銅'
+                assign label_en = 'Copper'
+              when '戒指'
+                assign label_en = 'Rings'
+              when '手鏈'
+                assign label_en = 'Bracelets'
+              when '耳飾'
+                assign label_en = 'Earrings'
+              when '項鏈'
+                assign label_en = 'Necklaces'
+              when '吊墜'
+                assign label_en = 'Pendants'
+              when '圓形'
+                assign label_en = 'Round'
+              when '公主方'
+                assign label_en = 'Princess'
+              when '橢圓'
+                assign label_en = 'Oval'
+              when '枕形'
+                assign label_en = 'Cushion'
+              when '水滴'
+                assign label_en = 'Pear'
+              when '心形'
+                assign label_en = 'Heart'
+              when '祖母綠'
+                assign label_en = 'Emerald'
+              when '馬眼'
+                assign label_en = 'Marquise'
+              when '阿斯切'
+                assign label_en = 'Asscher'
+              when '雷迪恩'
+                assign label_en = 'Radiant'
+              when '清新風'
+                assign label_en = 'Fresh'
+              when '韓系風'
+                assign label_en = 'Korean-Inspired'
+              when '奢華風'
+                assign label_en = 'Luxury'
+              when '極簡風'
+                assign label_en = 'Minimalist'
+              when '復古風'
+                assign label_en = 'Vintage'
+              when '白金色'
+                assign label_en = 'White Gold'
+              when '玫瑰金色'
+                assign label_en = 'Rose Gold'
+              when '黃金色'
+                assign label_en = 'Yellow Gold'
+              when '黑化'
+                assign label_en = 'Blackened'
+              when '香檳色'
+                assign label_en = 'Champagne'
+              when '雙色'
+                assign label_en = 'Two-tone'
+              when '莫桑石'
+                assign label_en = 'Moissanite'
+              when '鋯石'
+                assign label_en = 'Zircon'
+              when '高碳鑽'
+                assign label_en = 'High Carbon Diamond'
+              when '彩寶'
+                assign label_en = 'Colored Gemstones'
+              when '珍珠'
+                assign label_en = 'Pearl'
+              when '白鑽'
+                assign label_en = 'White'
+              when '黃鑽'
+                assign label_en = 'Yellow'
+              when '粉鑽'
+                assign label_en = 'Pink'
+              when '藍鑽'
+                assign label_en = 'Blue'
+              when '綠鑽'
+                assign label_en = 'Green'
+              when '紅鑽'
+                assign label_en = 'Red'
+              when '黑鑽'
+                assign label_en = 'Black'
+              when '紫鑽'
+                assign label_en = 'Purple'
+              when '香檳鑽'
+                assign label_en = 'Champagne'
+              when '彩色鑽'
+                assign label_en = 'Multicolor'
+            endcase
+          endif
+        -%}
+        {{ label_en }}
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "PAKYUET 分類標籤",
+  "max_blocks": 12,
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "分類標籤",
+      "settings": [
+        { "type": "text", "id": "label", "label": "標籤文字", "default": "全部" },
+        {
+          "type": "text",
+          "id": "link_url",
+          "label": "跳轉連結",
+          "default": "/",
+          "info": "填入路徑，如 /collections/bracelets。「全部」tab 填 / 會自動滾到商品區。"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PAKYUET 分類標籤",
+      "blocks": [
+        { "type": "tab", "settings": { "label": "全部", "link_url": "/" } },
+        { "type": "tab", "settings": { "label": "戒指", "link_url": "/collections/cat-ring" } },
+        { "type": "tab", "settings": { "label": "手鏈", "link_url": "/collections/cat-bracelet" } },
+        { "type": "tab", "settings": { "label": "耳飾", "link_url": "/collections/cat-earring" } },
+        { "type": "tab", "settings": { "label": "項鏈", "link_url": "/collections/cat-necklace" } },
+        { "type": "tab", "settings": { "label": "莫桑石系列", "link_url": "/collections/moissanite" } },
+        { "type": "tab", "settings": { "label": "日常系列", "link_url": "/collections/daily-essentials" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1799 @@
+/* ============================================
+   PAKYUET Design System v2 — shop-style homepage
+   Ported from pages/index.html (電商 shop 風格).
+   - rem values from the template converted to px (1rem = 16px)
+     so PAKYUET sizing is independent of Dawn's html { font-size: 62.5% }.
+   - Root classes namespaced .pakyuet-* to avoid clashing with
+     Dawn's own .footer / .hero / product-card rules.
+   - Header is sticky + solid (not fixed/transparent): the new
+     template's hero is a rounded card, not full-bleed under the nav.
+   ============================================ */
+:root {
+  /* Colors */
+  --color-white: #ffffff;
+  --color-off-white: #faf8f5;
+  --color-page-bg: #f2f2f2;
+  --color-dark: #1a1a1a;
+  --color-dark-rich: #1d1d1f;
+  --color-text-primary: #1d1d1f;
+  --color-text-secondary: #8c8c8c;
+  --color-accent-gold: #c9a96e;
+  --color-accent-rose: #b8977e;
+  --color-border-light: rgba(0, 0, 0, 0.06);
+  --color-border: #e0e0e0;
+  --color-search-bg: #f5f5f7;
+  --color-tag-moissanite: #c9a96e;
+  --color-tag-daily: #8c8c8c;
+
+  /* Typography */
+  --font-serif: 'Cormorant Garamond', 'Noto Serif TC', Georgia, serif;
+  --font-sans: 'Noto Sans TC', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+
+  /* Layout */
+  --container-max: 1400px;
+  --nav-height: 64px;
+  --top-bar-height: 32px;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-pill: 9999px;
+
+  /* Shadows */
+  --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.05);
+  --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.10);
+
+  /* Transitions */
+  --transition-fast: all 0.25s ease;
+  --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ============================================
+   Base (scoped — do not override Dawn body globally)
+   ============================================ */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.pakyuet-home,
+.pakyuet-header,
+.pakyuet-footer,
+.pakyuet-category-tabs,
+.pakyuet-product-section,
+.pakyuet-features,
+.pakyuet-newsletter {
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+}
+
+body.pakyuet-home {
+  font-weight: 400;
+  background-color: var(--color-page-bg);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+a { text-decoration: none; color: inherit; transition: var(--transition-fast); }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+/* Utility */
+.container { max-width: var(--container-max); margin: 0 auto; padding: 0 24px; }
+
+/* ============================================
+   1. Top Utility Bar
+   ============================================ */
+.pakyuet-top-bar {
+  background: var(--color-dark);
+  height: var(--top-bar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+  position: relative;
+  z-index: 100;
+}
+.pakyuet-top-bar a { color: rgba(255, 255, 255, 0.65); transition: var(--transition-fast); }
+.pakyuet-top-bar a:hover { color: #ffffff; }
+.pakyuet-top-bar__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; max-width: var(--container-max); margin: 0 auto; padding: 0 24px;
+}
+.pakyuet-top-bar__left { display: flex; align-items: center; gap: 6px; }
+.pakyuet-top-bar__left svg { width: 12px; height: 12px; stroke: rgba(255, 255, 255, 0.65); fill: none; stroke-width: 2; }
+.pakyuet-top-bar__right { display: flex; align-items: center; gap: 4px; }
+.pakyuet-top-bar__right .sep { margin: 0 8px; opacity: 0.3; }
+
+/* ============================================
+   2. Main Navigation Bar
+   ============================================ */
+.pakyuet-header {
+  background: var(--color-page-bg);
+  height: var(--nav-height);
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  box-shadow: none;
+  transition: box-shadow 0.3s ease;
+}
+.pakyuet-header.scrolled { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); }
+
+.nav__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 100%; max-width: var(--container-max); margin: 0 auto; padding: 0 24px;
+}
+.nav__logo {
+  font-family: var(--font-serif);
+  font-size: 21.6px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--color-text-primary);
+  flex-shrink: 0;
+}
+
+/* Search Bar */
+.nav__search { flex: 1; max-width: 500px; margin: 0 32px; position: relative; }
+.nav__search input {
+  width: 100%; height: 40px; padding: 0 16px 0 42px;
+  font-family: var(--font-sans); font-size: 13px;
+  color: var(--color-text-primary);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  outline: none; transition: var(--transition-fast);
+}
+.nav__search input::placeholder { color: var(--color-text-secondary); }
+.nav__search input:focus {
+  border-color: var(--color-accent-gold);
+  background: var(--color-white);
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
+}
+.nav__search-icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  width: 16px; height: 16px;
+  stroke: var(--color-text-secondary); fill: none; stroke-width: 2;
+  pointer-events: none;
+}
+
+/* Nav Actions */
+.nav__actions { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+.nav-action-btn {
+  display: flex; align-items: center; justify-content: center;
+  position: relative; color: var(--color-text-primary); transition: var(--transition-fast);
+}
+.nav-action-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.nav-action-btn:hover { color: var(--color-accent-gold); }
+.cart-badge {
+  position: absolute; top: -4px; right: -6px;
+  min-width: 16px; height: 16px; padding: 0 4px;
+  background: var(--color-accent-gold); color: var(--color-white);
+  font-size: 10px; font-weight: 700; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; line-height: 1;
+}
+
+/* ============================================
+   3. Category Tabs Bar
+   ============================================ */
+.pakyuet-category-tabs {
+  background: var(--color-white);
+  position: sticky;
+  top: var(--nav-height);
+  z-index: 85;
+  border-bottom: 1px solid var(--color-border-light);
+}
+.category-tabs__inner {
+  display: flex; align-items: center; gap: 0;
+  max-width: var(--container-max); margin: 0 auto; padding: 0 24px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.category-tabs__inner::-webkit-scrollbar { display: none; }
+.category-tab {
+  flex-shrink: 0; padding: 12px 20px;
+  font-family: var(--font-sans); font-size: 14px; font-weight: 400;
+  color: var(--color-text-secondary); cursor: pointer;
+  transition: var(--transition-fast); position: relative; white-space: nowrap;
+  border: none; background: none;
+}
+.category-tab:hover { color: var(--color-text-primary); }
+.category-tab.active { color: var(--color-text-primary); font-weight: 700; }
+.category-tab.active::after {
+  content: ''; position: absolute; bottom: 0; left: 20px; right: 20px;
+  height: 2px; background: var(--color-accent-gold); border-radius: 1px;
+}
+
+/* ============================================
+   4. Hero Banner Carousel
+   ============================================ */
+.pakyuet-hero { padding: 0 0 24px; }
+.pakyuet-hero__carousel {
+  position: relative; border-radius: var(--radius-md); overflow: hidden;
+  height: 320px;
+}
+.pakyuet-hero__slide {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  opacity: 0; transition: opacity 0.6s ease; pointer-events: none;
+}
+.pakyuet-hero__slide.active { opacity: 1; pointer-events: auto; }
+.pakyuet-hero__slide img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center 30%;
+}
+.pakyuet-hero__overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.15) 100%);
+}
+.pakyuet-hero__content {
+  position: absolute; top: 50%; left: 60px; transform: translateY(-50%);
+  z-index: 2; max-width: 500px;
+}
+.pakyuet-hero__label {
+  font-family: var(--font-sans); font-size: 11.2px; font-weight: 500;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7); margin-bottom: 16px;
+}
+.pakyuet-hero__heading {
+  font-family: var(--font-serif);
+  font-size: clamp(28.8px, 3.5vw, 44.8px);
+  font-weight: 400; color: var(--color-white);
+  line-height: 1.2; margin-bottom: 12px; letter-spacing: 0.04em;
+}
+.pakyuet-hero__subtitle {
+  font-family: var(--font-sans); font-size: 14.7px; font-weight: 300;
+  color: rgba(255, 255, 255, 0.8); line-height: 1.7; margin-bottom: 24px;
+}
+.pakyuet-hero__cta {
+  display: inline-block; padding: 10px 28px;
+  font-family: var(--font-sans); font-size: 12.8px; font-weight: 500;
+  letter-spacing: 0.08em; color: var(--color-white);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  cursor: pointer; transition: var(--transition-smooth);
+}
+.pakyuet-hero__cta:hover {
+  background: var(--color-white); color: var(--color-dark-rich); border-color: var(--color-white);
+}
+.pakyuet-hero__dots {
+  position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px; z-index: 3;
+}
+.pakyuet-hero__dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4); cursor: pointer;
+  transition: var(--transition-fast); border: none; padding: 0;
+}
+.pakyuet-hero__dot.active { background: var(--color-white); width: 24px; border-radius: 4px; }
+
+/* ============================================
+   5. Product Grid Section
+   ============================================ */
+.pakyuet-product-section { padding: 32px 0 48px; }
+.product-section__header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px;
+}
+.product-section__title {
+  font-family: var(--font-sans); font-size: 18px; font-weight: 700;
+  color: var(--color-text-primary); margin: 0;
+}
+.product-section__count {
+  font-size: 13px; font-weight: 300; color: var(--color-text-secondary); margin-left: 8px;
+}
+
+/* Sort Dropdown */
+.sort-dropdown { position: relative; }
+.sort-dropdown__toggle {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px; font-family: var(--font-sans); font-size: 13px; font-weight: 400;
+  color: var(--color-text-secondary); background: var(--color-white);
+  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  cursor: pointer; transition: var(--transition-fast);
+}
+.sort-dropdown__toggle:hover { border-color: var(--color-text-secondary); color: var(--color-text-primary); }
+.sort-dropdown__toggle svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform 0.25s ease; }
+.sort-dropdown.open .sort-dropdown__toggle svg { transform: rotate(180deg); }
+.sort-dropdown__menu {
+  position: absolute; top: calc(100% + 4px); right: 0; min-width: 160px;
+  background: var(--color-white); border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  opacity: 0; visibility: hidden; transform: translateY(-4px);
+  transition: all 0.2s ease; z-index: 50;
+}
+.sort-dropdown.open .sort-dropdown__menu { opacity: 1; visibility: visible; transform: translateY(0); }
+.sort-dropdown__item {
+  display: block; width: 100%; padding: 10px 16px;
+  font-family: var(--font-sans); font-size: 13px; font-weight: 400;
+  color: var(--color-text-secondary); text-align: left;
+  background: none; border: none; cursor: pointer; transition: var(--transition-fast);
+}
+.sort-dropdown__item:hover { background: var(--color-search-bg); color: var(--color-text-primary); }
+.sort-dropdown__item.active { color: var(--color-accent-gold); font-weight: 500; }
+
+/* Product Grid */
+.pakyuet-product-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.pakyuet-product-card {
+  background: var(--color-white); border-radius: var(--radius-sm); overflow: hidden;
+  box-shadow: var(--shadow-card); transition: var(--transition-smooth);
+  display: block;
+}
+.pakyuet-product-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-card-hover); }
+.product-card__image-wrap { position: relative; aspect-ratio: 1 / 1; overflow: hidden; }
+.product-card__image-wrap img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center 20%;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.pakyuet-product-card:hover .product-card__image-wrap img { transform: scale(1.05); }
+
+/* hover 換第二張圖：第二張預設透明、懸停時顯示並蓋在主圖上 */
+.product-card__img--secondary {
+  position: absolute; inset: 0; opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.pakyuet-product-card:hover .product-card__img--secondary { opacity: 1; }
+/* 觸屏裝置無 hover，關閉換圖避免主圖被永久覆蓋 */
+@media (hover: none) {
+  .product-card__img--secondary { display: none; }
+}
+.product-card__tag {
+  position: absolute; top: 8px; left: 8px; padding: 3px 10px;
+  font-size: 11px; font-weight: 500; border-radius: var(--radius-pill);
+  letter-spacing: 0.04em; z-index: 2;
+}
+.product-card__tag--moissanite { background: var(--color-tag-moissanite); color: var(--color-white); }
+.product-card__tag--daily { background: rgba(140, 140, 140, 0.85); color: var(--color-white); }
+.product-card__info { padding: 12px 14px 16px; }
+.product-card__name {
+  font-family: var(--font-sans); font-size: 13px; font-weight: 400;
+  color: var(--color-text-primary); line-height: 1.45;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; margin-bottom: 8px; min-height: 37px;
+}
+.product-card__price {
+  font-family: var(--font-sans); font-size: 15px; font-weight: 700;
+  color: var(--color-accent-gold); letter-spacing: 0.02em;
+}
+.product-card__price span { font-size: 12px; font-weight: 400; }
+.product-card__soldout { font-size: 11px; color: var(--color-text-secondary); margin-top: 4px; }
+.product-grid__empty {
+  grid-column: 1 / -1; text-align: center; padding: 48px 0;
+  color: var(--color-text-secondary); font-size: 14px;
+}
+
+/* ============================================
+   6. Brand Features Bar
+   ============================================ */
+.pakyuet-features {
+  background: var(--color-off-white); padding: 28px 0;
+  border-top: 1px solid var(--color-border-light);
+  border-bottom: 1px solid var(--color-border-light);
+}
+.pakyuet-features__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.features-bar__item {
+  display: flex; align-items: center; justify-content: center; gap: 10px; padding: 0 16px;
+}
+.features-bar__icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.features-bar__icon svg { width: 24px; height: 24px; stroke: var(--color-accent-gold); fill: none; stroke-width: 1.5; }
+.features-bar__text { text-align: left; }
+.features-bar__text-primary { font-family: var(--font-sans); font-size: 13px; font-weight: 500; color: var(--color-text-primary); line-height: 1.4; }
+.features-bar__text-secondary { font-family: var(--font-sans); font-size: 11px; font-weight: 300; color: var(--color-text-secondary); line-height: 1.4; }
+
+/* ============================================
+   7. Newsletter Bar
+   ============================================ */
+.pakyuet-newsletter { background: var(--color-dark); padding: 40px 0 36px; }
+.pakyuet-newsletter__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px; flex-wrap: wrap;
+}
+.pakyuet-newsletter__text {
+  font-family: var(--font-serif); font-size: 18.4px; font-weight: 400;
+  color: var(--color-white); letter-spacing: 0.02em; margin: 0;
+}
+.pakyuet-newsletter__form { display: flex; gap: 0; flex-shrink: 0; }
+.pakyuet-newsletter__input {
+  width: 300px; padding: 10px 18px;
+  font-family: var(--font-sans); font-size: 13px; font-weight: 300;
+  color: var(--color-white); background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15); border-right: none;
+  border-radius: var(--radius-pill) 0 0 var(--radius-pill);
+  outline: none; transition: var(--transition-fast);
+}
+.pakyuet-newsletter__input::placeholder { color: rgba(255, 255, 255, 0.35); }
+.pakyuet-newsletter__input:focus { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.3); }
+.pakyuet-newsletter__btn {
+  padding: 10px 24px; font-family: var(--font-sans); font-size: 13px; font-weight: 400;
+  letter-spacing: 0.08em; color: var(--color-dark-rich); background: var(--color-white);
+  border: 1px solid var(--color-white);
+  border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
+  cursor: pointer; transition: var(--transition-smooth); white-space: nowrap;
+}
+.pakyuet-newsletter__btn:hover { background: var(--color-accent-gold); border-color: var(--color-accent-gold); color: var(--color-white); }
+.pakyuet-newsletter__note { margin-top: 12px; font-size: 12px; color: rgba(255, 255, 255, 0.6); }
+
+/* ============================================
+   8. Footer
+   ============================================ */
+.pakyuet-footer { background: var(--color-dark); padding: 48px 0 0; }
+.pakyuet-footer__grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 36px;
+  padding-bottom: 40px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.pakyuet-footer__col-title {
+  font-family: var(--font-sans); font-size: 13px; font-weight: 700;
+  letter-spacing: 0.1em; color: rgba(255, 255, 255, 0.9); margin-bottom: 20px;
+}
+.pakyuet-footer__col ul { list-style: none; margin: 0; padding: 0; }
+.pakyuet-footer__col li { margin-bottom: 10px; }
+.pakyuet-footer__col a {
+  font-family: var(--font-sans); font-size: 13px; font-weight: 300;
+  color: rgba(255, 255, 255, 0.5); transition: var(--transition-fast);
+}
+.pakyuet-footer__col a:hover { color: rgba(255, 255, 255, 0.9); }
+.pakyuet-footer__bottom {
+  padding: 24px 0; display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+.pakyuet-footer__copyright {
+  font-family: var(--font-sans); font-size: 12px; font-weight: 300;
+  color: rgba(255, 255, 255, 0.35); margin: 0;
+}
+.pakyuet-footer__payment { display: flex; align-items: center; gap: 12px; }
+.pakyuet-footer__payment-icons { display: flex; gap: 8px; align-items: center; }
+.pakyuet-footer__payment-icon {
+  width: 36px; height: 24px; background: rgba(255, 255, 255, 0.08); border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+}
+.pakyuet-footer__payment-icon svg { width: 20px; height: 14px; stroke: rgba(255, 255, 255, 0.4); fill: none; stroke-width: 1.5; }
+.pakyuet-footer__payment-label { font-family: var(--font-sans); font-size: 11px; font-weight: 300; color: rgba(255, 255, 255, 0.3); }
+/* 公司資訊資訊欄(頁腳最右) */
+.pakyuet-footer__col--company .pakyuet-footer__company-name {
+  letter-spacing: normal; margin-bottom: 16px;
+}
+.pakyuet-footer__company-addr {
+  font-family: var(--font-sans); font-size: 11px; font-weight: 300;
+  line-height: 1.6; color: rgba(255, 255, 255, 0.45); margin: 0 0 10px;
+  white-space: pre-line;
+}
+.pakyuet-footer__company-meta { list-style: none; margin: 0; padding: 0; }
+.pakyuet-footer__company-meta li {
+  font-family: var(--font-sans); font-size: 11px; font-weight: 300;
+  color: rgba(255, 255, 255, 0.45); margin-bottom: 5px;
+}
+.pakyuet-footer__company-meta span {
+  display: block;
+  color: rgba(255, 255, 255, 0.3);
+}
+.pakyuet-footer__company-meta a {
+  color: rgba(255, 255, 255, 0.65); text-decoration: none; transition: var(--transition-fast);
+}
+.pakyuet-footer__company-meta a:hover { color: rgba(255, 255, 255, 0.9); text-decoration: underline; }
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 1200px) {
+  .pakyuet-product-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 1024px) {
+  .pakyuet-product-grid { grid-template-columns: repeat(3, 1fr); }
+  .nav__search { margin: 0 20px; max-width: 400px; }
+  .pakyuet-footer__grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .pakyuet-features__grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+}
+@media (max-width: 768px) {
+  .pakyuet-top-bar__left span { display: none; }
+  .pakyuet-top-bar__left::after { content: '免費送貨'; }
+  .nav__search { margin: 0 12px; max-width: 100%; }
+  .pakyuet-hero__carousel { height: 220px; }
+  .pakyuet-hero__content { left: 24px; max-width: 80%; }
+  .pakyuet-hero__heading { font-size: 24px; }
+  .pakyuet-hero__subtitle { font-size: 13.1px; display: none; }
+  .pakyuet-product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .product-section__header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .pakyuet-features__grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .features-bar__item { flex-direction: column; text-align: center; gap: 6px; padding: 8px; }
+  .features-bar__text { text-align: center; }
+  .pakyuet-newsletter__inner { flex-direction: column; text-align: center; }
+  .pakyuet-newsletter__form { width: 100%; max-width: 400px; }
+  .pakyuet-newsletter__input { width: 100%; flex: 1; border-right: 1px solid rgba(255, 255, 255, 0.15); border-radius: var(--radius-pill); }
+  .pakyuet-newsletter__btn { border-radius: var(--radius-pill); }
+  .pakyuet-footer__grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+  .pakyuet-footer__bottom { flex-direction: column; text-align: center; }
+  .category-tabs__inner { padding: 0 16px; }
+  .category-tab { padding: 12px 14px; font-size: 13px; }
+}
+@media (max-width: 480px) {
+  .nav__logo { font-size: 17.6px; letter-spacing: 0.1em; }
+  .nav__search { margin: 0 8px; }
+  .nav__search input { height: 36px; font-size: 12px; padding-left: 36px; }
+  .nav-action-btn svg { width: 20px; height: 20px; }
+  .pakyuet-hero__carousel { height: 180px; border-radius: 8px; }
+  .pakyuet-hero__content { left: 16px; }
+  .pakyuet-hero__label { display: none; }
+  .pakyuet-hero__heading { font-size: 20px; }
+  .pakyuet-hero__cta { padding: 8px 20px; font-size: 12px; }
+  .product-card__info { padding: 10px 10px 12px; }
+  .product-card__name { font-size: 12px; min-height: 34px; }
+  .product-card__price { font-size: 14px; }
+  .pakyuet-footer__grid { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .pakyuet-hero__slide { transition: none; }
+  .pakyuet-product-card:hover { transform: none; }
+}
+
+
+/* ============================================
+   SALE Badge & Discount Price (Added by Codex)
+   ============================================ */
+.product-card__badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-sm);
+  z-index: 5;
+  pointer-events: none;
+}
+/* SALE 徽章：划线价是演示用的（compare_at_price=price×1.2），不需要红 SALE 角标。
+   用户明确要求去掉。售罄徽章不受影响。 */
+.product-card__badge--sale {
+  display: none;
+}
+.product-card__badge--soldout {
+  background: #888;
+  color: #fff;
+}
+
+/* Dawn `.media > *:not(...)` 会把 .media 直接子元素拉伸铺满整图，
+   导致 SALE/售罄 徽章变成盖住整张商品图的大色块。用更高特异性重置为小角标。 */
+.media.product-card__image-wrap > .product-card__badge {
+  top: 10px;
+  left: 10px;
+  width: auto;
+  height: auto;
+  max-width: none;
+  display: inline-block;
+}
+
+/* Discount price */
+.product-card__price-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.product-card__price--sale {
+  color: #e74c3c;
+  font-weight: 700;
+}
+.product-card__price--compare {
+  color: var(--color-text-secondary);
+  text-decoration: line-through;
+  font-size: 13px;
+}
+.product-card__discount {
+  background: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ============================================
+   Breadcrumb (Added by Codex)
+   ============================================ */
+.pakyuet-breadcrumb {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 12px 24px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+.pakyuet-breadcrumb a {
+  color: var(--color-text-secondary);
+  transition: var(--transition-fast);
+}
+.pakyuet-breadcrumb a:hover {
+  color: var(--color-accent-gold);
+}
+.pakyuet-breadcrumb__sep {
+  margin: 0 6px;
+  opacity: 0.4;
+}
+.pakyuet-breadcrumb__current {
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   Pagination (Added by Codex)
+   ============================================ */
+.pakyuet-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 32px 0 16px;
+}
+.pakyuet-pagination a,
+.pakyuet-pagination span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  transition: var(--transition-fast);
+  text-decoration: none;
+}
+.pakyuet-pagination a:hover {
+  border-color: var(--color-accent-gold);
+  color: var(--color-accent-gold);
+}
+.pakyuet-pagination .current {
+  background: var(--color-dark);
+  color: #fff;
+  border-color: var(--color-dark);
+}
+.pakyuet-pagination .disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ============================================
+   P. 产品详情页 (rich 备用模板) — Arlos 风格
+   使用 .pakyuet-* 变量;类选择器不依赖 section 实例 ID
+   ============================================ */
+
+/* P.1 产品信息手风琴 (详情 / 产品规格 / 配送及退货) */
+.product__accordion.accordion {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--color-border-light);
+}
+.product__accordion .accordion__title {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: var(--color-text-primary);
+}
+.product__accordion summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--color-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.product__accordion summary::-webkit-details-marker { display: none; }
+.product__accordion .accordion__content {
+  padding: 16px 0 20px;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+/* P.2 产品故事区段 (layered image + video + overlay) */
+.pakyuet-story-section { overflow: hidden; }
+.pakyuet-story {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+}
+.pakyuet-story--small { min-height: 320px; }
+.pakyuet-story--medium { min-height: 460px; }
+.pakyuet-story--large { min-height: 600px; }
+.pakyuet-story--adapt { min-height: 380px; }
+.pakyuet-story__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+.pakyuet-story__image,
+.pakyuet-story__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.pakyuet-story__overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--color-dark);
+  opacity: var(--overlay-opacity, 0.35);
+  z-index: 1;
+}
+.pakyuet-story__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  padding: 48px 0;
+  min-height: inherit;
+  align-items: center;
+}
+.pakyuet-story__content--bottom-left,
+.pakyuet-story__content--bottom-right { align-items: flex-end; }
+.pakyuet-story__content--bottom-left .pakyuet-story__inner { text-align: left; margin-right: auto; }
+.pakyuet-story__content--bottom-right .pakyuet-story__inner { text-align: right; margin-left: auto; }
+.pakyuet-story__content--center .pakyuet-story__inner {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 720px;
+}
+.pakyuet-story__inner { padding: 0 24px; }
+.pakyuet-story__caption {
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  opacity: 0.85;
+}
+.pakyuet-story__heading {
+  font-family: var(--font-serif);
+  font-size: 44px;
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  line-height: 1.2;
+  margin: 0 0 16px;
+}
+.pakyuet-story__text {
+  font-size: 15px;
+  line-height: 1.8;
+  letter-spacing: 0.3px;
+  margin-bottom: 24px;
+  opacity: 0.92;
+}
+.pakyuet-story__button {
+  border-radius: var(--radius-pill);
+  padding: 14px 36px;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+.pakyuet-story__content--light .pakyuet-story__heading,
+.pakyuet-story__content--light .pakyuet-story__caption,
+.pakyuet-story__content--light .pakyuet-story__text {
+  color: var(--color-white);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+.pakyuet-story__content--dark .pakyuet-story__heading,
+.pakyuet-story__content--dark .pakyuet-story__caption,
+.pakyuet-story__content--dark .pakyuet-story__text {
+  color: var(--color-text-primary);
+}
+.pakyuet-story__content--light .pakyuet-story__button {
+  border-color: rgba(255, 255, 255, 0.8);
+  color: var(--color-white);
+}
+.pakyuet-story__content--light .pakyuet-story__button:hover {
+  background: var(--color-white);
+  color: var(--color-dark-rich);
+}
+/* 无媒体时兜底背景(避免空 section) */
+.pakyuet-story:not(:has(.pakyuet-story__media)) {
+  background: var(--color-dark-rich);
+  min-height: 320px;
+}
+
+/* P.3 评价区占位 */
+.pakyuet-reviews__heading {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  color: var(--color-text-primary);
+  text-align: center;
+  margin-bottom: 24px;
+}
+.pakyuet-reviews__summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: var(--color-text-primary);
+}
+.pakyuet-reviews__stars { font-size: 18px; }
+.pakyuet-reviews__score { font-weight: 600; }
+.pakyuet-reviews__count { color: var(--color-text-secondary); }
+.pakyuet-reviews__anchor { text-align: center; }
+.pakyuet-reviews__placeholder {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  padding: 24px 0;
+}
+/* 评价 widget 注入后自动隐藏占位文案 */
+#pakyuet-reviews-anchor:not(:empty) .pakyuet-reviews__placeholder { display: none; }
+
+/* P.4 产品页 image-with-text 标题统一衬线 (仅产品页) */
+body.template-product .image-with-text__heading {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* P.5 产品详情页响应式 */
+@media screen and (max-width: 768px) {
+  .pakyuet-story--small { min-height: 280px; }
+  .pakyuet-story--medium { min-height: 360px; }
+  .pakyuet-story--large { min-height: 440px; }
+  .pakyuet-story--adapt { min-height: 300px; }
+  .pakyuet-story__content { padding: 32px 0; }
+  .pakyuet-story__heading { font-size: 28px; letter-spacing: 1px; }
+  .pakyuet-story__text { font-size: 13px; }
+  .pakyuet-story__inner { padding: 0 20px; }
+  .pakyuet-story__content--light .pakyuet-story__heading,
+  .pakyuet-story__content--light .pakyuet-story__text {
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+  }
+  .product__accordion .accordion__title { font-size: 16px; }
+  .pakyuet-reviews__heading { font-size: 24px; }
+}
+
+/* ============================================
+   Q. 产品详情页 rich — 对齐 product.html 参考
+   (品牌故事 / 评价卡 / 信任徽章 / vendor pill / 全宽手风琴)
+   ============================================ */
+
+/* Q.1 vendor 文字 → 金色 pill 标签(仅产品页) */
+body.template-product .product__text.caption-with-letter-spacing {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--color-white);
+  background: var(--color-accent-gold);
+  border-radius: var(--radius-pill);
+  margin-bottom: 16px;
+}
+
+/* Q.2 产品标题 — 衬线、22px */
+body.template-product .product__title h1,
+body.template-product .product__title .h1 {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  color: var(--color-text-primary);
+}
+/* 产品页价格 — 金色 */
+body.template-product .price--large .price-item {
+  color: var(--color-accent-gold);
+  font-weight: 600;
+}
+
+/* Q.3 信任徽章 (main 里的 icon-with-text block) */
+body.template-product .product__icon-with-text {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border-light);
+}
+body.template-product .icon-with-text--horizontal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: flex-start;
+}
+body.template-product .icon-with-text--horizontal .icon-with-text__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+body.template-product .icon-with-text--horizontal .icon-with-text__icon {
+  color: var(--color-accent-gold);
+}
+
+/* Q.4 產品手風琴 (pakyuet-product-accordion section) — 复刻 product.html 第5节 */
+.pakyuet-accordion {
+  background: var(--color-white);
+}
+.pakyuet-accordion__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.pakyuet-accordion__item {
+  border-bottom: 1px solid var(--color-border-light);
+}
+.pakyuet-accordion__item:first-child {
+  border-top: 1px solid var(--color-border-light);
+}
+.pakyuet-accordion__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 18px 0;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: var(--transition-fast);
+}
+.pakyuet-accordion__header:hover {
+  color: var(--color-accent-gold);
+}
+.pakyuet-accordion__chevron {
+  width: 20px;
+  height: 20px;
+  stroke: var(--color-text-secondary);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+.pakyuet-accordion__item.is-open .pakyuet-accordion__chevron {
+  transform: rotate(180deg);
+}
+.pakyuet-accordion__body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), padding 0.3s ease;
+}
+.pakyuet-accordion__item.is-open .pakyuet-accordion__body {
+  max-height: 1200px;
+}
+.pakyuet-accordion__inner {
+  padding: 0 0 24px;
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+}
+.pakyuet-accordion__inner p { margin-bottom: 16px; }
+.pakyuet-accordion__inner ul { list-style: none; padding: 0; }
+.pakyuet-accordion__inner ul li {
+  padding: 4px 0 4px 16px;
+  position: relative;
+}
+.pakyuet-accordion__inner ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 13px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent-gold);
+  opacity: 0.5;
+}
+
+/* Q.5 品牌故事 (pakyuet-brand-stories section) */
+.pakyuet-brand-stories-section { background: var(--color-white); }
+.pakyuet-brand-stories { overflow: hidden; }
+.pakyuet-brand-story {
+  background: var(--color-white);
+  padding: 80px 0;
+}
+.pakyuet-brand-story:nth-child(even) {
+  background: var(--color-off-white);
+}
+.pakyuet-brand-story__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  padding: 0 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.pakyuet-brand-story--text_first .pakyuet-brand-story__image-wrap { order: 2; }
+.pakyuet-brand-story--text_first .pakyuet-brand-story__text-wrap { order: 1; }
+.pakyuet-brand-story__image-wrap img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center 20%;
+  border-radius: 16px;
+}
+.pakyuet-brand-story__text-wrap { padding: 16px 0; }
+.pakyuet-brand-story__label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-accent-gold);
+  margin-bottom: 20px;
+}
+.pakyuet-brand-story__heading {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--color-text-primary);
+  line-height: 1.3;
+  margin-bottom: 24px;
+  letter-spacing: 0.04em;
+}
+.pakyuet-brand-story__body {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--color-text-secondary);
+  line-height: 1.85;
+  max-width: 480px;
+}
+.pakyuet-brand-story__button {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 12px 28px;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--color-dark-rich);
+  border: 1.5px solid var(--color-dark-rich);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-smooth);
+}
+.pakyuet-brand-story__button:hover {
+  background: var(--color-dark-rich);
+  color: var(--color-white);
+}
+
+/* Q.6 评价卡 (pakyuet-reviews section) */
+.pakyuet-reviews-section { background: var(--color-page-bg); }
+.pakyuet-reviews .page-width { max-width: 1200px; }
+.pakyuet-reviews__header { text-align: center; margin-bottom: 48px; }
+.pakyuet-reviews__heading {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--color-text-primary);
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+.pakyuet-reviews__summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  font-weight: 300;
+}
+.pakyuet-reviews__stars,
+.pakyuet-reviews__stars-static {
+  color: var(--color-accent-gold);
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+.pakyuet-reviews__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.pakyuet-review-card {
+  background: var(--color-white);
+  border-radius: var(--radius-sm);
+  padding: 28px;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-smooth);
+}
+.pakyuet-review-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+.pakyuet-review-card__stars {
+  color: var(--color-accent-gold);
+  font-size: 14px;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+}
+.pakyuet-review-card__title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 10px;
+}
+.pakyuet-review-card__body {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+.pakyuet-review-card__author {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+.pakyuet-review-card__author span { opacity: 0.6; }
+
+/* Q.7 产品页 rich 响应式 */
+@media screen and (max-width: 1024px) {
+  .pakyuet-brand-story__inner { gap: 40px; padding: 60px 0; }
+  .pakyuet-brand-story__heading { font-size: 26px; }
+}
+@media screen and (max-width: 768px) {
+  .pakyuet-brand-story { padding: 48px 0; }
+  .pakyuet-brand-story__inner,
+  .pakyuet-brand-story--text_first .pakyuet-brand-story__image-wrap,
+  .pakyuet-brand-story--text_first .pakyuet-brand-story__text-wrap {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .pakyuet-brand-story--text_first .pakyuet-brand-story__image-wrap { order: unset; }
+  .pakyuet-brand-story--text_first .pakyuet-brand-story__text-wrap { order: unset; }
+  .pakyuet-brand-story__image-wrap img { aspect-ratio: 3 / 2; }
+  .pakyuet-brand-story__heading { font-size: 24px; }
+  .pakyuet-reviews__grid { grid-template-columns: 1fr; gap: 16px; }
+  .pakyuet-accordion__container { padding: 0 16px; }
+  .pakyuet-accordion__header { font-size: 14px; padding: 16px 0; }
+  .pakyuet-accordion__inner { font-size: 13px; }
+}
+@media screen and (max-width: 480px) {
+  .pakyuet-brand-story { padding: 36px 0; }
+  .pakyuet-brand-story__heading { font-size: 22px; }
+  .pakyuet-review-card { padding: 20px; }
+}
+
+/* ============================================
+   R. 商品分類側欄（梅陇風格）
+   淺橙色組標籤 + 內聯連結 + 紅色「全部」+ 底部排序條
+   ============================================ */
+.pakyuet-category-sidebar {
+  background: var(--color-white);
+  padding: 48px 0 40px;
+}
+.sidebar__inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.sidebar__title {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 22px;
+  letter-spacing: 0.04em;
+}
+.sidebar__rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sidebar__row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--color-border-light);
+}
+.sidebar__row:last-child { border-bottom: none; }
+.sidebar__row-title {
+  flex: 0 0 110px;
+  background: #fce4d6;
+  color: #7a3f1f;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.02em;
+}
+.sidebar__row-links {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 18px;
+  row-gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+}
+.sidebar__link {
+  color: #4a4a4a;
+  text-decoration: none;
+  transition: var(--transition-fast);
+  white-space: nowrap;
+}
+.sidebar__link:hover { color: var(--color-accent-gold); }
+.sidebar__link--all {
+  color: #d83333;
+  font-weight: 600;
+}
+.sidebar__link--all:hover { color: #b82626; }
+.sidebar__sort {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-border-light);
+}
+.sidebar__sort-link {
+  display: inline-block;
+  padding: 7px 16px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: #555;
+  background: #f3f3f3;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: var(--transition-fast);
+  white-space: nowrap;
+}
+.sidebar__sort-link:hover { background: #e8e8e8; color: var(--color-text-primary); }
+.sidebar__sort-link--active {
+  background: #333;
+  color: #fff;
+}
+.sidebar__sort-link--active:hover { background: #1a1a1a; color: #fff; }
+@media screen and (max-width: 600px) {
+  .sidebar__row { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .sidebar__row-title { align-self: flex-start; }
+}
+
+/* Pagination (内联分页器) */
+.pakyuet-pagination { margin-top: 32px; display: flex; justify-content: center; }
+.pakyuet-pagination__inner { display: flex; align-items: center; gap: 16px; }
+.pakyuet-pagination__btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 40px; height: 40px; padding: 0 12px;
+  font-family: var(--font-sans); font-size: 18px; font-weight: 500;
+  color: var(--color-text-primary); background: var(--color-white);
+  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  text-decoration: none; cursor: pointer; transition: var(--transition-fast);
+}
+.pakyuet-pagination__btn:hover:not(.pakyuet-pagination__btn--disabled) {
+  border-color: var(--color-text-primary); color: var(--color-text-primary);
+}
+.pakyuet-pagination__btn--disabled { opacity: 0.4; cursor: not-allowed; }
+.pakyuet-pagination__info {
+  font-family: var(--font-sans); font-size: 14px; font-weight: 500;
+  color: var(--color-text-secondary); white-space: nowrap;
+}
+
+/* ================================================================
+   IR 视觉覆盖 — ported from idearock-restore/pages/index.html
+   金色 #c4a35a · 黑色公告栏 · 米色副公告栏 · 简洁商品卡
+   ================================================================ */
+.ir-header,
+.ir-hero,
+.ir-market {
+  font-family: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", var(--font-sans), sans-serif;
+}
+
+/* ---- IR 色板（覆盖 pakyuet 默认） ---- */
+.ir-header {
+  --ir-primary: #c4a35a;
+  --ir-primary-dark: #a8893f;
+  --ir-announcement-bg: #000000;
+  --ir-announcement-text: #ffffff;
+  --ir-announcement2-bg: #f0e6d2;
+  --ir-text: #333333;
+  --ir-text-sec: #666666;
+  --ir-text-muted: #999999;
+  --ir-line: #e8e8e8;
+  --ir-font-size-base: 14px;
+  --ir-font-size-sm: 12px;
+  --ir-font-size-lg: 20px;
+  --ir-font-size-xl: 28px;
+}
+
+/* ========== 双公告栏 ========== */
+.ir-announcement {
+  background: var(--ir-announcement-bg);
+  color: var(--ir-announcement-text);
+  font-size: var(--ir-font-size-sm);
+  font-weight: 400;
+  line-height: 1.5;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.ir-announcement__inner { width: 100%; padding: 0 16px; }
+.ir-announcement2 {
+  background: var(--ir-announcement2-bg);
+  color: var(--ir-text-sec);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.ir-announcement2__inner { width: 100%; padding: 0 16px; }
+
+/* ========== Header 导航 ========== */
+/* 页眉吸顶：sticky 加在 Dawn 的 section 容器上（body 直接子元素、占满整页高度），
+   而不是 .ir-header 本身 —— sticky 只在父容器高度内生效，父容器只有页眉自身
+   125px 高，滚动后页眉会跟着滚走。参考 idearock（position:fixed）保持固定。 */
+.shopify-section-group-header-group {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+.ir-header.pakyuet-header {
+  background: #ffffff;
+  height: auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  z-index: 91;
+}
+.ir-header .ir-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 60px;
+  gap: 16px;
+}
+.ir-nav__left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.ir-nav__left::-webkit-scrollbar { display: none; }
+.ir-nav__link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ir-text);
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+.ir-nav__link:hover { color: var(--ir-primary); }
+.ir-logo {
+  flex: 0 0 auto;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ir-text);
+  letter-spacing: 3px;
+  line-height: 1.2;
+}
+.ir-nav__right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+}
+.ir-nav__login {
+  font-size: 14px;
+  color: var(--ir-text);
+  white-space: nowrap;
+}
+.ir-icon-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: var(--ir-text);
+  line-height: 1;
+}
+.ir-icon-btn:hover { color: var(--ir-primary); }
+.ir-cart-count {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: var(--ir-primary);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 600;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0 4px;
+}
+.ir-store-btn {
+  background: var(--ir-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+.ir-store-btn:hover { background: var(--ir-primary-dark); }
+
+/* ========== Hero 全宽轮播 ========== */
+.ir-hero.pakyuet-hero { padding: 0; }
+.ir-hero__carousel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3.6 / 1;
+  overflow: hidden;
+  background: #2c2c2c;
+  border-radius: 0;
+}
+.ir-hero__slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+  z-index: 1;
+  pointer-events: none;
+}
+.ir-hero__slide.active { opacity: 1; z-index: 2; pointer-events: auto; }
+.ir-hero__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ir-hero__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.35) 100%);
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+.ir-hero__content {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  text-align: center;
+  padding: 0 20px;
+  z-index: 2;
+  max-width: none;
+}
+.ir-hero__eyebrow {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 4px;
+  margin-bottom: 16px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  font-family: inherit;
+  text-transform: none;
+}
+.ir-hero__title {
+  font-family: 'Cormorant Garamond', 'Noto Serif TC', serif;
+  font-size: 42px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 6px;
+  line-height: 1.3;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  margin-bottom: 0;
+}
+.ir-hero__subtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 16px;
+  letter-spacing: 3px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  font-family: inherit;
+  font-weight: 300;
+  margin-bottom: 0;
+}
+.ir-hero__line {
+  width: 60px;
+  height: 2px;
+  background: var(--ir-primary);
+  margin: 24px auto 0;
+}
+.ir-hero__prev,
+.ir-hero__next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #ffffff;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.ir-hero__prev:hover,
+.ir-hero__next:hover { background: rgba(255, 255, 255, 0.4); }
+.ir-hero__prev { left: 24px; }
+.ir-hero__next { right: 24px; }
+.ir-hero__dots {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+.ir-hero__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  border: none;
+  padding: 0;
+}
+.ir-hero__dot.active { background: var(--ir-primary); transform: scale(1.2); }
+
+/* ========== Market：面包屑 + 标题 + 筛选 + 网格 ========== */
+.ir-market.pakyuet-market { background: transparent; /* 透出 --color-page-bg 灰底，白卡片形成反差（对齐 idearock /ir/dd） */ }
+.ir-market .ir-market__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px 36px;
+}
+.ir-breadcrumb {
+  font-size: var(--ir-font-size-sm);
+  color: var(--ir-text-muted);
+  line-height: 1.5;
+}
+.ir-breadcrumb a { color: var(--ir-text-muted); }
+.ir-breadcrumb a:hover { color: var(--ir-primary); }
+.ir-breadcrumb__sep { margin: 0 4px; }
+.ir-market__title {
+  font-family: 'Cormorant Garamond', 'Noto Serif TC', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ir-text);
+  line-height: 1.3;
+  margin: 8px 0 0;
+}
+.ir-filters {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ir-filters::-webkit-scrollbar { display: none; }
+.ir-filter-select {
+  width: 140px;
+  flex-shrink: 0;
+  border: 1px solid var(--ir-line);
+  border-radius: 2px;
+  padding: 6px 10px;
+  font-size: 13px;
+  color: var(--ir-text-sec);
+  background: #ffffff;
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+}
+.ir-filter-select:focus { border-color: var(--ir-primary); }
+.ir-market__grid-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 28px 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ir-line);
+}
+.ir-market__grid-title {
+  font-family: 'Cormorant Garamond', 'Noto Serif TC', serif;
+  font-size: var(--ir-font-size-lg);
+  font-weight: 600;
+  color: var(--ir-text);
+  margin: 0;
+}
+.ir-market__count { font-size: 13px; color: var(--ir-text-muted); margin-left: 4px; font-family: var(--font-sans); }
+.ir-market__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.ir-market__grid .pakyuet-product-card {
+  background: #ffffff;
+  border: 1px solid var(--ir-line);
+  border-radius: 0;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.ir-market__grid .pakyuet-product-card:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transform: none;
+}
+.ir-market__grid .product-card__info { padding: 10px 10px 14px; }
+.ir-market__grid .product-card__name {
+  font-size: 13px;
+  color: var(--ir-text);
+  margin: 0;
+  line-height: 1.4;
+  font-weight: 400;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-all;
+}
+.ir-market__grid .product-card__price-wrap { margin-top: 6px; }
+.ir-market__grid .product-card__price {
+  font-size: 13px;
+  color: var(--ir-primary);
+  font-weight: 500;
+}
+.ir-market__grid .product-card__price--compare,
+.ir-market__grid .product-card__discount { font-size: 12px; color: var(--ir-text-muted); }
+.ir-market__grid .product-card__soldout { font-size: 11px; color: var(--ir-text-muted); margin-top: 4px; }
+.ir-market__empty {
+  font-family: inherit;
+  color: var(--ir-text-sec);
+  padding: 48px;
+  text-align: center;
+}
+/* 覆盖 pakyuet.css 原有 5 列网格（IR 为 4 列） */
+.ir-market .ir-market__grid .product-card__image-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ========== 悬浮按钮 ========== */
+.ir-float-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--ir-primary);
+  color: #ffffff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  font-family: inherit;
+  z-index: 100;
+  transition: background 0.2s, transform 0.2s;
+}
+.ir-float-btn:hover { background: var(--ir-primary-dark); transform: scale(1.05); }
+.ir-float-btn svg { stroke: currentColor; fill: none; stroke-width: 2; }
+.ir-float-store {
+  position: fixed;
+  right: 16px;
+  bottom: 100px;
+}
+.ir-float-store-text { font-size: 10px; line-height: 1.2; text-align: center; font-weight: 500; }
+.ir-float-service {
+  position: fixed;
+  right: 16px;
+  bottom: 40px;
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 1024px) {
+  .ir-market__grid { grid-template-columns: repeat(3, 1fr); }
+  .ir-nav__left { gap: 16px; }
+  .ir-nav__link { font-size: 13px; }
+}
+@media (max-width: 768px) {
+  .ir-hero__carousel { height: 350px; }
+  .ir-hero__title { font-size: 28px; letter-spacing: 3px; }
+  .ir-filters { flex-wrap: wrap; }
+  .ir-nav__left { display: none; }
+}
+@media (max-width: 480px) {
+  .ir-market__grid { grid-template-columns: 1fr; }
+  .ir-nav__right .ir-nav__login { display: none; }
+}
+
+/* ========== 分类入口卡 ========== */
+.ir-category-cards {
+  background: #ffffff;
+  padding: 24px 20px 4px;
+}
+.ir-category-cards__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.ir-category-card {
+  display: block;
+  text-decoration: none;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.ir-category-card:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+}
+.ir-category-card__img-wrap {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--ir-muted, #f5f5f5);
+}
+.ir-category-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ir-category-card__placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ir-category-card__badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(196, 163, 90, 0.92);
+  color: #ffffff;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 2px;
+  z-index: 1;
+  font-weight: 500;
+}
+.ir-category-card__body {
+  padding: 12px 2px 0;
+  text-align: center;
+}
+.ir-category-card__title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ir-text);
+  line-height: 1.4;
+}
+.ir-category-card__count {
+  font-size: 12px;
+  color: var(--ir-text-muted);
+  margin-top: 2px;
+}
+@media (max-width: 900px) {
+  .ir-category-cards__inner { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .ir-category-cards__inner { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+}

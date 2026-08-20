@@ -1,0 +1,147 @@
+{% comment %}
+  PAKYUET: Cart discount code form (ported from the Tinker theme).
+  Applies / removes a discount code on the cart page and in the cart drawer
+  via the Cart Ajax API (cart/update.js `discount` field).
+
+  Usage:
+    {% render 'pakyuet-cart-discount', context: 'page' %}    -> cart page
+    {% render 'pakyuet-cart-discount', context: 'drawer' %}  -> cart drawer
+{% endcomment %}
+
+{%- if settings.show_add_discount_code -%}
+  {%- liquid
+    assign applied_discount_codes = ''
+    for discount in cart.cart_level_discount_applications
+      if discount.type == 'discount_code'
+        assign applied_discount_codes = applied_discount_codes | append: discount.title | append: ','
+      endif
+    endfor
+    assign applied_discount_codes = applied_discount_codes | split: ',' | uniq
+  -%}
+  <div
+    class="pakyuet-cart-discount"
+    data-cart-discount-root
+    data-cart-discount-context="{{ context }}"
+  >
+    {%- if applied_discount_codes.size > 0 -%}
+      <div class="pakyuet-cart-discount__applied">
+        {%- for code in applied_discount_codes -%}
+          {%- if code != blank -%}
+            <span class="pakyuet-cart-discount__pill" data-discount-code="{{ code | escape }}">
+              {{ code }}
+              <button
+                type="button"
+                class="pakyuet-cart-discount__remove button-unstyled"
+                data-discount-remove
+                aria-label="{{ 'pakyuet.cart.remove_discount' | t: code: code | default: 'Remove discount code' }}"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </span>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <form class="pakyuet-cart-discount__form" data-cart-discount-form novalidate>
+      <label class="visually-hidden" for="pakyuet-cart-discount-{{ context }}">
+        {{- 'pakyuet.cart.discount_code' | t | default: 'Discount code' -}}
+      </label>
+      <input
+        type="text"
+        id="pakyuet-cart-discount-{{ context }}"
+        name="discount"
+        class="pakyuet-cart-discount__input"
+        placeholder="{{ 'pakyuet.cart.discount_code' | t | default: 'Discount code' }}"
+        autocomplete="off"
+        aria-describedby="pakyuet-cart-discount-error-{{ context }}"
+      >
+      <button type="submit" class="button pakyuet-cart-discount__button">
+        {{- 'pakyuet.cart.apply' | t | default: 'Apply' -}}
+      </button>
+    </form>
+    <p
+      class="pakyuet-cart-discount__error"
+      id="pakyuet-cart-discount-error-{{ context }}"
+      data-cart-discount-error
+      hidden
+    ></p>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .pakyuet-cart-discount {
+    margin: 0 0 1.6rem;
+  }
+
+  .pakyuet-cart-discount__form {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 36rem;
+  }
+
+  .pakyuet-cart-discount__input {
+    flex: 1;
+    min-width: 0;
+    height: 4.5rem;
+    padding: 0 1.2rem;
+    border: 0.1rem solid rgba(var(--color-foreground), 0.25);
+    border-radius: 0;
+    background: transparent;
+    color: rgb(var(--color-foreground));
+    font-family: inherit;
+    font-size: 1.4rem;
+  }
+
+  .pakyuet-cart-discount__input::placeholder {
+    color: rgba(var(--color-foreground), 0.55);
+  }
+
+  .pakyuet-cart-discount__button {
+    min-height: 4.5rem;
+    padding-inline: 2.4rem;
+  }
+
+  .pakyuet-cart-discount__applied {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .pakyuet-cart-discount__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 0.4rem 0.4rem 1rem;
+    font-size: 1.3rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: 0.1rem solid rgba(var(--color-foreground), 0.25);
+  }
+
+  .pakyuet-cart-discount__remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+    color: inherit;
+  }
+
+  .pakyuet-cart-discount__remove:hover {
+    opacity: 0.6;
+  }
+
+  .pakyuet-cart-discount__error {
+    margin: 1rem 0 0;
+    padding: 0.8rem 1.2rem;
+    font-size: 1.3rem;
+    color: rgb(var(--color-foreground));
+    background: rgba(var(--color-foreground), 0.06);
+  }
+{% endstylesheet %}

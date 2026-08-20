@@ -1,0 +1,27 @@
+/* PAKYUET 页眉下拉卡片 —— 二期布局。
+   对齐 IR 求婚戒指下拉实测：链接列 ~153px 竖排窄列 + 图片占卡片右侧 ~75-80%（651×336）。
+   独立新文件：media.css 上线后已被 Cloudflare 缓存 1 年，改它看不到效果，须在 theme.liquid
+   于 media.css 之后加载本文件覆盖（见 pakyuet-cdn-cache-poisoning）。nav-dropdown-links-v2 */
+
+/* 覆盖 media.css 的布局：链接竖排窄列 + 图片放大撑满右侧 */
+.ir-nav-dropdown__inner {
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 48px;
+}
+
+/* 左：竖排链接列（对齐 IR .left.pe-5 窄列） */
+.ir-nav-dropdown__links {
+  flex: 0 0 170px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column; /* 竖排 */
+  gap: 16px;              /* 行距 16px（IR 实测 36px 行距 - 20px 字号） */
+}
+
+/* 右：图片放大，占剩余宽度（覆盖 media.css 的 flex:0 0 44% + max-width:600px） */
+.ir-nav-dropdown__media {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: none;
+}

@@ -25,6 +25,8 @@ venv/
 # ===== Shopify theme pull/verify temp copies =====
 theme-030-custom-pull/
 theme-030-verify/
+theme-021/
+theme-live-check/
 
 # ===== Ardot AI export staging =====
 outputs/

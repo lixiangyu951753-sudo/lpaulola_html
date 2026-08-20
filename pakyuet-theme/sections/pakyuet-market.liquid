@@ -1,0 +1,276 @@
+{%- liquid
+  # collection 模板：直接用当前分类；否则用 section 设置（与 pakyuet-product-grid 一致的回退逻辑）
+  assign is_collection = false
+  if template.name == 'collection' and collection != blank
+    assign is_collection = true
+    assign source_collection = collection
+  else
+    assign picked = section.settings.collection
+    if picked == blank
+      assign source_collection = collections['all-color-sorted']
+      if source_collection == blank or source_collection.empty
+        assign source_collection = collections.all
+      endif
+    else
+      assign source_collection = picked
+    endif
+  endif
+  assign page_size = section.settings.products_to_show
+  if page_size == 0
+    assign page_size = 24
+  endif
+  assign total_count = 0
+  if source_collection
+    assign total_count = source_collection.products_count
+  endif
+  # collection 模板下面包屑/标题回退到当前分类名
+  assign crumb_text = section.settings.breadcrumb_text
+  if crumb_text == blank and is_collection
+    assign crumb_text = collection.title
+  endif
+  assign mkt_title = section.settings.title
+  if mkt_title == blank and is_collection
+    assign mkt_title = collection.title
+  endif
+  # 当前排序：collection 模板用 collection.sort_by（本主题 request.params 为空，读不到 ?sort_by），首頁用預設
+  assign current_sort = 'manual'
+  if is_collection and collection.sort_by != blank
+    assign current_sort = collection.sort_by
+  endif
+-%}
+
+<section class="pakyuet-market ir-market" id="products" data-market data-product-section data-page-size="{{ page_size }}" data-collection="{{ source_collection.handle }}" data-collection-page="{% if is_collection %}1{% else %}0{% endif %}">
+  <div class="ir-market__inner">
+
+    {%- comment -%} 面包屑 + 标题（collection 模板回退到分类名） {%- endcomment -%}
+    <div class="ir-breadcrumb">
+      {%- if crumb_text != blank -%}
+        <a href="{{ routes.root_url }}">{%- if localization.language.iso_code == 'en' -%}Home{%- else -%}首頁{%- endif -%}</a>
+        <span class="ir-breadcrumb__sep">/</span>
+        <span>{{ crumb_text | escape }}</span>
+      {%- endif -%}
+    </div>
+    {%- if mkt_title != blank -%}
+      <h2 class="ir-market__title">{{ mkt_title | escape }}</h2>
+    {%- endif -%}
+
+    {%- comment -%} 筛选下拉（block-based，真实 collection 链接）手機摺疊成「展開篩選」 {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="ir-filter-collapse" data-filter-collapse>
+        <button type="button" class="ir-filter-toggle" data-filter-toggle aria-expanded="false">
+          <span>{%- if localization.language.iso_code == 'en' -%}Show Filters{%- else -%}展開篩選{%- endif -%}</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="ir-filter-panel">
+          <div class="ir-filters" data-filter-selects>
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'group' -%}
+            {%- assign lines = block.settings.items | default: '' | split: "
+" -%}
+            {%- assign filter_title = block.settings.title -%}
+            {%- if localization.language.iso_code == 'en' -%}
+              {%- case filter_title -%}
+                {%- when '依系列' -%}{%- assign filter_title = 'By Collection' -%}
+                {%- when '依材質' -%}{%- assign filter_title = 'By Material' -%}
+                {%- when '依類別' -%}{%- assign filter_title = 'By Category' -%}
+                {%- when '依形狀' -%}{%- assign filter_title = 'By Shape' -%}
+                {%- when '依風格' -%}{%- assign filter_title = 'By Style' -%}
+                {%- when '依電鍍' -%}{%- assign filter_title = 'By Plating' -%}
+                {%- when '依石材' -%}{%- assign filter_title = 'By Stone' -%}
+                {%- when '依顏色' -%}{%- assign filter_title = 'By Color' -%}
+              {%- endcase -%}
+            {%- endif -%}
+            {%- if lines.size > 0 -%}
+              <select class="ir-filter-select" aria-label="{{ filter_title | escape }}" data-filter-select {{ block.shopify_attributes }}>
+                <option value="" selected>{{ filter_title | escape }}</option>
+                {%- for line in lines -%}
+                  {%- assign line_s = line | strip -%}
+                  {%- if line_s == blank -%}{%- continue -%}{%- endif -%}
+                  {%- assign parts = line_s | split: '|' -%}
+                  {%- assign lbl = parts[0] | strip -%}
+                  {%- assign url = parts[1] | default: '#' | strip -%}
+                  {%- if url == blank -%}{%- assign url = '#' -%}{%- endif -%}
+                  {%- if localization.language.iso_code == 'en' -%}
+                    {%- case lbl -%}
+                      {%- when '全部' -%}{%- assign lbl = 'All' -%}
+                      {%- when '星空物語' -%}{%- assign lbl = 'Starry Stories' -%}
+                      {%- when '花語系列' -%}{%- assign lbl = 'Floral Series' -%}
+                      {%- when '水光系列' -%}{%- assign lbl = 'Water Glow Collection' -%}
+                      {%- when '國風系列' -%}{%- assign lbl = 'Oriental Heritage' -%}
+                      {%- when '愛心系列' -%}{%- assign lbl = 'Heart Collection' -%}
+                      {%- when '珍珠系列' -%}{%- assign lbl = 'Pearl Collection' -%}
+                      {%- when 'S925純銀' -%}{%- assign lbl = '925 Sterling Silver' -%}
+                      {%- when '銅' -%}{%- assign lbl = 'Copper' -%}
+                      {%- when '戒指' -%}{%- assign lbl = 'Rings' -%}
+                      {%- when '手鏈' -%}{%- assign lbl = 'Bracelets' -%}
+                      {%- when '耳飾' -%}{%- assign lbl = 'Earrings' -%}
+                      {%- when '項鏈' -%}{%- assign lbl = 'Necklaces' -%}
+                      {%- when '吊墜' -%}{%- assign lbl = 'Pendants' -%}
+                      {%- when '圓形' -%}{%- assign lbl = 'Round' -%}
+                      {%- when '公主方' -%}{%- assign lbl = 'Princess' -%}
+                      {%- when '橢圓' -%}{%- assign lbl = 'Oval' -%}
+                      {%- when '枕形' -%}{%- assign lbl = 'Cushion' -%}
+                      {%- when '水滴' -%}{%- assign lbl = 'Pear' -%}
+                      {%- when '心形' -%}{%- assign lbl = 'Heart' -%}
+                      {%- when '祖母綠' -%}{%- assign lbl = 'Emerald' -%}
+                      {%- when '馬眼' -%}{%- assign lbl = 'Marquise' -%}
+                      {%- when '阿斯切' -%}{%- assign lbl = 'Asscher' -%}
+                      {%- when '雷迪恩' -%}{%- assign lbl = 'Radiant' -%}
+                      {%- when '清新風' -%}{%- assign lbl = 'Fresh' -%}
+                      {%- when '韓系風' -%}{%- assign lbl = 'Korean-Inspired' -%}
+                      {%- when '奢華風' -%}{%- assign lbl = 'Luxury' -%}
+                      {%- when '極簡風' -%}{%- assign lbl = 'Minimalist' -%}
+                      {%- when '復古風' -%}{%- assign lbl = 'Vintage' -%}
+                      {%- when '白金色' -%}{%- assign lbl = 'White Gold' -%}
+                      {%- when '玫瑰金色' -%}{%- assign lbl = 'Rose Gold' -%}
+                      {%- when '黃金色' -%}{%- assign lbl = 'Yellow Gold' -%}
+                      {%- when '黑化' -%}{%- assign lbl = 'Blackened' -%}
+                      {%- when '香檳色' -%}{%- assign lbl = 'Champagne' -%}
+                      {%- when '雙色' -%}{%- assign lbl = 'Two-tone' -%}
+                      {%- when '莫桑石' -%}{%- assign lbl = 'Moissanite' -%}
+                      {%- when '鋯石' -%}{%- assign lbl = 'Zircon' -%}
+                      {%- when '高碳鑽' -%}{%- assign lbl = 'High Carbon Diamond' -%}
+                      {%- when '彩寶' -%}{%- assign lbl = 'Colored Gemstones' -%}
+                      {%- when '珍珠' -%}{%- assign lbl = 'Pearl' -%}
+                      {%- when '白鑽' -%}{%- assign lbl = 'White' -%}
+                      {%- when '黃鑽' -%}{%- assign lbl = 'Yellow' -%}
+                      {%- when '粉鑽' -%}{%- assign lbl = 'Pink' -%}
+                      {%- when '藍鑽' -%}{%- assign lbl = 'Blue' -%}
+                      {%- when '綠鑽' -%}{%- assign lbl = 'Green' -%}
+                      {%- when '紅鑽' -%}{%- assign lbl = 'Red' -%}
+                      {%- when '黑鑽' -%}{%- assign lbl = 'Black' -%}
+                      {%- when '紫鑽' -%}{%- assign lbl = 'Purple' -%}
+                      {%- when '香檳鑽' -%}{%- assign lbl = 'Champagne' -%}
+                      {%- when '彩色鑽' -%}{%- assign lbl = 'Multicolor' -%}
+                    {%- endcase -%}
+                  {%- endif -%}
+                  <option value="{{ url }}">{{ lbl | escape }}</option>
+                {%- endfor -%}
+              </select>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+          </div>
+          <a href="/collections/all" class="ir-filter-clear" data-filter-clear hidden>{%- if localization.language.iso_code == 'en' -%}Clear{%- else -%}清空篩選{%- endif -%}</a>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} 网格标题 + 排序（AJAX） {%- endcomment -%}
+    <div class="ir-market__grid-head">
+      <h3 class="ir-market__grid-title">{%- if localization.language.iso_code == 'en' -%}All Products{%- else -%}{{ section.settings.grid_title | escape }}{%- endif -%}
+        {%- if total_count > 0 -%}
+          <span class="ir-market__count">({{ total_count }})</span>
+        {%- endif -%}
+      </h3>
+      <div class="sort-dropdown" data-sort-dropdown>
+        <button type="button" class="sort-dropdown__toggle" data-sort-toggle>
+          <span data-sort-label>
+            {%- case current_sort -%}
+              {%- when 'created-descending' -%}{{ section.settings.sort_newest_label }}
+              {%- when 'price-ascending' -%}{{ section.settings.sort_price_asc_label }}
+              {%- when 'price-descending' -%}{{ section.settings.sort_price_desc_label }}
+              {%- else -%}{%- if localization.language.iso_code == 'en' -%}Sort{%- else -%}{{ section.settings.sort_default_label }}{%- endif -%}
+            {%- endcase -%}
+          </span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="sort-dropdown__menu">
+          <a class="sort-dropdown__item{% if current_sort == 'manual' or current_sort == blank %} active{% endif %}" href="?sort_by=manual" data-sort-key="manual">{%- if localization.language.iso_code == 'en' -%}Sort{%- else -%}{{ section.settings.sort_default_label }}{%- endif -%}</a>
+          <a class="sort-dropdown__item{% if current_sort == 'created-descending' %} active{% endif %}" href="?sort_by=created-descending" data-sort-key="created-descending">{%- if localization.language.iso_code == 'en' -%}Newest{%- else -%}{{ section.settings.sort_newest_label }}{%- endif -%}</a>
+          <a class="sort-dropdown__item{% if current_sort == 'price-ascending' %} active{% endif %}" href="?sort_by=price-ascending" data-sort-key="price-ascending">{%- if localization.language.iso_code == 'en' -%}Price: Low to High{%- else -%}{{ section.settings.sort_price_asc_label }}{%- endif -%}</a>
+          <a class="sort-dropdown__item{% if current_sort == 'price-descending' %} active{% endif %}" href="?sort_by=price-descending" data-sort-key="price-descending">{%- if localization.language.iso_code == 'en' -%}Price: High to Low{%- else -%}{{ section.settings.sort_price_desc_label }}{%- endif -%}</a>
+        </div>
+      </div>
+    </div>
+
+    {%- if total_count > 0 -%}
+      {%- paginate source_collection.products by page_size -%}
+        <div class="ir-market__grid" data-product-grid>
+          {%- for product in source_collection.products -%}
+            {%- render 'pakyuet-product-card', product: product, show_secondary_image: section.settings.show_secondary_image -%}
+          {%- endfor -%}
+        </div>
+        {%- if paginate.pages > 1 -%}
+          <nav class="pakyuet-pagination" role="navigation" aria-label="{%- if localization.language.iso_code == 'en' -%}Pagination{%- else -%}分页{%- endif -%}" data-pagination>
+            <div class="pakyuet-pagination__inner">
+              {%- if paginate.previous -%}
+                <a class="pakyuet-pagination__btn pakyuet-pagination__btn--arrow" href="{{ paginate.previous.url }}#products" rel="prev" aria-label="{%- if localization.language.iso_code == 'en' -%}Previous page{%- else -%}上一页{%- endif -%}" data-page="{{ paginate.current_page | minus: 1 }}">&lsaquo;</a>
+              {%- else -%}
+                <span class="pakyuet-pagination__btn pakyuet-pagination__btn--arrow pakyuet-pagination__btn--disabled">&lsaquo;</span>
+              {%- endif -%}
+              <div class="pakyuet-pagination__pages">
+                {%- for part in paginate.parts -%}
+                  {%- if part.is_link -%}
+                    <a class="pakyuet-pagination__num" href="{{ part.url }}#products" data-page="{{ part.title }}">{{ part.title }}</a>
+                  {%- elsif part.title == '&hellip;' -%}
+                    <span class="pakyuet-pagination__num pakyuet-pagination__num--ellipsis" aria-hidden="true">&hellip;</span>
+                  {%- else -%}
+                    <span class="pakyuet-pagination__num pakyuet-pagination__num--current" aria-current="page" data-current-page="{{ part.title }}">{{ part.title }}</span>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              {%- if paginate.next -%}
+                <a class="pakyuet-pagination__btn pakyuet-pagination__btn--arrow" href="{{ paginate.next.url }}#products" rel="next" aria-label="{%- if localization.language.iso_code == 'en' -%}Next page{%- else -%}下一页{%- endif -%}" data-page="{{ paginate.current_page | plus: 1 }}">&rsaquo;</a>
+              {%- else -%}
+                <span class="pakyuet-pagination__btn pakyuet-pagination__btn--arrow pakyuet-pagination__btn--disabled">&rsaquo;</span>
+              {%- endif -%}
+              <form class="pakyuet-pagination__jump" data-pagination-jump>
+                <span class="pakyuet-pagination__jump-label">{%- if localization.language.iso_code == 'en' -%}Go to{%- else -%}跳至{%- endif -%}</span>
+                <input class="pakyuet-pagination__jump-input" type="number" min="1" max="{{ paginate.pages }}" placeholder="{{ paginate.current_page }}" aria-label="{%- if localization.language.iso_code == 'en' -%}Go to page{%- else -%}跳轉頁碼{%- endif -%}">
+                <span class="pakyuet-pagination__jump-label">{%- if localization.language.iso_code == 'en' -%}of{%- else -%}頁{%- endif -%}</span>
+                <button type="submit" class="pakyuet-pagination__jump-btn">{%- if localization.language.iso_code == 'en' -%}Go{%- else -%}跳轉{%- endif -%}</button>
+              </form>
+            </div>
+          </nav>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- else -%}
+      <p class="ir-market__empty">{{ section.settings.empty_text }}</p>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "PAKYUET 精選商品區",
+  "settings": [
+    { "type": "header", "content": "麵包屑與標題" },
+    { "type": "text", "id": "breadcrumb_text", "label": "麵包屑當前項", "default": "莫桑石" },
+    { "type": "text", "id": "title", "label": "大標題", "default": "莫桑石項鍊、戒指推薦" },
+    { "type": "header", "content": "商品來源" },
+    { "type": "collection", "id": "collection", "label": "商品合集", "info": "留空 = 按配色排序的全部商品（all-color-sorted）。" },
+    { "type": "checkbox", "id": "show_secondary_image", "label": "鼠標懸停顯示第二張圖", "default": true },
+    { "type": "range", "id": "products_to_show", "label": "每頁顯示數量", "min": 8, "max": 48, "step": 4, "default": 24 },
+    { "type": "header", "content": "網格標題" },
+    { "type": "text", "id": "grid_title", "label": "網格標題", "default": "全部商品" },
+    { "type": "header", "content": "排序下拉文字" },
+    { "type": "text", "id": "sort_default_label", "label": "綜合排序", "default": "綜合排序" },
+    { "type": "text", "id": "sort_newest_label", "label": "最新上架", "default": "最新上架" },
+    { "type": "text", "id": "sort_price_asc_label", "label": "價格低到高", "default": "價格由低到高" },
+    { "type": "text", "id": "sort_price_desc_label", "label": "價格高到低", "default": "價格由高到低" },
+    { "type": "header", "content": "空狀態" },
+    { "type": "text", "id": "empty_text", "label": "無商品提示", "default": "店鋪暫無商品，請先上架商品。" }
+  ],
+  "blocks": [
+    {
+      "type": "group",
+      "name": "篩選下拉",
+      "settings": [
+        { "type": "text", "id": "title", "label": "下拉標題", "default": "依材質" },
+        { "type": "textarea", "id": "items", "label": "選項", "default": "全部|/collections/all\n選項一|#\n選項二|#", "info": "每行一個：顯示文字|連結。選擇後跳轉到對應 collection。" }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "PAKYUET 精選商品區",
+      "blocks": [
+        { "type": "group" }
+      ]
+    }
+  ]
+}
+{% endschema %}

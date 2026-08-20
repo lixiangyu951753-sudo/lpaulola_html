@@ -1,0 +1,9 @@
+/* 2026-08-12 「專屬線上諮詢」区块「立即諮詢」按钮去黑框
+   根因：Dawn 的 .button:after 用 box-shadow 环画描边（base.css:1261），
+   text_color=dark 时按钮继承 button--secondary 默认色 → 黑框白底黑字。
+   覆盖 :after 的 box-shadow:none 即去掉黑框，保留白底黑字。
+   独立新文件名：Cloudflare 忽略 query 按路径缓存 /cdn/*.css 1 年，同名覆盖不生效。 */
+.pakyuet-story__content--dark .pakyuet-story__button::after,
+.pakyuet-story__content--dark .pakyuet-story__button:hover::after {
+  box-shadow: none;
+}

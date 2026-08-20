@@ -1,0 +1,268 @@
+{%- comment -%}
+  PAKYUET 商品分類側欄（梅陇風格）
+  ------------------------------------------------------------
+  風格參考梅陇珠宝的左側「商品分類」：每行 = 左側淺橙色標籤框
+  （如「按材質」）+ 右側內聯連結，「全部」預設紅色，底部附排序條。
+  每個分類組是一個 block，items 設定格式：每行「顯示文字|連結」，
+  第一行預設為「全部」並以紅色呈現。
+{%- endcomment -%}
+
+<section class="pakyuet-category-sidebar">
+  <div class="sidebar__inner">
+    {%- if section.settings.title != blank -%}
+      <h2 class="sidebar__title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+
+    <ul class="sidebar__rows" role="list">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'group' -%}
+          <li class="sidebar__row" {{ block.shopify_attributes }}>
+            {%- liquid
+              assign row_title = block.settings.title
+              if localization.language.iso_code == 'en'
+                case row_title
+                  when '依系列'
+                    assign row_title = 'By Collection'
+                  when '依材質'
+                    assign row_title = 'By Material'
+                  when '依類別'
+                    assign row_title = 'By Category'
+                  when '依顏色'
+                    assign row_title = 'By Color'
+                  when '依形狀'
+                    assign row_title = 'By Shape'
+                  when '依風格'
+                    assign row_title = 'By Style'
+                  when '依電鍍'
+                    assign row_title = 'By Plating'
+                  when '依石材'
+                    assign row_title = 'By Stone'
+                  when '全部'
+                    assign row_title = 'All'
+                  when '展開篩選'
+                    assign row_title = 'Show Filters'
+                endcase
+              endif
+            -%}
+            <div class="sidebar__row-title">{{ row_title }}</div>
+            <div class="sidebar__row-links">
+              {%- assign lines = block.settings.items | default: '' | split: '\n' -%}
+              {%- for line in lines -%}
+                {%- assign line_s = line | strip -%}
+                {%- if line_s == blank -%}{%- continue -%}{%- endif -%}
+                {%- assign parts = line_s | split: '|' -%}
+                {%- assign lbl = parts[0] | strip -%}
+                {%- assign url = parts[1] | default: '#' | strip -%}
+                {%- if url == blank -%}{%- assign url = '#' -%}{%- endif -%}
+                {%- liquid
+                  assign lbl_en = lbl
+                  if localization.language.iso_code == 'en'
+                    case lbl
+                      when '依系列'
+                        assign lbl_en = 'By Collection'
+                      when '依材質'
+                        assign lbl_en = 'By Material'
+                      when '依類別'
+                        assign lbl_en = 'By Category'
+                      when '依顏色'
+                        assign lbl_en = 'By Color'
+                      when '依形狀'
+                        assign lbl_en = 'By Shape'
+                      when '依風格'
+                        assign lbl_en = 'By Style'
+                      when '依電鍍'
+                        assign lbl_en = 'By Plating'
+                      when '依石材'
+                        assign lbl_en = 'By Stone'
+                      when '全部'
+                        assign lbl_en = 'All'
+                      when '展開篩選'
+                        assign lbl_en = 'Show Filters'
+                      when '星空物語'
+                        assign lbl_en = 'Starry Stories'
+                      when '花語系列'
+                        assign lbl_en = 'Floral Series'
+                      when '水光系列'
+                        assign lbl_en = 'Water Glow Collection'
+                      when '國風系列'
+                        assign lbl_en = 'Oriental Heritage'
+                      when '愛心系列'
+                        assign lbl_en = 'Heart Collection'
+                      when '珍珠系列'
+                        assign lbl_en = 'Pearl Collection'
+                      when 'S925純銀'
+                        assign lbl_en = '925 Sterling Silver'
+                      when '銅'
+                        assign lbl_en = 'Copper'
+                      when '戒指'
+                        assign lbl_en = 'Rings'
+                      when '手鏈'
+                        assign lbl_en = 'Bracelets'
+                      when '耳飾'
+                        assign lbl_en = 'Earrings'
+                      when '項鏈'
+                        assign lbl_en = 'Necklaces'
+                      when '吊墜'
+                        assign lbl_en = 'Pendants'
+                      when '圓形'
+                        assign lbl_en = 'Round'
+                      when '公主方'
+                        assign lbl_en = 'Princess'
+                      when '橢圓'
+                        assign lbl_en = 'Oval'
+                      when '枕形'
+                        assign lbl_en = 'Cushion'
+                      when '水滴'
+                        assign lbl_en = 'Pear'
+                      when '心形'
+                        assign lbl_en = 'Heart'
+                      when '祖母綠'
+                        assign lbl_en = 'Emerald'
+                      when '馬眼'
+                        assign lbl_en = 'Marquise'
+                      when '阿斯切'
+                        assign lbl_en = 'Asscher'
+                      when '雷迪恩'
+                        assign lbl_en = 'Radiant'
+                      when '清新風'
+                        assign lbl_en = 'Fresh'
+                      when '韓系風'
+                        assign lbl_en = 'Korean-Inspired'
+                      when '奢華風'
+                        assign lbl_en = 'Luxury'
+                      when '極簡風'
+                        assign lbl_en = 'Minimalist'
+                      when '復古風'
+                        assign lbl_en = 'Vintage'
+                      when '白金色'
+                        assign lbl_en = 'White Gold'
+                      when '玫瑰金色'
+                        assign lbl_en = 'Rose Gold'
+                      when '黃金色'
+                        assign lbl_en = 'Yellow Gold'
+                      when '黑化'
+                        assign lbl_en = 'Blackened'
+                      when '香檳色'
+                        assign lbl_en = 'Champagne'
+                      when '雙色'
+                        assign lbl_en = 'Two-tone'
+                      when '莫桑石'
+                        assign lbl_en = 'Moissanite'
+                      when '鋯石'
+                        assign lbl_en = 'Zircon'
+                      when '高碳鑽'
+                        assign lbl_en = 'High Carbon Diamond'
+                      when '彩寶'
+                        assign lbl_en = 'Colored Gemstones'
+                      when '珍珠'
+                        assign lbl_en = 'Pearl'
+                      when '白鑽'
+                        assign lbl_en = 'White'
+                      when '黃鑽'
+                        assign lbl_en = 'Yellow'
+                      when '粉鑽'
+                        assign lbl_en = 'Pink'
+                      when '藍鑽'
+                        assign lbl_en = 'Blue'
+                      when '綠鑽'
+                        assign lbl_en = 'Green'
+                      when '紅鑽'
+                        assign lbl_en = 'Red'
+                      when '黑鑽'
+                        assign lbl_en = 'Black'
+                      when '紫鑽'
+                        assign lbl_en = 'Purple'
+                      when '香檳鑽'
+                        assign lbl_en = 'Champagne'
+                      when '彩色鑽'
+                        assign lbl_en = 'Multicolor'
+                    endcase
+                  endif
+                -%}
+                <a
+                  class="sidebar__link{% if forloop.first %} sidebar__link--all{% endif %}"
+                  href="{{ url }}"
+                >{{ lbl_en }}</a>
+              {%- endfor -%}
+            </div>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+
+    {%- if section.settings.show_sort -%}
+      <div class="sidebar__sort" role="group" aria-label="排序">
+        <a class="sidebar__sort-link{% if section.settings.active_sort == 'asc' %} sidebar__sort-link--active{% endif %}"
+           href="/collections/all?sort_by=price-ascending">价格从低到高</a>
+        <a class="sidebar__sort-link{% if section.settings.active_sort == 'desc' %} sidebar__sort-link--active{% endif %}"
+           href="/collections/all?sort_by=price-descending">价格从高到低</a>
+        <a class="sidebar__sort-link{% if section.settings.active_sort == 'updated' %} sidebar__sort-link--active{% endif %}"
+           href="/collections/all?sort_by=created-descending">按更新时间排序</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "PAKYUET 商品分類側欄",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "區塊標題",
+      "default": "商品分類"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort",
+      "label": "顯示底部排序條",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "active_sort",
+      "label": "當前激活排序（高亮顯示）",
+      "options": [
+        { "value": "asc", "label": "价格从低到高" },
+        { "value": "desc", "label": "价格从高到低" },
+        { "value": "updated", "label": "按更新时间排序" }
+      ],
+      "default": "asc"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "group",
+      "name": "分類組",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "組標題（左側橙色標籤）",
+          "default": "按材質"
+        },
+        {
+          "type": "textarea",
+          "id": "items",
+          "label": "分類項",
+          "default": "全部|#\n選項一|#\n選項二|#",
+          "info": "每行一個：顯示文字|連結。第一行預設為「全部」並以紅色顯示。"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PAKYUET 商品分類側欄",
+      "blocks": [
+        { "type": "group" },
+        { "type": "group" },
+        { "type": "group" },
+        { "type": "group" },
+        { "type": "group" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,57 @@
+{%- comment -%}
+  Renders the correct currency symbol for the current localization.
+  Shopify 的 currency.symbol 对 TWD/SGD/USD/HKD 都返回 '$'（ISO 符号），
+  导致多货币切换后价格数字换算但符号不变。这里按货币代码映射本地习惯符号。
+
+  用法:
+    {%- capture cur_symbol %}{% render 'currency-symbol' %}{% endcapture -%}
+    {{ cur_symbol }}{{ price | money | remove_first: '$' }}
+
+  可选参数:
+    - country: 传入 country 对象（localization.available_countries 循环内），
+               按该国家的货币输出符号；省略时用当前国家/购物车货币。
+{%- endcomment -%}
+{%- liquid
+  if country != blank
+    assign code = country.currency.iso_code
+  else
+    assign code = localization.country.currency.iso_code | default: cart.currency.iso_code | default: shop.currency
+  endif
+
+  case code
+    when 'TWD'
+      echo 'NT$'
+    when 'SGD'
+      echo 'S$'
+    when 'USD'
+      echo 'US$'
+    when 'HKD'
+      echo 'HK$'
+    when 'MYR'
+      echo 'RM'
+    when 'CNY'
+      echo '¥'
+    when 'JPY'
+      echo '¥'
+    when 'KRW'
+      echo '₩'
+    when 'EUR'
+      echo '€'
+    when 'GBP'
+      echo '£'
+    when 'THB'
+      echo '฿'
+    when 'AUD'
+      echo 'A$'
+    when 'CAD'
+      echo 'C$'
+    when 'NZD'
+      echo 'NZ$'
+    else
+      if country != blank
+        echo country.currency.symbol | default: '$'
+      else
+        echo localization.country.currency.symbol | default: cart.currency.symbol | default: '$'
+      endif
+  endcase
+-%}

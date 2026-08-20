@@ -1,0 +1,47 @@
+{%- comment -%}
+  语言前缀重定向兜底(客户端)
+  Shopify 平台不支持 zh-TW / zh-CN 这两个前缀(默认语言走根域、简中是 zh-Hans),
+  带这些前缀的 URL 会被 Shopify 路由层直接 404。这里在 404 模板顶部用 JS 捕获并跳转:
+    /zh-TW/... → 根域(繁中=默认语言,无前缀)
+    /zh-CN/... → /zh-hans/...(Shopify 简中 BCP-47 = zh-Hans)
+  注意:这是 JS 客户端跳转,Shopify 已返回 404 状态码,SEO 弱于服务端 301。
+  想要真 301 应在 Cloudflare Redirect Rules 配(到 Shopify 之前就重写)。
+{%- endcomment -%}
+<script>
+  (function () {
+    var p = window.location.pathname;
+    var q = window.location.search;
+    var h = window.location.hash;
+    if (/^\/zh-TW(\/|$)/i.test(p)) {
+      window.location.replace(p.replace(/^\/zh-TW/i, '') + q + h);
+      return;
+    }
+    if (/^\/zh-CN(\/|$)/i.test(p)) {
+      window.location.replace('/zh-hans' + p.replace(/^\/zh-CN/i, '') + q + h);
+      return;
+    }
+  })();
+</script>
+<style type="text/css">
+  .template-404 .title + * {
+    margin-top: 1rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .template-404 .title + * {
+      margin-top: 2rem;
+    }
+  }
+</style>
+
+<div class="template-404 page-width page-margin center">
+  <p>
+    {{ 'templates.404.subtext' | t }}
+  </p>
+  <h1 class="title">
+    {{ 'templates.404.title' | t }}
+  </h1>
+  <a href="{{ routes.all_products_collection_url }}" class="button">
+    {{ 'general.continue_shopping' | t }}
+  </a>
+</div>

@@ -1,0 +1,45 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "pakyuet_footer": {
+      "type": "pakyuet-footer",
+      "settings": {
+        "brand_name": "PAKYUET",
+        "brand_desc": "以莫桑石與925純銀，為日常帶來剛剛好的輕奢精緻感。香港設計。",
+        "instagram": "https://www.instagram.com/paulolajewelry_hk?igsh=bWJ4bGZmNjd6cjl4",
+        "facebook": "https://www.facebook.com/share/1KWp86kvwC/",
+        "youtube": "",
+        "x": "https://x.com/Paulolajewelry",
+        "shop_menu": "footer",
+        "shop_title": "購物",
+        "brand_menu": "footer-about",
+        "brand_title": "品牌",
+        "service_menu": "footer-support",
+        "service_title": "服務",
+        "show_company_info": true,
+        "company_name": "PAKYUET JEWELLERY CO., LIMITED",
+        "company_address": "UNIT 05, 12/F THE CLOUD\nNO.111 TUNG CHAU ST TAI KOK TSUI\nHONG KONG",
+        "company_br": "80236752-000-04-26-7",
+        "company_email": "support@paulola.com",
+        "company_whatsapp": "+852 9711 2975",
+        "company_whatsapp_url": "https://wa.me/85297112975",
+        "copyright": "© 2026 PAKYUET 柏悅. All Rights Reserved. PAKYUET JEWELLERY CO., LIMITED · Hong Kong",
+        "show_payment_icons": true,
+        "payment_label": "安全付款"
+      }
+    }
+  },
+  "order": [
+    "pakyuet_footer"
+  ]
+}

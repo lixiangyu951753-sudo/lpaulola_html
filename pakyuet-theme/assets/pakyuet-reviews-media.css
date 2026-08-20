@@ -1,0 +1,113 @@
+/* PAKYUET 评价卡 (pakyuet-reviews section) — v2 全局评价池
+ * 独立文件名 pakyuet-reviews-media.css：Cloudflare 按路径缓存 /cdn/*.css ~1 年，
+ * 旧 pakyuet.css 里的评价卡规则仍在，但本文件在文档流更晚加载，同优先级规则覆盖它。
+ * 新增：评价图 1–3 张网格 + 手机端单列。
+ */
+
+.pakyuet-reviews-section { background: var(--color-page-bg); }
+.pakyuet-reviews .page-width { max-width: 1200px; }
+.pakyuet-reviews__header { text-align: center; margin-bottom: 48px; }
+.pakyuet-reviews__heading {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--color-text-primary);
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+.pakyuet-reviews__summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  font-weight: 300;
+}
+.pakyuet-reviews__stars,
+.pakyuet-reviews__stars-static {
+  color: var(--color-accent-gold);
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+.pakyuet-reviews__score {
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.pakyuet-reviews__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.pakyuet-review-card {
+  background: var(--color-white);
+  border-radius: var(--radius-sm);
+  padding: 28px;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-smooth);
+}
+.pakyuet-review-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+.pakyuet-review-card__stars {
+  color: var(--color-accent-gold);
+  font-size: 14px;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+}
+.pakyuet-review-card__title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 10px;
+}
+.pakyuet-review-card__body {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+.pakyuet-review-card__author {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+.pakyuet-review-card__author span { opacity: 0.6; }
+
+/* 评价图片 1–3 张：左对齐等宽流式，1 张=通栏、2 张=各半、3 张=各 1/3 */
+.pakyuet-review-card__media {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.pakyuet-review-card__figure {
+  margin: 0;
+  border-radius: calc(var(--radius-sm) / 2);
+  overflow: hidden;
+  background: var(--color-page-bg);
+}
+.pakyuet-review-card__figure img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.pakyuet-reviews__anchor { min-height: 40px; }
+.pakyuet-reviews__placeholder {
+  text-align: center;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+/* 响应式 */
+@media screen and (max-width: 900px) {
+  .pakyuet-reviews__grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media screen and (max-width: 560px) {
+  .pakyuet-reviews__grid { grid-template-columns: 1fr; }
+}

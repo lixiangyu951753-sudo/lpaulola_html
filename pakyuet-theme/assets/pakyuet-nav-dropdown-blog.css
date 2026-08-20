@@ -1,0 +1,28 @@
+/* PAKYUET 页眉下拉卡片 —— BLOG 文章下拉（悬停换图）。
+   新独立文件绕 Cloudflare 一年缓存（见 pakyuet-cdn-cache-poisoning）。
+   须在 links.css 之后加载以覆盖列宽。nav-dropdown-blog-v1 */
+
+/* BLOG 下拉：左侧文章链接列加宽、允许换行；右侧预览图占满剩余宽度 */
+.ir-nav-dropdown__inner--blog {
+  align-items: center;
+}
+.ir-nav-dropdown__inner--blog .ir-nav-dropdown__links {
+  flex: 0 0 300px;
+  min-width: 0;
+  flex-direction: column;
+  gap: 12px;
+}
+.ir-nav-dropdown__link--blog {
+  white-space: normal; /* 覆盖基类 nowrap：长标题自动换行 */
+  line-height: 1.45;
+  font-size: 13px;
+  font-weight: 600;
+}
+.ir-nav-dropdown__link--blog:hover {
+  color: var(--ir-primary);
+}
+.ir-nav-dropdown__media--blog {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: none;
+}

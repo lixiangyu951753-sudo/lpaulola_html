@@ -1,0 +1,27 @@
+{%- comment -%}
+  PAKYUET Breadcrumb — added by Codex
+  Usage: {% render "pakyuet-breadcrumb" %}
+{%- endcomment -%}
+<nav class="pakyuet-breadcrumb" aria-label="Breadcrumb">
+  <a href="/">{% if localization.language.iso_code == 'en' %}Home{% else %}首頁{% endif %}</a>
+  <span class="pakyuet-breadcrumb__sep">/</span>
+  {%- if collection -%}
+    <span class="pakyuet-breadcrumb__current">{{ collection.title }}</span>
+  {%- elsif product -%}
+    {%- if product.collections.size > 0 -%}
+      <a href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a>
+      <span class="pakyuet-breadcrumb__sep">/</span>
+    {%- endif -%}
+    <span class="pakyuet-breadcrumb__current">{{ product.title }}</span>
+  {%- elsif page -%}
+    <span class="pakyuet-breadcrumb__current">{{ page.title }}</span>
+  {%- elsif blog -%}
+    <span class="pakyuet-breadcrumb__current">{{ blog.title }}</span>
+  {%- elsif article -%}
+    <a href="{{ blog.url }}">{{ blog.title }}</a>
+    <span class="pakyuet-breadcrumb__sep">/</span>
+    <span class="pakyuet-breadcrumb__current">{{ article.title }}</span>
+  {%- else -%}
+    <span class="pakyuet-breadcrumb__current">{{ page_title }}</span>
+  {%- endif -%}
+</nav>

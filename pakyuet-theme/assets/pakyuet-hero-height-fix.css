@@ -1,0 +1,14 @@
+/* 2026-08-11 PAKYUET hero 高度修复
+   原因：hero 原用 aspect-ratio:16/9 由「视口宽度」推算高度，未减去页眉(125px,含两条公告+导航)，
+         首屏永远放不下 header+hero；≥2K 屏时 2048px 图被放大到主体巨大、底部被截断
+         （F12 窄视口后 header+hero 恰好放进一屏，所以「看着正常」）。
+   修复：桌面高度 = 视口高 − 页眉 125px，上限 780px；object-fit:cover 自动裁切，主体大小可控。
+   手机（≤768px）不应用，保持 9:16 原图（手机上是缩小显示，本无此问题）。
+   独立新文件原因：Cloudflare 缓存旧 /cdn/*.css 达 1 年，改旧文件无法生效。 */
+@media (min-width: 769px) {
+  .ir-bhero__carousel {
+    height: calc(100vh - 125px);
+    max-height: 780px;
+    aspect-ratio: auto;
+  }
+}

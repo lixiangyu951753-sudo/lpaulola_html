@@ -1,0 +1,291 @@
+{% comment %}
+  PAKYUET 戒指尺寸指南弹窗（自包含）
+  - 内联 <style> + <script>：不走 asset 文件，规避 Cloudflare 对 /cdn/*.css 的一年缓存。
+  - 用法（见 product-variant-picker.liquid）：
+      1. 在有「尺码」选项的商品，于该选项 label/legend 旁渲染 trigger：
+         <button type="button" class="pakyuet-size-guide-trigger" data-open-size-guide aria-controls="pakyuet-size-guide" aria-expanded="false">尺寸指南</button>
+      2. 页面上渲染本 snippet 一次（放在 <variant-selects> 内即可——VariantSelects 不重写 innerHTML，弹窗安全）。
+  - 数据依据：九美=美码 US5-9 / 新德艺=港码 HK8-22 / 高斯迪=开口戒无需码（2026-08-06 审计）。
+{% endcomment %}
+
+<style>
+  .pakyuet-size-guide-trigger {
+    display: inline-block;
+    margin-left: 0.8rem;
+    padding: 0;
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-size: 1.1rem;
+    line-height: inherit;
+    letter-spacing: 0.02em;
+    color: var(--color-accent-gold, #c9a96e);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+    vertical-align: baseline;
+  }
+  .pakyuet-size-guide-trigger:hover { color: #a98c50; }
+
+  .pakyuet-size-guide-label-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .pakyuet-size-guide-label-row .form__label { margin-bottom: 0; }
+
+  .pakyuet-size-guide {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  .pakyuet-size-guide.is-open { display: flex; }
+
+  .pakyuet-size-guide__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    cursor: pointer;
+  }
+
+  .pakyuet-size-guide__dialog {
+    position: relative;
+    width: 100%;
+    max-width: 62rem;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #ffffff;
+    border-radius: 1.2rem;
+    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.25);
+  }
+
+  .pakyuet-size-guide__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.8rem 2rem 1.2rem;
+    border-bottom: 1px solid #f0e9dd;
+  }
+  .pakyuet-size-guide__title {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #3a2f23;
+  }
+  .pakyuet-size-guide__close {
+    flex: 0 0 auto;
+    width: 3.4rem;
+    height: 3.4rem;
+    border: none;
+    border-radius: 50%;
+    background: #f5efe6;
+    color: #3a2f23;
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .pakyuet-size-guide__close:hover { background: #e9dfcd; }
+
+  .pakyuet-size-guide__body {
+    padding: 1.6rem 2rem 2rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .pakyuet-size-guide__lead { margin: 0 0 1.4rem; font-size: 1.3rem; line-height: 1.7; color: #5c5042; }
+  .pakyuet-size-guide__body h3 { margin: 1.6rem 0 0.8rem; font-size: 1.5rem; font-weight: 600; color: #3a2f23; }
+
+  .pakyuet-size-guide__table-wrap { overflow-x: auto; border: 1px solid #efe7d8; border-radius: 0.8rem; }
+  .pakyuet-size-guide__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.3rem;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .pakyuet-size-guide__table th,
+  .pakyuet-size-guide__table td {
+    padding: 0.7rem 0.6rem;
+    border-bottom: 1px solid #f2ecdf;
+  }
+  .pakyuet-size-guide__table thead th {
+    background: #f8f2e7;
+    color: #5c5042;
+    font-weight: 600;
+  }
+  .pakyuet-size-guide__table tbody tr:last-child td { border-bottom: none; }
+  .pakyuet-size-guide__table tbody tr:nth-child(even) { background: #fdfbf6; }
+  .pakyuet-size-guide__caption { margin: 0.6rem 0 0; font-size: 1.2rem; line-height: 1.6; color: #8a8070; }
+
+  .pakyuet-size-guide__steps { margin: 0; padding-left: 2rem; font-size: 1.3rem; line-height: 1.7; color: #3a2f23; }
+  .pakyuet-size-guide__steps li { margin-bottom: 0.6rem; }
+
+  .pakyuet-size-guide__tip {
+    margin-top: 1.4rem;
+    padding: 1.2rem 1.4rem;
+    border-radius: 0.8rem;
+    background: #fbf5ea;
+    border: 1px solid #f0e5cd;
+    font-size: 1.3rem;
+    line-height: 1.7;
+    color: #4a3f30;
+  }
+  .pakyuet-size-guide__tip ul { margin: 0.6rem 0 0; padding-left: 1.6rem; }
+  .pakyuet-size-guide__tip li { margin-bottom: 0.3rem; }
+
+  .pakyuet-size-guide__policy {
+    margin: 1.6rem 0 0;
+    padding-top: 1.2rem;
+    border-top: 1px solid #f0e9dd;
+    font-size: 1.3rem;
+    line-height: 1.7;
+    color: #5c5042;
+  }
+  .pakyuet-size-guide__policy a { color: var(--color-accent-gold, #c9a96e); text-decoration: underline; }
+
+  @media (max-width: 749px) {
+    .pakyuet-size-guide { padding: 1rem; align-items: flex-end; }
+    .pakyuet-size-guide__dialog { max-height: 88vh; border-radius: 1.2rem 1.2rem 0 0; }
+  }
+</style>
+
+<div class="pakyuet-size-guide" id="pakyuet-size-guide" role="dialog" aria-modal="true" aria-labelledby="pakyuet-size-guide-title" aria-hidden="true">
+  <div class="pakyuet-size-guide__overlay" data-close-size-guide></div>
+  <div class="pakyuet-size-guide__dialog" role="document">
+    <div class="pakyuet-size-guide__head">
+      <h2 class="pakyuet-size-guide__title" id="pakyuet-size-guide-title">{% if is_en %}Ring Size Guide{% else %}戒指尺寸指南{% endif %}</h2>
+      <button type="button" class="pakyuet-size-guide__close" data-close-size-guide aria-label="{% if is_en %}Close{% else %}關閉視窗{% endif %}">✕</button>
+    </div>
+    <div class="pakyuet-size-guide__body">
+      {%- assign is_en = false -%}
+      {%- if localization.language.iso_code == 'en' -%}{%- assign is_en = true -%}{%- endif -%}
+      <p class="pakyuet-size-guide__lead">{% if is_en %}Different collections use different ring size systems (US size / HK size). Please measure your finger and compare with the table below before ordering to confirm your size.{% else %}不同系列採用不同的尺碼系統（美碼 US／港碼 HK）。下單前請先量度手指並對照下表，確認屬於哪一個碼。{% endif %}</p>
+
+      <h3>📐 {% if is_en %}International Ring Size Chart{% else %}國際尺碼對照表{% endif %}</h3>
+      <div class="pakyuet-size-guide__table-wrap">
+        <table class="pakyuet-size-guide__table">
+          <thead>
+            <tr>
+              <th>{% if is_en %}US{% else %}美碼<br>US{% endif %}</th>
+              <th>{% if is_en %}HK{% else %}港碼<br>HK{% endif %}</th>
+              <th>{% if is_en %}UK{% else %}英碼<br>UK{% endif %}</th>
+              <th>{% if is_en %}EU{% else %}歐碼<br>EU{% endif %}</th>
+              <th>{% if is_en %}Inner Diameter<br>(mm){% else %}內徑<br>(mm){% endif %}</th>
+              <th>{% if is_en %}Circumference<br>(mm){% else %}周長<br>(mm){% endif %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>4</td><td>6</td><td>H</td><td>47</td><td>14.9</td><td>46.8</td></tr>
+            <tr><td>4.5</td><td>7</td><td>I</td><td>48</td><td>15.3</td><td>48.0</td></tr>
+            <tr><td>5</td><td>8</td><td>J</td><td>49</td><td>15.7</td><td>49.3</td></tr>
+            <tr><td>5.5</td><td>9</td><td>K</td><td>50</td><td>16.1</td><td>50.6</td></tr>
+            <tr><td>6</td><td>10</td><td>L</td><td>51</td><td>16.5</td><td>51.9</td></tr>
+            <tr><td>6.5</td><td>11</td><td>M</td><td>52</td><td>16.9</td><td>53.1</td></tr>
+            <tr><td>7</td><td>12</td><td>N</td><td>53</td><td>17.3</td><td>54.4</td></tr>
+            <tr><td>7.5</td><td>13</td><td>O</td><td>54</td><td>17.7</td><td>55.6</td></tr>
+            <tr><td>8</td><td>14</td><td>P</td><td>55</td><td>18.1</td><td>56.9</td></tr>
+            <tr><td>8.5</td><td>15</td><td>Q</td><td>56</td><td>18.5</td><td>58.1</td></tr>
+            <tr><td>9</td><td>16</td><td>R</td><td>57</td><td>18.9</td><td>59.5</td></tr>
+            <tr><td>9.5</td><td>17</td><td>S</td><td>58</td><td>19.4</td><td>60.7</td></tr>
+            <tr><td>10</td><td>18</td><td>T</td><td>59</td><td>19.8</td><td>62.2</td></tr>
+            <tr><td>10.5</td><td>19</td><td>T&frac12;</td><td>60</td><td>20.2</td><td>63.4</td></tr>
+            <tr><td>11</td><td>20</td><td>U</td><td>61</td><td>20.6</td><td>64.7</td></tr>
+            <tr><td>11.5</td><td>21</td><td>V</td><td>62</td><td>21.0</td><td>65.9</td></tr>
+            <tr><td>12</td><td>22</td><td>W</td><td>63</td><td>21.4</td><td>67.2</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="pakyuet-size-guide__caption">{% if is_en %}* The chart is for reference only; actual finger measurement takes priority. If you fall between two sizes, we recommend choosing the larger size.{% else %}* 對照表僅供參考，實際以手指量度為準；介於兩個碼之間建議選大一號。{% endif %}</p>
+
+      <h3>📏 {% if is_en %}How to Measure{% else %}如何量度{% endif %}</h3>
+      <ol class="pakyuet-size-guide__steps">
+        <li>{% if is_en %}<strong>Method 1: Measure an Existing Ring</strong> — Take a ring that fits you comfortably and measure its <strong>inner diameter (mm)</strong> with a ruler, then compare with the chart above.{% else %}<strong>方法一：量現有戒指</strong> —— 拿一枚佩戴合手的戒指，用直尺量它的<strong>內徑（mm）</strong>，對照上表。{% endif %}</li>
+        <li>{% if is_en %}<strong>Method 2: Measure Circumference Around Your Finger</strong> — Using a non-stretch strip of paper or cotton thread, wrap it snugly around the <strong>base of your finger</strong>, mark the overlap, lay it flat and measure the length — that is your <strong>circumference (mm)</strong>. Compare with the chart above.{% else %}<strong>方法二：繞指量周長</strong> —— 用一條無彈性的紙條或棉線，緊貼繞在<strong>手指根部</strong>一圈，在交接處做記號，攤平量出長度即為<strong>周長（mm）</strong>，對照上表。{% endif %}</li>
+      </ol>
+
+      <div class="pakyuet-size-guide__tip">
+        <strong>💡 {% if is_en %}Tips{% else %}小提示{% endif %}</strong>
+        <ul>
+          <li>{% if is_en %}Measure in the evening or when your fingers are warm — they are slightly larger, giving a more accurate result.{% else %}建議在傍晚或手指溫暖時測量，手指會稍為脹大，結果更準。{% endif %}</li>
+          <li>{% if is_en %}Larger knuckles, or fall between two sizes → <strong>choose the larger size</strong>.{% else %}關節較粗、或介於兩個碼之間 → <strong>請選大一號</strong>。{% endif %}</li>
+          <li>{% if is_en %}Open rings can be adjusted by hand, so no size selection is needed.{% else %}開口戒可自行調節鬆緊，無需選碼。{% endif %}</li>
+        </ul>
+      </div>
+
+      <p class="pakyuet-size-guide__policy">
+        {% if is_en %}If the size doesn't fit, please refer to our{% else %}尺寸不合可參考{% endif %}
+        <a href="{{ routes.root_url }}pages/refund-policy" target="_blank" rel="noopener">{% if is_en %}Return &amp; Exchange Policy{% else %}退換政策{% endif %}</a>
+        {% if is_en %}or contact us.{% else %}與我們聯絡。{% endif %}
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var modal = document.getElementById('pakyuet-size-guide');
+    if (!modal) return;
+    // Teleport 到 <body>：Dawn 的 .product__info-wrapper 带 scroll-trigger/animate--slider-in，
+    // 会残留 transform（matrix(1,0,0,1,0,0)），导致 position:fixed 相对该祖先定位而非视口——
+    // 弹窗锚在页面中间、overlay 盖不满全屏、关闭按钮可能跑到其他 UI 下面。移到 body 后 fixed 恢复正常。
+    if (modal.parentNode && modal.parentNode !== document.body) {
+      document.body.appendChild(modal);
+    }
+    var openTriggers = document.querySelectorAll('[data-open-size-guide]');
+    var lastFocus = null;
+
+    function isOpen() { return modal.classList.contains('is-open'); }
+
+    function open(el) {
+      lastFocus = el || document.activeElement;
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('overflow-hidden');
+      var closeBtn = modal.querySelector('.pakyuet-size-guide__close');
+      if (closeBtn) closeBtn.focus();
+      for (var i = 0; i < openTriggers.length; i++) openTriggers[i].setAttribute('aria-expanded', 'true');
+    }
+
+    function close() {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('overflow-hidden');
+      for (var i = 0; i < openTriggers.length; i++) openTriggers[i].setAttribute('aria-expanded', 'false');
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    function trapFocus(e) {
+      if (e.key !== 'Tab') return;
+      var focusables = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (!focusables.length) return;
+      var first = focusables[0];
+      var last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+
+    document.addEventListener('click', function (e) {
+      var t = e.target;
+      if (t.closest && t.closest('[data-open-size-guide]')) {
+        e.preventDefault();
+        e.stopPropagation();
+        open(t.closest('[data-open-size-guide]'));
+        return;
+      }
+      if (t.closest && t.closest('[data-close-size-guide]')) { close(); return; }
+      if (t === modal) close();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen()) close();
+      if (isOpen()) trapFocus(e);
+    });
+  })();
+</script>

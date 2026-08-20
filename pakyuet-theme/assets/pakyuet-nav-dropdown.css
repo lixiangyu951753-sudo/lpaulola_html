@@ -1,0 +1,79 @@
+/* PAKYUET 页眉下拉卡片（复刻 idearock.com.tw 的 hover 弹出卡片效果）。
+   独立文件确保绕过 Cloudflare 旧 CSS 缓存强制回源（见 pakyuet-cdn-cache-poisoning）。
+   nav-dropdown-v1 */
+
+/* 弹出卡片锚定到整个 header（占满整页宽），而不是子元素：
+   - .ir-header 设 position:relative，成为绝对定位下拉的定位基准
+   - .ir-nav__left 原来 overflow-x:auto 会裁切绝对定位子元素（overflow-x≠visible 时
+     overflow-y 计算为 auto，形成滚动裁切盒）→ 改为 visible。页眉 7 个分类在 ≥768px
+     都放得下（<768px 时 .ir-nav__left 直接隐藏），无需横向滚动。
+   - .ir-nav-item 撑满导航行高度（align-self/align-items:stretch），使链接下缘到
+     下拉卡片上缘无缝衔接，避免鼠标下移时经过空隙而 hover 断连（卡片闪退）。 */
+.ir-header {
+  position: relative;
+}
+.ir-nav__left {
+  overflow: visible;
+  align-self: stretch;
+  align-items: stretch;
+}
+
+/* 下拉卡片：白色、整页宽、紧贴导航下方弹出 */
+.ir-nav-item {
+  position: static;
+  display: flex;
+  align-items: center;
+}
+.ir-nav-dropdown {
+  position: absolute;
+  top: 100%; /* header 高度(公告栏+导航)的 100% = 导航正下方 */
+  left: 0;
+  right: 0;
+  display: none;
+  background: #ffffff;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.10);
+  z-index: 95;
+}
+.ir-nav-item:hover .ir-nav-dropdown,
+.ir-nav-item:focus-within .ir-nav-dropdown {
+  display: block;
+  animation: ir-nav-dropdown-in 0.15s ease-out;
+}
+@keyframes ir-nav-dropdown-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.ir-nav-dropdown__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 28px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 48px;
+}
+.ir-nav-dropdown__link {
+  font-size: 14px;
+  font-weight: 700;
+  color: #333333;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+.ir-nav-dropdown__link:hover {
+  color: var(--ir-primary);
+}
+
+/* 有下拉的分類加一個小三角提示可展開 */
+.ir-nav-item--has-dropdown .ir-nav__link::after {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 6px;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid currentColor;
+  vertical-align: middle;
+  opacity: 0.65;
+}

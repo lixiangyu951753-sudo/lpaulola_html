@@ -1,0 +1,115 @@
+{%- liquid
+  assign picked = section.settings.collection
+  assign using_all = false
+  if picked == blank
+    assign using_all = true
+    assign source_collection = collections['all-color-sorted']
+    if source_collection == blank or source_collection.empty
+      assign source_collection = collections.all
+    endif
+  else
+    assign source_collection = picked
+  endif
+  assign page_size = section.settings.products_to_show
+  if page_size == 0
+    assign page_size = 50
+  endif
+  assign total_count = 0
+  if source_collection
+    assign total_count = source_collection.products_count
+  endif
+  # 读取 URL ?sort_by 参数，用于高亮当前排序选项
+  assign current_sort = request.params.sort_by | default: 'manual'
+-%}
+<section class="pakyuet-product-section" id="products" data-product-section data-page-size="{{ page_size }}">
+  <div class="container">
+    <div class="product-section__header">
+      <div style="display:flex;align-items:baseline;">
+        <h2 class="product-section__title">{{ section.settings.title }}</h2>
+        {%- if total_count > 0 -%}
+          <span class="product-section__count" data-product-count>(<span data-product-shown>{{ total_count }}</span>)</span>
+        {%- endif -%}
+      </div>
+      <div class="sort-dropdown" data-sort-dropdown>
+        <button type="button" class="sort-dropdown__toggle" data-sort-toggle>
+          <span data-sort-label>
+            {%- case current_sort -%}
+              {%- when 'created-descending' -%}{{ section.settings.sort_newest_label }}
+              {%- when 'price-ascending' -%}{{ section.settings.sort_price_asc_label }}
+              {%- when 'price-descending' -%}{{ section.settings.sort_price_desc_label }}
+              {%- else -%}{{ section.settings.sort_default_label }}
+            {%- endcase -%}
+          </span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="sort-dropdown__menu">
+          {%- comment -%} 排序通过 AJAX 完成（JS fetch collection.data.liquid），不跳转页面。链接作为 fallback。 {%- endcomment -%}
+          <a class="sort-dropdown__item{% if current_sort == 'manual' or current_sort == blank %} active{% endif %}" href="/?sort_by=manual" data-sort-key="manual">{{ section.settings.sort_default_label }}</a>
+          <a class="sort-dropdown__item{% if current_sort == 'created-descending' %} active{% endif %}" href="/?sort_by=created-descending" data-sort-key="created-descending">{{ section.settings.sort_newest_label }}</a>
+          <a class="sort-dropdown__item{% if current_sort == 'price-ascending' %} active{% endif %}" href="/?sort_by=price-ascending" data-sort-key="price-ascending">{{ section.settings.sort_price_asc_label }}</a>
+          <a class="sort-dropdown__item{% if current_sort == 'price-descending' %} active{% endif %}" href="/?sort_by=price-descending" data-sort-key="price-descending">{{ section.settings.sort_price_desc_label }}</a>
+        </div>
+      </div>
+    </div>
+
+    {%- if total_count > 0 -%}
+      {%- paginate source_collection.products by page_size -%}
+      <div class="pakyuet-product-grid" data-product-grid>
+        {%- for product in source_collection.products -%}
+          {%- render 'pakyuet-product-card', product: product, show_secondary_image: section.settings.show_secondary_image -%}
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}
+        <nav class="pakyuet-pagination" role="navigation" aria-label="分页" data-pagination>
+          <div class="pakyuet-pagination__inner">
+            {%- if paginate.previous -%}
+              <a class="pakyuet-pagination__btn pakyuet-pagination__btn--arrow" href="{{ paginate.previous.url }}#products" rel="prev" aria-label="上一页" data-page="{{ paginate.current_page | minus: 1 }}">&lsaquo;</a>
+            {%- else -%}
+              <span class="pakyuet-pagination__btn pakyuet-pagination__btn--arrow pakyuet-pagination__btn--disabled">&lsaquo;</span>
+            {%- endif -%}
+            <span class="pakyuet-pagination__info" data-page-info>{%- if localization.language.iso_code == 'en' -%}Page {{ paginate.current_page }} of {{ paginate.pages }}{%- else -%}第 {{ paginate.current_page }} / {{ paginate.pages }} 页{%- endif -%}</span>
+            {%- if paginate.next -%}
+              <a class="pakyuet-pagination__btn pakyuet-pagination__btn--arrow" href="{{ paginate.next.url }}#products" rel="next" aria-label="下一页" data-page="{{ paginate.current_page | plus: 1 }}">&rsaquo;</a>
+            {%- else -%}
+              <span class="pakyuet-pagination__btn pakyuet-pagination__btn--arrow pakyuet-pagination__btn--disabled">&rsaquo;</span>
+            {%- endif -%}
+          </div>
+        </nav>
+      {%- endif -%}
+      {%- endpaginate -%}
+    {%- else -%}
+      <div class="pakyuet-product-grid">
+        <p class="product-grid__empty">
+          {%- if using_all -%}
+            {{ section.settings.empty_text }}
+          {%- else -%}
+            {{ section.settings.no_products_text }}
+          {%- endif -%}
+        </p>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "PAKYUET 商品网格",
+  "settings": [
+    { "type": "header", "content": "商品来源" },
+    { "type": "collection", "id": "collection", "label": "商品合集", "info": "留空 = 按配色排序的全部商品（all-color-sorted 集合，跨页配色排序）。指定 collection 则只显示其中商品。" },
+    { "type": "checkbox", "id": "show_secondary_image", "label": "鼠标悬停显示第二张图", "default": true, "info": "需商品本身设置了第二张图片才生效。" },
+    { "type": "range", "id": "products_to_show", "label": "每页显示数量", "min": 8, "max": 50, "step": 1, "default": 15, "info": "超出部分通过底部分页器翻页显示。" },
+    { "type": "header", "content": "标题" },
+    { "type": "text", "id": "title", "label": "标题文字", "default": "全部商品" },
+    { "type": "header", "content": "排序下拉文字" },
+    { "type": "text", "id": "sort_default_label", "label": "综合排序（=配色排序）", "default": "综合排序", "info": "默认选项，按集合 manual order（配色色组顺序）跨页排序。" },
+    { "type": "text", "id": "sort_newest_label", "label": "最新上架", "default": "最新上架" },
+    { "type": "text", "id": "sort_price_asc_label", "label": "价格低到高", "default": "价格由低到高" },
+    { "type": "text", "id": "sort_price_desc_label", "label": "价格高到低", "default": "价格由高到低" },
+    { "type": "header", "content": "空状态" },
+    { "type": "text", "id": "empty_text", "label": "店铺无商品提示", "default": "店铺暂无商品，请先上架商品。" },
+    { "type": "text", "id": "no_products_text", "label": "无商品提示", "default": "此合集暂无商品。" }
+  ],
+  "presets": [{ "name": "PAKYUET 商品网格" }]
+}
+{% endschema %}

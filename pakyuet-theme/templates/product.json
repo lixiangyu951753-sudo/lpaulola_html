@@ -1,0 +1,252 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "breadcrumb": {
+      "type": "pakyuet-breadcrumb",
+      "settings": {}
+    },
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": {
+          "type": "text",
+          "settings": {
+            "text": "pakyuet",
+            "text_style": "uppercase"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "rating": {
+          "type": "rating",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "inventory": {
+          "type": "inventory",
+          "settings": {
+            "text_style": "body",
+            "inventory_threshold": 10,
+            "show_inventory_quantity": true
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "whatsapp": {
+          "type": "pakyuet_whatsapp",
+          "settings": {}
+        },
+        "trust": {
+          "type": "icon-with-text",
+          "settings": {
+            "layout": "horizontal",
+            "icon_1": "lock",
+            "heading_1": "100% 安全付款",
+            "icon_2": "return",
+            "heading_2": "48 小時退換保障",
+            "icon_3": "box",
+            "heading_3": "精美禮盒包裝"
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "price",
+        "rating",
+        "variant_picker",
+        "inventory",
+        "quantity_selector",
+        "buy_buttons",
+        "whatsapp",
+        "trust"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "media_size": "small",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "gallery_layout": "thumbnail_slider",
+        "mobile_thumbnails": "show",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "padding_top": 24,
+        "padding_bottom": 12
+      }
+    },
+    "disclosures": {
+      "type": "disclosures",
+      "settings": {
+        "heading": "資訊揭露",
+        "heading_size": "h2",
+        "open_by_default": false,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "accordion": {
+      "type": "pakyuet-product-accordion",
+      "blocks": {
+        "row_detail": {
+          "type": "row",
+          "settings": {
+            "heading": "商品詳情",
+            "source": "product_description",
+            "content": "<p>以優質莫桑石打造,閃耀度接近鑽石。S925 純銀基底,溫和親膚。滿圈鑲嵌設計,每顆莫桑石精心挑選,確保光澤一致。日常佩戴的完美之選。</p><ul><li>材質:S925 純銀 + 莫桑石</li><li>莫桑石重量:2.53 克拉</li><li>戒指內圈直徑:可選 5-9 號</li><li>表面處理:高拋光</li><li>SKU: PKYUET-R001</li></ul>",
+            "open_default": true
+          }
+        },
+        "row_shipping": {
+          "type": "row",
+          "settings": {
+            "heading": "配送及退換",
+            "source": "custom",
+            "content": "<ul><li>訂單處理時間:1-3 個工作天</li><li>香港 / 台灣 / 新加坡:約 5-10 個工作天</li><li>其他地區:約 7-15 個工作天</li><li>滿指定金額可享免運,未達門檻於結帳時顯示運費</li><li>訂單發出後將收到物流追蹤通知</li></ul><p><strong>退換政策:</strong></p><ul><li>一般情況不接受退貨或退款</li><li>僅限商品明顯瑕疵或寄送錯誤,並於收貨後 48 小時內聯絡我們</li></ul>",
+            "open_default": false
+          }
+        },
+        "row_care": {
+          "type": "row",
+          "settings": {
+            "heading": "材質與保養",
+            "source": "custom",
+            "content": "<p>S925 純銀含銀量 92.5%,經高溫鍛造後精密打磨,質感溫潤親膚。莫桑石硬度達 9.25(莫氏硬度),接近鑽石的 10,擁有優異的耐磨性與折射率,火彩璀璨持久。</p><p><strong>保養建議:</strong></p><ul><li>避免接觸化學品(香水、清潔劑等)</li><li>游泳或洗澡時請摘下</li><li>使用隨附擦銀布擦拭,保持光澤</li><li>不佩戴時,請存放於密封袋或首飾盒中</li></ul>",
+            "open_default": false
+          }
+        }
+      },
+      "block_order": [
+        "row_detail",
+        "row_shipping",
+        "row_care"
+      ],
+      "settings": {
+        "open_first": true,
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "brand-stories": {
+      "type": "pakyuet-brand-stories",
+      "blocks": {
+        "story_1": {
+          "type": "story",
+          "settings": {
+            "image_asset": "",
+            "label": "PAKYUET STORY",
+            "heading": "閃耀如你",
+            "text": "<p>每一顆莫桑石的璀璨,都源於對光影的極致追求。我們深信,真正的美不需要張揚——它在你日常的每一刻自然流露,成為專屬於你的光芒。</p>",
+            "button_label": "",
+            "button_link": "",
+            "layout": "image_first"
+          }
+        },
+        "story_2": {
+          "type": "story",
+          "settings": {
+            "image_asset": "",
+            "label": "CRAFTSMANSHIP",
+            "heading": "匠心之作",
+            "text": "<p>從選石到鑲嵌,每一步都凝聚匠心。S925 純銀經高溫鍛造後精密打磨,莫桑石由手工逐顆嵌入,確保每枚戒指都呈現完美的火彩與光澤。</p>",
+            "button_label": "",
+            "button_link": "",
+            "layout": "text_first"
+          }
+        },
+        "story_3": {
+          "type": "story",
+          "settings": {
+            "image_asset": "",
+            "label": "PERFECT GIFT",
+            "heading": "完美禮物",
+            "text": "<p>無論是生日、紀念日,還是只想為日常增添一份驚喜——精緻的禮盒包裝,讓拆開的那一刻便充滿期待。每一件飾品,都是一份用心的表達。</p>",
+            "button_label": "",
+            "button_link": "",
+            "layout": "image_first"
+          }
+        }
+      },
+      "block_order": [
+        "story_1",
+        "story_2",
+        "story_3"
+      ],
+      "disabled": true,
+      "settings": {
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "reviews": {
+      "type": "pakyuet-reviews",
+      "disabled": true,
+      "settings": {
+        "heading": "顧客評價",
+        "placeholder_text": "評價功能即將上線",
+        "color_scheme": "scheme-1",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "heading": "你可能也喜歡",
+        "heading_size": "h2",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 36,
+        "padding_bottom": 28
+      }
+    }
+  },
+  "order": [
+    "breadcrumb",
+    "main",
+    "disclosures",
+    "accordion",
+    "brand-stories",
+    "reviews",
+    "related-products"
+  ]
+}

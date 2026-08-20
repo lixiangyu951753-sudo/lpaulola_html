@@ -1,0 +1,227 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "baked_hero": {
+      "type": "pakyuet-baked-hero",
+      "blocks": {
+        "slide_1": { "type": "slide", "settings": { "link": "/pages/shop", "alt": "新店開幕 立即選購" } },
+        "slide_2": { "type": "slide", "settings": { "link": "/pages/shop", "alt": "開幕期間 全館 8 折" } },
+        "slide_3": { "type": "slide", "settings": { "link": "https://wa.me/85297112975", "alt": "WhatsApp 專屬諮詢", "asset_desktop": "baked-3-consult-desktop.jpg", "asset_mobile": "baked-3-consult-mobile.jpg" } },
+        "slide_4": { "type": "slide", "settings": { "link": "/pages/shop", "alt": "求婚訂婚 莫桑石戒" } },
+        "slide_5": { "type": "slide", "settings": { "link": "/pages/shop", "alt": "以戒定情 愛在時光" } },
+        "slide_6": { "type": "slide", "settings": { "link": "/pages/shop", "alt": "嚴選莫桑石 匠心雕琢" } }
+      },
+      "block_order": ["slide_1", "slide_2", "slide_3", "slide_4", "slide_5", "slide_6"],
+      "settings": {}
+    },
+    "hot_categories": {
+      "type": "pakyuet-category-cards",
+      "blocks": {
+        "hc_1": { "type": "card", "settings": { "collection": "rings", "link": "/collections/rings/莫桑石", "image_asset": "cat-engagement-ring.jpg", "title": "莫桑石戒指", "cta_text": "view more" } },
+        "hc_2": { "type": "card", "settings": { "collection": "necklaces", "link": "/collections/necklaces/莫桑石", "image_asset": "cat-gift-jewelry.jpg", "title": "莫桑石項鏈", "cta_text": "view more" } },
+        "hc_3": { "type": "card", "settings": { "collection": "earrings", "link": "/collections/earrings/莫桑石", "image_asset": "cat-earrings.jpg", "title": "莫桑石耳飾", "cta_text": "view more" } },
+        "hc_4": { "type": "card", "settings": { "collection": "bracelets", "link": "/collections/bracelets/莫桑石", "image_asset": "cat-bracelet.jpg", "title": "莫桑石手鏈", "cta_text": "view more" } }
+      },
+      "block_order": ["hc_1", "hc_2", "hc_3", "hc_4"],
+      "settings": {
+        "heading": "熱門分類",
+        "subheading": "嚴選莫桑石系列，找到屬於您的永恆光芒",
+        "background": "none",
+        "square_media": true,
+        "show_count": false
+      }
+    },
+    "series": {
+      "type": "pakyuet-category-cards",
+      "blocks": {
+        "sr_1": { "type": "card", "settings": { "collection": "theme-star", "image_asset": "prod-couple-necklace.jpg", "title": "星空物語", "cta_text": "探索系列" } },
+        "sr_2": { "type": "card", "settings": { "collection": "theme-flower", "image_asset": "prod-wedding-vow.jpg", "title": "花語系列", "cta_text": "探索系列" } },
+        "sr_3": { "type": "card", "settings": { "collection": "theme-water", "image_asset": "prod-engagement-solitaire.jpg", "title": "水光系列", "cta_text": "探索系列" } },
+        "sr_4": { "type": "card", "settings": { "collection": "theme-love", "image_asset": "prod-couple-heart-ring.jpg", "title": "愛心系列", "cta_text": "探索系列" } }
+      },
+      "block_order": ["sr_1", "sr_2", "sr_3", "sr_4"],
+      "settings": {
+        "heading": "推薦系列",
+        "subheading": "職人嚴選，每一件都值得珍藏",
+        "background": "light",
+        "square_media": true,
+        "show_count": false
+      }
+    },
+    "brand_stories": {
+      "type": "pakyuet-brand-stories",
+      "blocks": {
+        "bs_1": {
+          "type": "story",
+          "settings": {
+            "image_asset": "feat-engagement-ring.jpg",
+            "heading": "莫桑石戒指",
+            "text": "<p>嚴選 S925 純銀與莫桑石，以精湛鑲嵌工藝打造，讓承諾閃耀永恆光芒。從經典六爪到華麗車工，為您獻上最動人的求婚之選。</p>",
+            "button_label": "探索系列",
+            "button_link": "/collections/rings/%E8%8E%AB%E6%A1%91%E7%9F%B3",
+            "layout": "image_first"
+          }
+        },
+        "bs_2": {
+          "type": "story",
+          "settings": {
+            "image_asset": "feat-wedding-bands.jpg",
+            "heading": "訂婚戒指",
+            "text": "<p>嚴選 PAKYUET 代表之作，簡約俐落的線條設計，象徵兩人相守的承諾。舒適貼手的戒身弧度，讓愛在歲月中恆久陪伴。</p>",
+            "button_label": "探索系列",
+            "button_link": "/collections/rings/%E5%A9%9A%E7%A6%AE",
+            "layout": "text_first"
+          }
+        },
+        "bs_3": {
+          "type": "story",
+          "settings": {
+            "image_asset": "feat-couple-jewelry.jpg",
+            "heading": "星空物語 / 愛心系列",
+            "text": "<p>從日常配戴到重要紀念，星空、愛心與花語系列為妳的愛情留下獨特印記，每一件都能刻字，傳遞專屬心意。</p>",
+            "button_label": "探索系列",
+            "button_link": "/collections/theme-star",
+            "layout": "image_first"
+          }
+        }
+      },
+      "block_order": ["bs_1", "bs_2", "bs_3"],
+      "settings": { "padding_top": 60, "padding_bottom": 60 }
+    },
+    "services": {
+      "type": "pakyuet-service-cards",
+      "blocks": {
+        "svc_1": {
+          "type": "card",
+          "settings": {
+            "image_asset": "svc-aftercare.jpg",
+            "title": "貼心售後服務",
+            "desc": "PAKYUET 嚴選 S925 純銀與莫桑石，提供貼心售後與飾品清潔保養服務，讓珠寶歷久彌新。",
+            "button_label": "了解更多",
+            "button_link": "https://wa.me/85297112975"
+          }
+        },
+        "svc_2": {
+          "type": "card",
+          "settings": {
+            "image_asset": "svc-engraving.jpg",
+            "title": "專屬訂製推薦",
+            "desc": "為您一對一推薦專屬飾品，依預算與場合挑選最契合的款式，讓心意與風格完美契合。",
+            "button_label": "了解更多",
+            "button_link": "https://wa.me/85297112975"
+          }
+        },
+        "svc_3": {
+          "type": "card",
+          "settings": {
+            "image_asset": "svc-repair.jpg",
+            "title": "專業飾品保養",
+            "desc": "每個珠寶飾品承載了深刻的回憶與意義，PAKYUET 提供專業保養修復，保存送禮與收禮的情意。",
+            "button_label": "了解更多",
+            "button_link": "https://wa.me/85297112975"
+          }
+        },
+        "svc_4": {
+          "type": "card",
+          "settings": {
+            "image_asset": "svc-diamond-knowledge.jpg",
+            "title": "莫桑石知識分享",
+            "desc": "買婚戒前必看：莫桑石、鋯石與高碳鑽的差異，品質與常見問題全解析。",
+            "button_label": "了解更多",
+            "button_link": "/blogs/jewelry-knowledge"
+          }
+        }
+      },
+      "block_order": ["svc_1", "svc_2", "svc_3", "svc_4"],
+      "settings": {
+        "heading": "專業服務",
+        "subheading": "完整售後保障，讓您的珠寶歷久彌新"
+      }
+    },
+    "tryon": {
+      "type": "pakyuet-product-story",
+      "settings": {
+        "image_asset": "tryon-experience.jpg",
+        "heading": "專屬線上諮詢",
+        "text": "<p>透過 WhatsApp 與專業客服一對一諮詢，為您推薦最契合的專屬飾品，讓每個重要時刻都能完美定格。</p>",
+        "button_label": "立即諮詢",
+        "button_link": "https://wa.me/85297112975",
+        "height": "medium",
+        "content_position": "center",
+        "text_color": "dark",
+        "overlay_opacity": 0,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "contact": {
+      "type": "pakyuet-contact-cards",
+      "blocks": {
+        "ct_1": {
+          "type": "card",
+          "settings": {
+            "icon": "💬",
+            "title": "WhatsApp 專人客服",
+            "rows": "+852 9711 2975\n週一至週日 11:00 - 21:00\n立即對話 →|https://wa.me/85297112975"
+          }
+        },
+        "ct_2": {
+          "type": "card",
+          "settings": {
+            "icon": "📸",
+            "title": "Instagram",
+            "rows": "@paulolajewelry_hk\n追蹤我們 →|https://www.instagram.com/paulolajewelry_hk"
+          }
+        },
+        "ct_3": {
+          "type": "card",
+          "settings": {
+            "icon": "📧",
+            "title": "客服郵箱",
+            "rows": "support@paulola.com\n發送郵件 →|mailto:support@paulola.com"
+          }
+        },
+        "ct_4": {
+          "type": "card",
+          "settings": {
+            "icon": "🏢",
+            "title": "公司資訊",
+            "rows": "PAKYUET JEWELLERY CO., LIMITED\nUNIT 05, 12/F THE CLOUD, NO.111 TUNG CHAU ST, TAI KOK TSUI, HONG KONG"
+          }
+        }
+      },
+      "block_order": ["ct_1", "ct_2", "ct_3", "ct_4"],
+      "settings": {
+        "heading": "聯絡我們",
+        "subheading": "歡迎透過以下方式聯繫我們，專人為您服務"
+      }
+    },
+    "newsletter": {
+      "type": "pakyuet-newsletter",
+      "settings": {
+        "heading": "訂閱 PAKYUET 電子報，率先獲取新品與優惠資訊",
+        "placeholder": "輸入你的電郵地址",
+        "button_text": "訂閱",
+        "success_text": "感謝訂閱！"
+      }
+    }
+  },
+  "order": [
+    "baked_hero",
+    "hot_categories",
+    "series",
+    "brand_stories",
+    "services",
+    "tryon",
+    "contact",
+    "newsletter"
+  ]
+}

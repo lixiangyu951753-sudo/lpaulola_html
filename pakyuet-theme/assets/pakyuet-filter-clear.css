@@ -1,0 +1,33 @@
+/* 2026-08-12 筛选栏「清空篩選」按钮
+   独立新文件名：Cloudflare 忽略 query 按路径缓存 /cdn/*.css 1 年，同名覆盖不生效。
+   按钮放 .ir-filter-panel 内、.ir-filters 之外 —— 避免被横向滚动条(.ir-filters
+   overflow-x:auto)卷出可视区；仅当 URL 处于筛选态时才显示（JS 通过
+   data-filter-clear 控制 hidden 属性）。 */
+.ir-filter-clear {
+  display: block;
+  width: fit-content;
+  margin: 12px 0 0 auto; /* 右对齐 */
+  padding: 6px 14px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ir-primary, #c4a35a);
+  border: 1px solid var(--ir-primary, #c4a35a);
+  border-radius: 2px;
+  background: transparent;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+}
+.ir-filter-clear:hover {
+  background: var(--ir-primary, #c4a35a);
+  color: #fff;
+}
+.ir-filter-clear[hidden] { display: none; }
+
+@media (max-width: 768px) {
+  .ir-filter-clear {
+    width: 100%;
+    margin: 12px 0 0;
+    text-align: center;
+  }
+}

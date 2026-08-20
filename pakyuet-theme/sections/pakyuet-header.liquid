@@ -1,0 +1,646 @@
+{%- liquid
+  assign help_link = section.settings.help_link
+-%}
+<header class="pakyuet-header ir-header" data-pakyuet-header>
+  {%- if section.settings.show_announcement -%}
+    <div class="ir-announcement">
+      <div class="ir-announcement__inner">
+        {%- assign announcement_out = section.settings.announcement_text -%}
+        {%- if localization.language.iso_code == 'en' -%}
+          {%- case section.settings.announcement_text -%}
+            {%- when '莫桑石珠寶設計　匠心工藝　爲妳而作' -%}{%- assign announcement_out = 'Moissanite Jewelry, Crafted with Mastery — Made for You' -%}
+          {%- endcase -%}
+        {%- endif -%}
+        {{ announcement_out }}
+      </div>
+    </div>
+  {%- endif -%}
+  {%- if section.settings.show_announcement2 -%}
+    <div class="ir-announcement2">
+      <div class="ir-announcement2__inner">
+        <span class="ir-announcement2__text">
+          {%- assign announcement2_out = section.settings.announcement2_text -%}
+          {%- if localization.language.iso_code == 'en' -%}
+            {%- case section.settings.announcement2_text -%}
+              {%- when '藝人見證的安心工藝 · 懂妳才懂做的戒指專家' -%}{%- assign announcement2_out = 'Craftsmanship trusted by celebrities — ring experts who truly know you' -%}
+            {%- endcase -%}
+          {%- endif -%}
+          {{ announcement2_out }}
+        </span>
+        {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
+          <div class="ir-announcement2__localization">
+            {%- if localization.available_countries.size > 1 -%}
+              <localization-form class="ir-lang-form ir-lang-form--announcement ir-lang-form--country">
+                {%- form 'localization', id: 'PakyuetAnnouncementCountryForm', class: 'localization-form' -%}
+                  {%- render 'country-localization', localPosition: 'PakyuetAnnouncementCountry' -%}
+                {%- endform -%}
+              </localization-form>
+            {%- endif -%}
+            {%- if localization.available_languages.size > 1 -%}
+              <localization-form class="ir-lang-form ir-lang-form--announcement ir-lang-form--language">
+                {%- form 'localization', id: 'PakyuetAnnouncementLangForm', class: 'localization-form' -%}
+                  {%- render 'language-localization', localPosition: 'PakyuetAnnouncementLang' -%}
+                {%- endform -%}
+              </localization-form>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="ir-nav">
+    <button type="button" class="ir-hamburger" data-menu-toggle aria-label="{% if localization.language.iso_code == 'en' %}Menu{% else %}選單{% endif %}" aria-expanded="false" aria-controls="ir-menu-drawer">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="ir-nav__left" aria-label="{% if localization.language.iso_code == 'en' %}Categories{% else %}商品分類{% endif %}">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'nav_link' -%}
+          {%- liquid
+            assign has_children = false
+            for i in (1..6)
+              assign label_key = 'child_label_' | append: i
+              if block.settings[label_key] != blank
+                assign has_children = true
+              endif
+            endfor
+            assign blog = false
+            if block.settings.blog_handle != blank
+              assign blog = blogs[block.settings.blog_handle]
+              if blog.articles.size > 0
+                assign has_children = true
+              endif
+            endif
+          -%}
+          {%- assign nav_label = block.settings.label -%}
+          {%- if localization.language.iso_code == 'en' -%}
+            {%- case block.settings.label -%}
+              {%- when '系列' -%}{%- assign nav_label = 'Collections' -%}
+              {%- when '莫桑石' -%}{%- assign nav_label = 'Moissanite' -%}
+              {%- when '鋯石' -%}{%- assign nav_label = 'Zircon' -%}
+              {%- when '高碳鑽' -%}{%- assign nav_label = 'High Carbon Diamond' -%}
+              {%- when '日常系列' -%}{%- assign nav_label = 'Everyday Collection' -%}
+              {%- when '珍珠系列' -%}{%- assign nav_label = 'Pearl Collection' -%}
+              {%- when '戒指' -%}{%- assign nav_label = 'Rings' -%}
+              {%- when '925純銀' -%}{%- assign nav_label = '925 Sterling Silver' -%}
+              {%- when '星空物語' -%}{%- assign nav_label = 'Starry Stories' -%}
+              {%- when '花語系列' -%}{%- assign nav_label = 'Floral Series' -%}
+              {%- when '水光系列' -%}{%- assign nav_label = 'Water Glow Collection' -%}
+              {%- when '極簡風' -%}{%- assign nav_label = 'Minimalist' -%}
+              {%- when '奢華風' -%}{%- assign nav_label = 'Luxury' -%}
+              {%- when '項鏈' -%}{%- assign nav_label = 'Necklaces' -%}
+              {%- when '吊墜' -%}{%- assign nav_label = 'Pendants' -%}
+              {%- when '國風系列' -%}{%- assign nav_label = 'Oriental Heritage' -%}
+              {%- when '復古風' -%}{%- assign nav_label = 'Vintage' -%}
+              {%- when '耳飾' -%}{%- assign nav_label = 'Earrings' -%}
+              {%- when '愛心系列' -%}{%- assign nav_label = 'Heart Collection' -%}
+              {%- when '韓系風' -%}{%- assign nav_label = 'Korean-Inspired' -%}
+              {%- when '清新風' -%}{%- assign nav_label = 'Fresh' -%}
+              {%- when '手鏈' -%}{%- assign nav_label = 'Bracelets' -%}
+              {%- when '客戶服務' -%}{%- assign nav_label = 'Support' -%}
+              {%- when '常見問題' -%}{%- assign nav_label = 'FAQ' -%}
+              {%- when '佩戴指南' -%}{%- assign nav_label = 'Sizing Guide' -%}
+              {%- when '材質與保養' -%}{%- assign nav_label = 'Material & Care' -%}
+              {%- when '設計理念' -%}{%- assign nav_label = 'Design Philosophy' -%}
+              {%- when '門市資訊' -%}{%- assign nav_label = 'Stores' -%}
+              {%- when '關於我們' -%}{%- assign nav_label = 'About Us' -%}
+            {%- endcase -%}
+          {%- endif -%}
+          <div class="ir-nav-item{% if has_children %} ir-nav-item--has-dropdown{% endif %}" {{ block.shopify_attributes }}>
+            <a href="{{ block.settings.link_url | default: '#' }}" class="ir-nav__link">{{ nav_label }}</a>
+            {%- if has_children -%}
+              <div class="ir-nav-dropdown">
+                <div class="ir-nav-dropdown__inner{% if blog %} ir-nav-dropdown__inner--blog{% endif %}"{% if blog %} data-blog-dropdown{% endif %}>
+                  {%- if blog -%}
+                    <div class="ir-nav-dropdown__links">
+                      {%- for article in blog.articles limit: 6 -%}
+                        <a class="ir-nav-dropdown__link ir-nav-dropdown__link--blog" href="{{ article.url }}"{% if article.image %} data-blog-img="{{ article.image | image_url: width: 800 }}"{% endif %}>{{ article.title }}</a>
+                      {%- endfor -%}
+                    </div>
+                    <div class="ir-nav-dropdown__media ir-nav-dropdown__media--blog">
+                      {%- liquid
+                        assign first_article = blog.articles.first
+                        if first_article.image
+                          assign preview_src = first_article.image | image_url: width: 800
+                        else
+                          assign preview_src = 'pakyuet-nav-moissanite.jpg' | asset_url
+                        endif
+                      -%}
+                      <img data-blog-preview src="{{ preview_src }}" alt="" width="1200" height="400" loading="lazy">
+                    </div>
+                  {%- else -%}
+                    <div class="ir-nav-dropdown__links">
+                      {%- for i in (1..6) -%}
+                        {%- assign label_key = 'child_label_' | append: i -%}
+                        {%- assign url_key = 'child_url_' | append: i -%}
+                        {%- assign child_label = block.settings[label_key] -%}
+                        {%- if localization.language.iso_code == 'en' -%}
+                          {%- case child_label -%}
+                            {%- when '系列' -%}{%- assign child_label = 'Collections' -%}
+                            {%- when '莫桑石' -%}{%- assign child_label = 'Moissanite' -%}
+                            {%- when '鋯石' -%}{%- assign child_label = 'Zircon' -%}
+                            {%- when '高碳鑽' -%}{%- assign child_label = 'High Carbon Diamond' -%}
+                            {%- when '日常系列' -%}{%- assign child_label = 'Everyday Collection' -%}
+                            {%- when '珍珠系列' -%}{%- assign child_label = 'Pearl Collection' -%}
+                            {%- when '戒指' -%}{%- assign child_label = 'Rings' -%}
+                            {%- when '925純銀' -%}{%- assign child_label = '925 Sterling Silver' -%}
+                            {%- when '星空物語' -%}{%- assign child_label = 'Starry Stories' -%}
+                            {%- when '花語系列' -%}{%- assign child_label = 'Floral Series' -%}
+                            {%- when '水光系列' -%}{%- assign child_label = 'Water Glow Collection' -%}
+                            {%- when '極簡風' -%}{%- assign child_label = 'Minimalist' -%}
+                            {%- when '奢華風' -%}{%- assign child_label = 'Luxury' -%}
+                            {%- when '項鏈' -%}{%- assign child_label = 'Necklaces' -%}
+                            {%- when '吊墜' -%}{%- assign child_label = 'Pendants' -%}
+                            {%- when '國風系列' -%}{%- assign child_label = 'Oriental Heritage' -%}
+                            {%- when '復古風' -%}{%- assign child_label = 'Vintage' -%}
+                            {%- when '耳飾' -%}{%- assign child_label = 'Earrings' -%}
+                            {%- when '愛心系列' -%}{%- assign child_label = 'Heart Collection' -%}
+                            {%- when '韓系風' -%}{%- assign child_label = 'Korean-Inspired' -%}
+                            {%- when '清新風' -%}{%- assign child_label = 'Fresh' -%}
+                            {%- when '手鏈' -%}{%- assign child_label = 'Bracelets' -%}
+                            {%- when '客戶服務' -%}{%- assign child_label = 'Support' -%}
+                            {%- when '常見問題' -%}{%- assign child_label = 'FAQ' -%}
+                            {%- when '佩戴指南' -%}{%- assign child_label = 'Sizing Guide' -%}
+                            {%- when '材質與保養' -%}{%- assign child_label = 'Material & Care' -%}
+                            {%- when '設計理念' -%}{%- assign child_label = 'Design Philosophy' -%}
+                            {%- when '門市資訊' -%}{%- assign child_label = 'Stores' -%}
+                            {%- when '關於我們' -%}{%- assign child_label = 'About Us' -%}
+                          {%- endcase -%}
+                        {%- endif -%}
+                        {%- if child_label != blank -%}
+                          <a class="ir-nav-dropdown__link" href="{{ block.settings[url_key] | default: '#' }}">{{ child_label }}</a>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+                    {%- if block.settings.promo_slug != blank -%}
+                      {%- liquid
+                        assign promo_alt = block.settings.promo_alt | default: block.settings.label
+                        assign promo_href = block.settings.promo_link | default: block.settings.link_url | default: '#'
+                        assign promo_src = 'pakyuet-nav-' | append: block.settings.promo_slug | append: '.jpg'
+                      -%}
+                      <a class="ir-nav-dropdown__media" href="{{ promo_href }}" aria-label="{{ promo_alt }}">
+                        <img src="{{ promo_src | asset_url }}" alt="{{ promo_alt }}" width="1200" height="400" loading="lazy">
+                      </a>
+                    {%- endif -%}
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </nav>
+
+    <a href="{{ routes.root_url }}" class="ir-logo">{{ section.settings.logo_text }}</a>
+
+    <div class="ir-nav__right">
+      {%- if section.settings.show_search -%}
+        {%- assign search_out = section.settings.search_placeholder -%}
+        {%- if localization.language.iso_code == 'en' -%}
+          {%- case section.settings.search_placeholder -%}
+            {%- when '搜尋商品...' -%}{%- assign search_out = 'Search products...' -%}
+          {%- endcase -%}
+        {%- endif -%}
+        <a href="{{ routes.search_url }}" class="ir-icon-btn" aria-label="{{ search_out }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </a>
+      {%- endif -%}
+      {%- if section.settings.show_account -%}
+        {%- if shop.customer_accounts_enabled -%}
+          {%- comment -%} 新版客户账户：Shopify 托管登录，头部用 shopify-account 组件（仿 Tinker） {%- endcomment -%}
+          {%- assign account_out_nav = section.settings.login_text -%}
+          {%- if localization.language.iso_code == 'en' -%}
+            {%- case section.settings.login_text -%}
+              {%- when '登入' -%}{%- assign account_out_nav = 'Sign in' -%}
+            {%- endcase -%}
+          {%- endif -%}
+          <div class="ir-nav__account" data-account-button>
+            <shopify-account menu="customer-account-main-menu">
+              {%- if customer -%}
+                <div class="ir-account-fallback"></div>
+              {%- else -%}
+                <span slot="signed-out-avatar" class="ir-nav__login ir-account-text">{{ account_out_nav }}</span>
+              {%- endif -%}
+            </shopify-account>
+          </div>
+        {%- else -%}
+          {%- comment -%} 经典客户账户回退 {%- endcomment -%}
+          {%- if customer -%}
+            <a href="{{ routes.account_url }}" class="ir-nav__login">{{ section.settings.account_text | default: '我的帳戶' }}</a>
+          {%- else -%}
+            {%- assign login_out_nav = section.settings.login_text -%}
+            {%- if localization.language.iso_code == 'en' -%}
+              {%- case section.settings.login_text -%}
+                {%- when '登入' -%}{%- assign login_out_nav = 'Sign in' -%}
+              {%- endcase -%}
+            {%- endif -%}
+            <a href="{{ routes.account_login_url }}" class="ir-nav__login">{{ login_out_nav }}</a>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- if section.settings.show_cart -%}
+        {%- assign cart_out = section.settings.cart_label -%}
+        {%- if localization.language.iso_code == 'en' -%}
+          {%- case section.settings.cart_label -%}
+            {%- when '購物車' -%}{%- assign cart_out = 'Cart' -%}
+          {%- endcase -%}
+        {%- endif -%}
+        {%- liquid
+          capture cart_icon_markup
+            echo '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>'
+            if cart.item_count > 0
+              echo '<span class="ir-cart-count">' | append: cart.item_count | append: '</span>'
+            endif
+          endcapture
+        -%}
+        {%- if settings.cart_type == 'drawer' and template.name != 'cart' -%}
+          <button type="button" class="ir-icon-btn ir-cart-btn" data-open-cart-drawer aria-label="{{ cart_out }}">{{ cart_icon_markup }}</button>
+        {%- else -%}
+          <a href="{{ routes.cart_url }}" class="ir-icon-btn ir-cart-btn" aria-label="{{ cart_out }}">{{ cart_icon_markup }}</a>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%} 手机抽屉菜单 {%- endcomment -%}
+  <div class="ir-drawer__backdrop" data-menu-backdrop></div>
+  <div class="ir-drawer" id="ir-menu-drawer" data-menu-drawer role="dialog" aria-modal="true" aria-label="{% if localization.language.iso_code == 'en' %}Menu{% else %}選單{% endif %}">
+    <div class="ir-drawer__header">
+      <span class="ir-drawer__brand">{{ section.settings.logo_text }}</span>
+      <button type="button" class="ir-drawer__close" data-menu-close aria-label="{% if localization.language.iso_code == 'en' %}Close{% else %}關閉{% endif %}">×</button>
+    </div>
+    <nav class="ir-drawer__nav">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'nav_link' -%}
+          {%- liquid
+            assign has_children = false
+            for i in (1..6)
+              assign label_key = 'child_label_' | append: i
+              if block.settings[label_key] != blank
+                assign has_children = true
+              endif
+            endfor
+            assign blog = false
+            if block.settings.blog_handle != blank
+              assign blog = blogs[block.settings.blog_handle]
+              if blog.articles.size > 0
+                assign has_children = true
+              endif
+            endif
+          -%}
+          {%- assign drawer_label = block.settings.label -%}
+          {%- if localization.language.iso_code == 'en' -%}
+            {%- case block.settings.label -%}
+              {%- when '系列' -%}{%- assign drawer_label = 'Collections' -%}
+              {%- when '莫桑石' -%}{%- assign drawer_label = 'Moissanite' -%}
+              {%- when '鋯石' -%}{%- assign drawer_label = 'Zircon' -%}
+              {%- when '高碳鑽' -%}{%- assign drawer_label = 'High Carbon Diamond' -%}
+              {%- when '日常系列' -%}{%- assign drawer_label = 'Everyday Collection' -%}
+              {%- when '珍珠系列' -%}{%- assign drawer_label = 'Pearl Collection' -%}
+              {%- when '戒指' -%}{%- assign drawer_label = 'Rings' -%}
+              {%- when '925純銀' -%}{%- assign drawer_label = '925 Sterling Silver' -%}
+              {%- when '星空物語' -%}{%- assign drawer_label = 'Starry Stories' -%}
+              {%- when '花語系列' -%}{%- assign drawer_label = 'Floral Series' -%}
+              {%- when '水光系列' -%}{%- assign drawer_label = 'Water Glow Collection' -%}
+              {%- when '極簡風' -%}{%- assign drawer_label = 'Minimalist' -%}
+              {%- when '奢華風' -%}{%- assign drawer_label = 'Luxury' -%}
+              {%- when '項鏈' -%}{%- assign drawer_label = 'Necklaces' -%}
+              {%- when '吊墜' -%}{%- assign drawer_label = 'Pendants' -%}
+              {%- when '國風系列' -%}{%- assign drawer_label = 'Oriental Heritage' -%}
+              {%- when '復古風' -%}{%- assign drawer_label = 'Vintage' -%}
+              {%- when '耳飾' -%}{%- assign drawer_label = 'Earrings' -%}
+              {%- when '愛心系列' -%}{%- assign drawer_label = 'Heart Collection' -%}
+              {%- when '韓系風' -%}{%- assign drawer_label = 'Korean-Inspired' -%}
+              {%- when '清新風' -%}{%- assign drawer_label = 'Fresh' -%}
+              {%- when '手鏈' -%}{%- assign drawer_label = 'Bracelets' -%}
+              {%- when '客戶服務' -%}{%- assign drawer_label = 'Support' -%}
+              {%- when '常見問題' -%}{%- assign drawer_label = 'FAQ' -%}
+              {%- when '佩戴指南' -%}{%- assign drawer_label = 'Sizing Guide' -%}
+              {%- when '材質與保養' -%}{%- assign drawer_label = 'Material & Care' -%}
+              {%- when '設計理念' -%}{%- assign drawer_label = 'Design Philosophy' -%}
+              {%- when '門市資訊' -%}{%- assign drawer_label = 'Stores' -%}
+              {%- when '關於我們' -%}{%- assign drawer_label = 'About Us' -%}
+            {%- endcase -%}
+          {%- endif -%}
+          {%- if has_children -%}
+            <details class="ir-drawer__group">
+              <summary class="ir-drawer__summary">{{ drawer_label }}</summary>
+              <div class="ir-drawer__children">
+                {%- if blog -%}
+                  {%- for article in blog.articles -%}
+                    <a class="ir-drawer__child" href="{{ article.url }}">{{ article.title }}</a>
+                  {%- endfor -%}
+                {%- else -%}
+                  {%- for i in (1..6) -%}
+                    {%- assign label_key = 'child_label_' | append: i -%}
+                    {%- assign url_key = 'child_url_' | append: i -%}
+                    {%- assign child_label = block.settings[label_key] -%}
+                    {%- if localization.language.iso_code == 'en' -%}
+                      {%- case child_label -%}
+                        {%- when '系列' -%}{%- assign child_label = 'Collections' -%}
+                        {%- when '莫桑石' -%}{%- assign child_label = 'Moissanite' -%}
+                        {%- when '鋯石' -%}{%- assign child_label = 'Zircon' -%}
+                        {%- when '高碳鑽' -%}{%- assign child_label = 'High Carbon Diamond' -%}
+                        {%- when '日常系列' -%}{%- assign child_label = 'Everyday Collection' -%}
+                        {%- when '珍珠系列' -%}{%- assign child_label = 'Pearl Collection' -%}
+                        {%- when '戒指' -%}{%- assign child_label = 'Rings' -%}
+                        {%- when '925純銀' -%}{%- assign child_label = '925 Sterling Silver' -%}
+                        {%- when '星空物語' -%}{%- assign child_label = 'Starry Stories' -%}
+                        {%- when '花語系列' -%}{%- assign child_label = 'Floral Series' -%}
+                        {%- when '水光系列' -%}{%- assign child_label = 'Water Glow Collection' -%}
+                        {%- when '極簡風' -%}{%- assign child_label = 'Minimalist' -%}
+                        {%- when '奢華風' -%}{%- assign child_label = 'Luxury' -%}
+                        {%- when '項鏈' -%}{%- assign child_label = 'Necklaces' -%}
+                            {%- when '吊墜' -%}{%- assign child_label = 'Pendants' -%}
+                        {%- when '國風系列' -%}{%- assign child_label = 'Oriental Heritage' -%}
+                        {%- when '復古風' -%}{%- assign child_label = 'Vintage' -%}
+                        {%- when '耳飾' -%}{%- assign child_label = 'Earrings' -%}
+                        {%- when '愛心系列' -%}{%- assign child_label = 'Heart Collection' -%}
+                        {%- when '韓系風' -%}{%- assign child_label = 'Korean-Inspired' -%}
+                        {%- when '清新風' -%}{%- assign child_label = 'Fresh' -%}
+                        {%- when '手鏈' -%}{%- assign child_label = 'Bracelets' -%}
+                        {%- when '客戶服務' -%}{%- assign child_label = 'Support' -%}
+                        {%- when '常見問題' -%}{%- assign child_label = 'FAQ' -%}
+                        {%- when '佩戴指南' -%}{%- assign child_label = 'Sizing Guide' -%}
+                        {%- when '材質與保養' -%}{%- assign child_label = 'Material & Care' -%}
+                        {%- when '設計理念' -%}{%- assign child_label = 'Design Philosophy' -%}
+                        {%- when '門市資訊' -%}{%- assign child_label = 'Stores' -%}
+                        {%- when '關於我們' -%}{%- assign child_label = 'About Us' -%}
+                      {%- endcase -%}
+                    {%- endif -%}
+                    {%- if child_label != blank -%}
+                      <a class="ir-drawer__child" href="{{ block.settings[url_key] | default: '#' }}">{{ child_label }}</a>
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+              </div>
+            </details>
+          {%- else -%}
+            <a class="ir-drawer__link" href="{{ block.settings.link_url | default: '#' }}">{{ drawer_label }}</a>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if section.settings.show_account -%}
+        <div class="ir-drawer__account">
+          {%- if customer -%}
+            <a href="{{ routes.account_url }}" class="ir-drawer__link">{{ section.settings.account_text | default: '我的帳戶' }}</a>
+          {%- else -%}
+            {%- assign login_out_drawer = section.settings.login_text -%}
+            {%- if localization.language.iso_code == 'en' -%}
+              {%- case section.settings.login_text -%}
+                {%- when '登入' -%}{%- assign login_out_drawer = 'Sign in' -%}
+              {%- endcase -%}
+            {%- endif -%}
+            <a href="{{ routes.account_login_url }}" class="ir-drawer__link">{{ login_out_drawer }}</a>
+          {%- endif -%}
+        </div>
+        <style>
+          .ir-drawer__account { margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--ir-line, #f0f0f0); }
+          .ir-drawer__account .ir-drawer__link { font-weight: 600; }
+        </style>
+      {%- endif -%}
+      {%- if localization.available_languages.size > 1 -%}
+        <div class="ir-drawer__lang">
+          <localization-form class="ir-lang-form">
+            {%- form 'localization', id: 'PakyuetHeaderLangMobileForm', class: 'localization-form' -%}
+              {%- render 'language-localization', localPosition: 'PakyuetHeaderLangMobile' -%}
+            {%- endform -%}
+          </localization-form>
+        </div>
+      {%- endif -%}
+    </nav>
+  </div>
+</header>
+
+<style>
+  /* 語言切換：讓選項列表顯示在按鈕下方，避免出現在上方被遮擋 */
+  .ir-lang-form { display: inline-block; vertical-align: middle; position: relative; }
+  .ir-lang-form .disclosure { position: relative; }
+  .ir-lang-form .disclosure__list-wrapper {
+    bottom: auto;
+    top: calc(100% + 6px);
+    left: auto;
+    right: 0;
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 40;
+  }
+
+  /* ================================================================
+     副公告栏国家/语言切换器：Dawn 原生样式（参考 PAULOLA 0.2.1）
+     - 透明背景、无边框、圆角 7px、深色文字 + caret
+     - 国家/语言两个按钮并排，绝对定位于副公告栏最右侧
+     ================================================================ */
+  .ir-announcement2 {
+    position: relative;
+  }
+  .ir-announcement2__inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ir-announcement2__text {
+    line-height: 1.5;
+  }
+  .ir-announcement2__localization {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    /* 与购物车（导航栏 padding 20px）右缘对齐：公告栏全宽，导航栏 max-width 居中 */
+    right: calc((100% - var(--container-max)) / 2 + 20px);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  /* 清除 Dawn localization-form 默认 padding/margin，让按钮紧贴右缘 */
+  .ir-lang-form--announcement .localization-form {
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+  }
+  .ir-lang-form--announcement .disclosure__button.localization-selector.link {
+    background: transparent;
+    border: 0;
+    margin: 0;
+    padding: 0.2rem 0.4rem;
+    min-width: 0;
+    min-height: 0;
+    height: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    /* 与下方「登入」一致：14px 深色文字，无边框无圆角 */
+    font-size: 14px;
+    letter-spacing: 0.6px;
+    color: var(--ir-text);
+    text-decoration: none;
+    line-height: 1.4;
+    border-radius: 0;
+  }
+  .ir-lang-form--announcement .pakyuet-loc-icon { display: none; }
+  .ir-lang-form--announcement .disclosure__button .icon-caret { width: 0.7rem; height: 0.45rem; margin-left: 0.1rem; opacity: 0.7; }
+  .ir-lang-form--announcement .disclosure__button:hover { color: var(--ir-text); text-decoration: underline; text-underline-offset: 3px; }
+  /* 禁用 Dawn localization-form__select 的 ::before/::after 伪元素边框（hover/focus 时会显示外框） */
+  .ir-lang-form--announcement .disclosure__button.localization-form__select::before,
+  .ir-lang-form--announcement .disclosure__button.localization-form__select::after,
+  .ir-lang-form--announcement .disclosure__button.localization-form__select:hover::before,
+  .ir-lang-form--announcement .disclosure__button.localization-form__select:hover::after,
+  .ir-lang-form--announcement .disclosure__button.localization-form__select:focus::before,
+  .ir-lang-form--announcement .disclosure__button.localization-form__select:focus::after,
+  .ir-lang-form--announcement .disclosure__button.localization-form__select:focus-visible::before,
+  .ir-lang-form--announcement .disclosure__button.localization-form__select:focus-visible::after {
+    display: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    outline: 0 !important;
+  }
+
+  /* 移动端：导航栏全宽（无居中偏移），按钮直接贴右缘（padding 20px 对齐购物车） */
+  @media (max-width: 768px) {
+    .ir-lang-form--country { display: none !important; }
+    .ir-announcement2__inner {
+      padding-right: 4px;
+    }
+    .ir-announcement2__text {
+      font-size: 12px;
+    }
+    .ir-announcement2__localization {
+      right: 20px;
+      gap: 2px;
+    }
+    .ir-lang-form--announcement .disclosure__button.localization-selector.link {
+      font-size: 13px;
+      padding: 0.1rem 0.2rem;
+    }
+  }
+
+  /* PAKYUET: 新版客户账户按钮（shopify-account 组件，仿 Tinker） */
+  .ir-nav__account {
+    display: inline-flex;
+    align-items: center;
+  }
+  .ir-nav__account shopify-account {
+    --shopify-account-font-heading: var(--font-heading-family);
+    --shopify-account-font-heading-weight: var(--font-heading-weight, 400);
+    --shopify-account-font-body: var(--font-body-family);
+    --shopify-account-font-body-weight: var(--font-body-weight, 400);
+    --shopify-account-radius-base: 14px;
+    --shopify-account-radius-button: 0;
+    --shopify-account-radius-button-small: 0;
+    --shopify-account-radius-input: 0;
+    --shopify-account-color-background: rgb(var(--color-background));
+    --shopify-account-color-text: rgb(var(--color-foreground));
+    --shopify-account-color-accent: rgb(var(--color-button));
+    --shopify-account-color-accent-text: rgb(var(--color-button-text));
+    --shopify-account-dialog-position-top: 64px;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .ir-nav__account shopify-account:not(:defined) {
+    min-width: 44px;
+    justify-content: center;
+  }
+  .ir-account-fallback {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: rgb(var(--color-button));
+  }
+  .ir-account-text {
+    font-size: 14px;
+    color: var(--ir-text);
+    white-space: nowrap;
+  }
+</style>
+
+<script>
+  // BLOG 下拉：滑鼠懸停文章連結時，切換右側預覽圖為該文章的圖片
+  (function () {
+    var dropdowns = document.querySelectorAll('[data-blog-dropdown]');
+    if (!dropdowns.length) return;
+    dropdowns.forEach(function (dd) {
+      var preview = dd.querySelector('[data-blog-preview]');
+      if (!preview) return;
+      var links = dd.querySelectorAll('[data-blog-img]');
+      links.forEach(function (link) {
+        link.addEventListener('mouseenter', function () {
+          var src = link.getAttribute('data-blog-img');
+          if (src) preview.setAttribute('src', src);
+        });
+      });
+    });
+  })();
+
+  // 購物車按鈕：抽屜模式（非購物車頁）下點擊開啟購物車抽屜；無抽屜時回退到 /cart
+  (function () {
+    var cartButtons = document.querySelectorAll('[data-open-cart-drawer]');
+    if (!cartButtons.length) return;
+    var fallbackUrl = {% if routes.cart_url != blank %}'{{ routes.cart_url | escape }}'{% else %}'/cart'{% endif %};
+    cartButtons.forEach(function (btn) {
+      btn.addEventListener('click', function (event) {
+        event.preventDefault();
+        var drawer = document.querySelector('cart-drawer');
+        if (drawer && typeof drawer.open === 'function') {
+          drawer.open();
+        } else {
+          window.location.href = fallbackUrl;
+        }
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "PAKYUET Header",
+  "blocks": [
+    {
+      "type": "nav_link",
+      "name": "分類連結",
+      "settings": [
+        { "type": "text", "id": "label", "label": "連結文字", "default": "莫桑石" },
+        { "type": "url", "id": "link_url", "label": "連結", "info": "填入 collection 路徑，如 /collections/moissanite" },
+        { "type": "header", "content": "下拉選單（懸停卡片）：填任一子連結即會彈出卡片，全留空則無下拉" },
+        { "type": "text", "id": "child_label_1", "label": "子連結 1 文字" },
+        { "type": "url", "id": "child_url_1", "label": "子連結 1" },
+        { "type": "text", "id": "child_label_2", "label": "子連結 2 文字" },
+        { "type": "url", "id": "child_url_2", "label": "子連結 2" },
+        { "type": "text", "id": "child_label_3", "label": "子連結 3 文字" },
+        { "type": "url", "id": "child_url_3", "label": "子連結 3" },
+        { "type": "text", "id": "child_label_4", "label": "子連結 4 文字" },
+        { "type": "url", "id": "child_url_4", "label": "子連結 4" },
+        { "type": "text", "id": "child_label_5", "label": "子連結 5 文字" },
+        { "type": "url", "id": "child_url_5", "label": "子連結 5" },
+        { "type": "text", "id": "child_label_6", "label": "子連結 6 文字" },
+        { "type": "url", "id": "child_url_6", "label": "子連結 6" },
+        { "type": "header", "content": "促銷圖片（卡片右側，可留空）" },
+        { "type": "text", "id": "promo_slug", "label": "促銷圖片", "info": "填 assets 檔名（不含副檔名）：moissanite / rings / necklace / earrings / bracelet；留空則無圖片" },
+        { "type": "url", "id": "promo_link", "label": "圖片連結", "info": "留空則用主連結" },
+        { "type": "text", "id": "promo_alt", "label": "圖片替代文字", "info": "留空則用連結文字" },
+        { "type": "text", "id": "blog_handle", "label": "部落格 Handle", "info": "填部落格 handle（如 jewelry-knowledge）時，下拉改為顯示該部落格文章，滑鼠懸停文章連結即顯示對應圖片；與子連結擇一使用" }
+      ]
+    }
+  ],
+  "settings": [
+    { "type": "header", "content": "頂部公告欄（黑色）" },
+    { "type": "checkbox", "id": "show_announcement", "label": "顯示黑色公告欄", "default": true },
+    { "type": "text", "id": "announcement_text", "label": "公告文字", "default": "莫桑石珠寶設計　匠心工藝　爲妳而作" },
+    { "type": "header", "content": "副公告欄（米色）" },
+    { "type": "checkbox", "id": "show_announcement2", "label": "顯示米色公告欄", "default": true },
+    { "type": "text", "id": "announcement2_text", "label": "副公告文字", "default": "藝人見證的安心工藝 · 懂妳才懂做的戒指專家" },
+    { "type": "header", "content": "主導航" },
+    { "type": "text", "id": "logo_text", "label": "Logo 文字", "default": "PAKYUET" },
+    { "type": "checkbox", "id": "show_search", "label": "顯示搜尋圖標", "default": true },
+    { "type": "text", "id": "search_placeholder", "label": "搜尋圖標 aria 標籤", "default": "搜尋商品..." },
+    { "type": "checkbox", "id": "show_account", "label": "顯示登入文字", "default": true },
+    { "type": "text", "id": "login_text", "label": "登入文字", "default": "登入" },
+    { "type": "text", "id": "account_text", "label": "已登入文字", "default": "我的帳戶" },
+    { "type": "checkbox", "id": "show_cart", "label": "顯示購物車圖標", "default": true },
+    { "type": "text", "id": "cart_label", "label": "購物車圖標 aria 標籤", "default": "購物車" },
+    { "type": "text", "id": "help_text", "label": "幫助連結文字", "default": "幫助中心" },
+    { "type": "url", "id": "help_link", "label": "幫助連結" }
+  ]
+}
+{% endschema %}

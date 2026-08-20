@@ -1,0 +1,144 @@
+{%- liquid
+  assign shop_menu = linklists[section.settings.shop_menu]
+  assign brand_menu = linklists[section.settings.brand_menu]
+  assign service_menu = linklists[section.settings.service_menu]
+-%}
+<footer class="pakyuet-footer">
+  <div class="container">
+    <div class="pakyuet-footer__grid">
+      {%- if shop_menu.links.size > 0 -%}
+        <details class="pakyuet-footer__col pakyuet-footer__details" open>
+          <summary class="pakyuet-footer__col-title pakyuet-footer__summary">{%- if localization.language.iso_code == 'en' -%}{{ section.settings.shop_title | replace: '購物', 'Shopping' }}{%- else -%}{{ section.settings.shop_title }}{%- endif -%}</summary>
+          <ul>
+            {%- for link in shop_menu.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
+          </ul>
+        </details>
+      {%- endif -%}
+      {%- if brand_menu.links.size > 0 -%}
+        <details class="pakyuet-footer__col pakyuet-footer__details" open>
+          <summary class="pakyuet-footer__col-title pakyuet-footer__summary">{%- if localization.language.iso_code == 'en' -%}{{ section.settings.brand_title | replace: '品牌', 'Brand' }}{%- else -%}{{ section.settings.brand_title }}{%- endif -%}</summary>
+          <ul>
+            {%- for link in brand_menu.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
+          </ul>
+        </details>
+      {%- endif -%}
+      {%- if service_menu.links.size > 0 -%}
+        <details class="pakyuet-footer__col pakyuet-footer__details" open>
+          <summary class="pakyuet-footer__col-title pakyuet-footer__summary">{%- if localization.language.iso_code == 'en' -%}{{ section.settings.service_title | replace: '服務', 'Service' }}{%- else -%}{{ section.settings.service_title }}{%- endif -%}</summary>
+          <ul>
+            {%- for link in service_menu.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
+          </ul>
+        </details>
+      {%- endif -%}
+      {%- if section.settings.show_company_info -%}
+        <details class="pakyuet-footer__col pakyuet-footer__col--company pakyuet-footer__details" open>
+          {%- if section.settings.company_name != blank -%}
+            <summary class="pakyuet-footer__col-title pakyuet-footer__summary pakyuet-footer__company-name">{{ section.settings.company_name | escape }}</summary>
+          {%- endif -%}
+          {%- if section.settings.company_address != blank -%}
+            <p class="pakyuet-footer__company-addr">{{ section.settings.company_address | escape | newline_to_br }}</p>
+          {%- endif -%}
+          <ul class="pakyuet-footer__company-meta">
+            {%- if section.settings.company_br != blank -%}
+              <li><span>{%- if localization.language.iso_code == 'en' -%}Business Registration No.{%- else -%}商業登記號碼{%- endif -%}</span>{{ section.settings.company_br | escape }}</li>
+            {%- endif -%}
+            {%- if section.settings.company_email != blank -%}
+              <li><span>{%- if localization.language.iso_code == 'en' -%}Customer Service Email{%- else -%}客服電郵{%- endif -%}</span><a href="mailto:{{ section.settings.company_email | escape }}">{{ section.settings.company_email | escape }}</a></li>
+            {%- endif -%}
+            {%- if section.settings.company_whatsapp != blank -%}
+              <li><span>WhatsApp</span><a href="{{ section.settings.company_whatsapp_url | default: '#' | escape }}" target="_blank" rel="noopener">{{ section.settings.company_whatsapp | escape }}</a></li>
+            {%- endif -%}
+          </ul>
+          <div class="pakyuet-footer__social">
+            {%- if section.settings.instagram != blank -%}
+              <a href="{{ section.settings.instagram }}" aria-label="Instagram" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </a>
+            {%- endif -%}
+            {%- if section.settings.facebook != blank -%}
+              <a href="{{ section.settings.facebook }}" aria-label="Facebook" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              </a>
+            {%- endif -%}
+            {%- if section.settings.x != blank -%}
+              <a href="{{ section.settings.x }}" aria-label="X" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </a>
+            {%- endif -%}
+          </div>
+        </details>
+      {%- endif -%}
+    </div>
+
+    <div class="pakyuet-footer__bottom">
+      <p class="pakyuet-footer__copyright">{%- if localization.language.iso_code == 'en' -%}© 2026 PAKYUET. All Rights Reserved. PAKYUET JEWELLERY CO., LIMITED · Hong Kong{%- else -%}{{ section.settings.copyright }}{%- endif -%}</p>
+      {%- if section.settings.show_payment_icons -%}
+        <div class="pakyuet-footer__payment">
+          <div class="pakyuet-footer__payment-icons">
+            <div class="pakyuet-footer__payment-icon" title="Visa">
+              <svg viewBox="0 0 24 16"><rect x="1" y="1" width="22" height="14" rx="2" stroke-width="1.5"/><text x="12" y="10.5" text-anchor="middle" font-size="6" fill="rgba(255,255,255,0.4)" stroke="none" font-family="Arial" font-weight="bold">VISA</text></svg>
+            </div>
+            <div class="pakyuet-footer__payment-icon" title="Mastercard">
+              <svg viewBox="0 0 24 16"><rect x="1" y="1" width="22" height="14" rx="2" stroke-width="1.5"/><circle cx="9" cy="8" r="3.5" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="0.8"/><circle cx="15" cy="8" r="3.5" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="0.8"/></svg>
+            </div>
+            <div class="pakyuet-footer__payment-icon" title="PayPal">
+              <svg viewBox="0 0 24 16"><rect x="1" y="1" width="22" height="14" rx="2" stroke-width="1.5"/><text x="12" y="10" text-anchor="middle" font-size="5" fill="rgba(255,255,255,0.4)" stroke="none" font-family="Arial" font-weight="bold">PP</text></svg>
+            </div>
+            <div class="pakyuet-footer__payment-icon" title="Apple Pay">
+              <svg viewBox="0 0 24 16"><rect x="1" y="1" width="22" height="14" rx="2" stroke-width="1.5"/><text x="12" y="10.5" text-anchor="middle" font-size="5.5" fill="rgba(255,255,255,0.4)" stroke="none" font-family="Arial">&#63743;</text></svg>
+            </div>
+          </div>
+          <span class="pakyuet-footer__payment-label">{%- if localization.language.iso_code == 'en' -%}Secure Payment{%- else -%}{{ section.settings.payment_label }}{%- endif -%}</span>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+<script>
+  // 手机端(≤768px)默认收起手风琴；桌面端靠 <details open> 原生全展开
+  (function () {
+    if (window.__pakyuetFooterInit) return;
+    window.__pakyuetFooterInit = true;
+    var mq = window.matchMedia && window.matchMedia('(max-width: 768px)');
+    if (!mq || !mq.matches) return;
+    document.querySelectorAll('.pakyuet-footer__details').forEach(function (d) {
+      d.open = false;
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "PAKYUET Footer",
+  "settings": [
+    { "type": "header", "content": "品牌" },
+    { "type": "text", "id": "brand_name", "label": "品牌名稱", "default": "PAKYUET" },
+    { "type": "textarea", "id": "brand_desc", "label": "品牌描述", "default": "以莫桑石與925純銀，為日常帶來剛剛好的輕奢精緻感。香港設計。" },
+    { "type": "header", "content": "社群連結" },
+    { "type": "url", "id": "instagram", "label": "Instagram" },
+    { "type": "url", "id": "facebook", "label": "Facebook" },
+    { "type": "url", "id": "youtube", "label": "YouTube" },
+    { "type": "url", "id": "x", "label": "X (Twitter)" },
+    { "type": "header", "content": "選單欄" },
+    { "type": "link_list", "id": "shop_menu", "label": "購物選單", "default": "footer" },
+    { "type": "text", "id": "shop_title", "label": "購物欄標題", "default": "購物" },
+    { "type": "link_list", "id": "brand_menu", "label": "品牌選單" },
+    { "type": "text", "id": "brand_title", "label": "品牌欄標題", "default": "品牌" },
+    { "type": "link_list", "id": "service_menu", "label": "服務選單" },
+    { "type": "text", "id": "service_title", "label": "服務欄標題", "default": "服務" },
+    { "type": "header", "content": "公司資訊" },
+    { "type": "checkbox", "id": "show_company_info", "label": "顯示公司資訊", "default": true },
+    { "type": "text", "id": "company_name", "label": "公司全稱", "default": "Pak Yuet Trading Limited" },
+    { "type": "textarea", "id": "company_address", "label": "公司地址", "default": "UNIT 05, 12/F THE CLOUD\nNO.111 TUNG CHAU ST TAI KOK TSUI\nHONG KONG" },
+    { "type": "text", "id": "company_br", "label": "商業登記號碼", "default": "80236752-000-04-26-7" },
+    { "type": "text", "id": "company_email", "label": "客服電郵", "default": "support@paulola.com" },
+    { "type": "text", "id": "company_whatsapp", "label": "WhatsApp 號碼", "default": "+852 9711 2975" },
+    { "type": "text", "id": "company_whatsapp_url", "label": "WhatsApp 連結", "default": "https://wa.me/85297112975" },
+    { "type": "header", "content": "底部" },
+    { "type": "text", "id": "copyright", "label": "版權", "default": "© 2026 PAKYUET 柏悅. All Rights Reserved. PAKYUET JEWELLERY CO., LIMITED · Hong Kong" },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "顯示支付圖標", "default": true },
+    { "type": "text", "id": "payment_label", "label": "支付標籤文字", "default": "安全付款" }
+  ]
+}
+{% endschema %}

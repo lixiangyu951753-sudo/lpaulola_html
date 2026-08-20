@@ -1,0 +1,529 @@
+/* ============================================
+   PAKYUET Design System v2 — shop-style homepage
+   Ported from pages/index.html (電商 shop 風格).
+   - rem values from the template converted to px (1rem = 16px)
+     so PAKYUET sizing is independent of Dawn's html { font-size: 62.5% }.
+   - Root classes namespaced .pakyuet-* to avoid clashing with
+     Dawn's own .footer / .hero / product-card rules.
+   - Header is sticky + solid (not fixed/transparent): the new
+     template's hero is a rounded card, not full-bleed under the nav.
+   ============================================ */
+:root {
+  /* Colors */
+  --color-white: #ffffff;
+  --color-off-white: #faf8f5;
+  --color-page-bg: #f5f5f7;
+  --color-dark: #1a1a1a;
+  --color-dark-rich: #1d1d1f;
+  --color-text-primary: #1d1d1f;
+  --color-text-secondary: #8c8c8c;
+  --color-accent-gold: #c9a96e;
+  --color-accent-rose: #b8977e;
+  --color-border-light: rgba(0, 0, 0, 0.06);
+  --color-border: #e0e0e0;
+  --color-search-bg: #f5f5f7;
+  --color-tag-moissanite: #c9a96e;
+  --color-tag-daily: #8c8c8c;
+
+  /* Typography */
+  --font-serif: 'Cormorant Garamond', 'Noto Serif TC', Georgia, serif;
+  --font-sans: 'Noto Sans TC', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+
+  /* Layout */
+  --container-max: 1400px;
+  --nav-height: 64px;
+  --top-bar-height: 32px;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-pill: 9999px;
+
+  /* Shadows */
+  --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.05);
+  --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.10);
+
+  /* Transitions */
+  --transition-fast: all 0.25s ease;
+  --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ============================================
+   Base (scoped — do not override Dawn body globally)
+   ============================================ */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.pakyuet-home,
+.pakyuet-header,
+.pakyuet-footer,
+.pakyuet-category-tabs,
+.pakyuet-product-section,
+.pakyuet-features,
+.pakyuet-newsletter {
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+}
+
+body.pakyuet-home {
+  font-weight: 400;
+  background-color: var(--color-page-bg);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+a { text-decoration: none; color: inherit; transition: var(--transition-fast); }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+/* Utility */
+.container { max-width: var(--container-max); margin: 0 auto; padding: 0 24px; }
+
+/* ============================================
+   1. Top Utility Bar
+   ============================================ */
+.pakyuet-top-bar {
+  background: var(--color-dark);
+  height: var(--top-bar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+  position: relative;
+  z-index: 100;
+}
+.pakyuet-top-bar a { color: rgba(255, 255, 255, 0.65); transition: var(--transition-fast); }
+.pakyuet-top-bar a:hover { color: #ffffff; }
+.pakyuet-top-bar__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; max-width: var(--container-max); margin: 0 auto; padding: 0 24px;
+}
+.pakyuet-top-bar__left { display: flex; align-items: center; gap: 6px; }
+.pakyuet-top-bar__left svg { width: 12px; height: 12px; stroke: rgba(255, 255, 255, 0.65); fill: none; stroke-width: 2; }
+.pakyuet-top-bar__right { display: flex; align-items: center; gap: 4px; }
+.pakyuet-top-bar__right .sep { margin: 0 8px; opacity: 0.3; }
+
+/* ============================================
+   2. Main Navigation Bar
+   ============================================ */
+.pakyuet-header {
+  background: var(--color-white);
+  height: var(--nav-height);
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  box-shadow: 0 1px 0 var(--color-border-light);
+  transition: box-shadow 0.3s ease;
+}
+.pakyuet-header.scrolled { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); }
+
+.nav__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 100%; max-width: var(--container-max); margin: 0 auto; padding: 0 24px;
+}
+.nav__logo {
+  font-family: var(--font-serif);
+  font-size: 21.6px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--color-text-primary);
+  flex-shrink: 0;
+}
+
+/* Search Bar */
+.nav__search { flex: 1; max-width: 500px; margin: 0 32px; position: relative; }
+.nav__search input {
+  width: 100%; height: 40px; padding: 0 16px 0 42px;
+  font-family: var(--font-sans); font-size: 13px;
+  color: var(--color-text-primary);
+  background: var(--color-search-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  outline: none; transition: var(--transition-fast);
+}
+.nav__search input::placeholder { color: var(--color-text-secondary); }
+.nav__search input:focus {
+  border-color: var(--color-accent-gold);
+  background: var(--color-white);
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
+}
+.nav__search-icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  width: 16px; height: 16px;
+  stroke: var(--color-text-secondary); fill: none; stroke-width: 2;
+  pointer-events: none;
+}
+
+/* Nav Actions */
+.nav__actions { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+.nav-action-btn {
+  display: flex; align-items: center; justify-content: center;
+  position: relative; color: var(--color-text-primary); transition: var(--transition-fast);
+}
+.nav-action-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.nav-action-btn:hover { color: var(--color-accent-gold); }
+.cart-badge {
+  position: absolute; top: -4px; right: -6px;
+  min-width: 16px; height: 16px; padding: 0 4px;
+  background: var(--color-accent-gold); color: var(--color-white);
+  font-size: 10px; font-weight: 700; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; line-height: 1;
+}
+
+/* ============================================
+   3. Category Tabs Bar
+   ============================================ */
+.pakyuet-category-tabs {
+  background: var(--color-white);
+  position: sticky;
+  top: var(--nav-height);
+  z-index: 85;
+  border-bottom: 1px solid var(--color-border-light);
+}
+.category-tabs__inner {
+  display: flex; align-items: center; gap: 0;
+  max-width: var(--container-max); margin: 0 auto; padding: 0 24px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.category-tabs__inner::-webkit-scrollbar { display: none; }
+.category-tab {
+  flex-shrink: 0; padding: 12px 20px;
+  font-family: var(--font-sans); font-size: 14px; font-weight: 400;
+  color: var(--color-text-secondary); cursor: pointer;
+  transition: var(--transition-fast); position: relative; white-space: nowrap;
+  border: none; background: none;
+}
+.category-tab:hover { color: var(--color-text-primary); }
+.category-tab.active { color: var(--color-text-primary); font-weight: 700; }
+.category-tab.active::after {
+  content: ''; position: absolute; bottom: 0; left: 20px; right: 20px;
+  height: 2px; background: var(--color-accent-gold); border-radius: 1px;
+}
+
+/* ============================================
+   4. Hero Banner Carousel
+   ============================================ */
+.pakyuet-hero { padding: 24px 0 0; }
+.pakyuet-hero__carousel {
+  position: relative; border-radius: var(--radius-md); overflow: hidden;
+  height: 320px;
+}
+.pakyuet-hero__slide {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  opacity: 0; transition: opacity 0.6s ease; pointer-events: none;
+}
+.pakyuet-hero__slide.active { opacity: 1; pointer-events: auto; }
+.pakyuet-hero__slide img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center 30%;
+}
+.pakyuet-hero__overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.15) 100%);
+}
+.pakyuet-hero__content {
+  position: absolute; top: 50%; left: 60px; transform: translateY(-50%);
+  z-index: 2; max-width: 500px;
+}
+.pakyuet-hero__label {
+  font-family: var(--font-sans); font-size: 11.2px; font-weight: 500;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7); margin-bottom: 16px;
+}
+.pakyuet-hero__heading {
+  font-family: var(--font-serif);
+  font-size: clamp(28.8px, 3.5vw, 44.8px);
+  font-weight: 400; color: var(--color-white);
+  line-height: 1.2; margin-bottom: 12px; letter-spacing: 0.04em;
+}
+.pakyuet-hero__subtitle {
+  font-family: var(--font-sans); font-size: 14.7px; font-weight: 300;
+  color: rgba(255, 255, 255, 0.8); line-height: 1.7; margin-bottom: 24px;
+}
+.pakyuet-hero__cta {
+  display: inline-block; padding: 10px 28px;
+  font-family: var(--font-sans); font-size: 12.8px; font-weight: 500;
+  letter-spacing: 0.08em; color: var(--color-white);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  cursor: pointer; transition: var(--transition-smooth);
+}
+.pakyuet-hero__cta:hover {
+  background: var(--color-white); color: var(--color-dark-rich); border-color: var(--color-white);
+}
+.pakyuet-hero__dots {
+  position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px; z-index: 3;
+}
+.pakyuet-hero__dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4); cursor: pointer;
+  transition: var(--transition-fast); border: none; padding: 0;
+}
+.pakyuet-hero__dot.active { background: var(--color-white); width: 24px; border-radius: 4px; }
+
+/* ============================================
+   5. Product Grid Section
+   ============================================ */
+.pakyuet-product-section { padding: 32px 0 48px; }
+.product-section__header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px;
+}
+.product-section__title {
+  font-family: var(--font-sans); font-size: 18px; font-weight: 700;
+  color: var(--color-text-primary); margin: 0;
+}
+.product-section__count {
+  font-size: 13px; font-weight: 300; color: var(--color-text-secondary); margin-left: 8px;
+}
+
+/* Sort Dropdown */
+.sort-dropdown { position: relative; }
+.sort-dropdown__toggle {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px; font-family: var(--font-sans); font-size: 13px; font-weight: 400;
+  color: var(--color-text-secondary); background: var(--color-white);
+  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  cursor: pointer; transition: var(--transition-fast);
+}
+.sort-dropdown__toggle:hover { border-color: var(--color-text-secondary); color: var(--color-text-primary); }
+.sort-dropdown__toggle svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform 0.25s ease; }
+.sort-dropdown.open .sort-dropdown__toggle svg { transform: rotate(180deg); }
+.sort-dropdown__menu {
+  position: absolute; top: calc(100% + 4px); right: 0; min-width: 160px;
+  background: var(--color-white); border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  opacity: 0; visibility: hidden; transform: translateY(-4px);
+  transition: all 0.2s ease; z-index: 50;
+}
+.sort-dropdown.open .sort-dropdown__menu { opacity: 1; visibility: visible; transform: translateY(0); }
+.sort-dropdown__item {
+  display: block; width: 100%; padding: 10px 16px;
+  font-family: var(--font-sans); font-size: 13px; font-weight: 400;
+  color: var(--color-text-secondary); text-align: left;
+  background: none; border: none; cursor: pointer; transition: var(--transition-fast);
+}
+.sort-dropdown__item:hover { background: var(--color-search-bg); color: var(--color-text-primary); }
+.sort-dropdown__item.active { color: var(--color-accent-gold); font-weight: 500; }
+
+/* Product Grid */
+.pakyuet-product-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.pakyuet-product-card {
+  background: var(--color-white); border-radius: var(--radius-sm); overflow: hidden;
+  box-shadow: var(--shadow-card); transition: var(--transition-smooth);
+  display: block;
+}
+.pakyuet-product-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-card-hover); }
+.product-card__image-wrap { position: relative; aspect-ratio: 1 / 1; overflow: hidden; }
+.product-card__image-wrap img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center 20%;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.pakyuet-product-card:hover .product-card__image-wrap img { transform: scale(1.05); }
+
+/* hover 換第二張圖：第二張預設透明、懸停時顯示並蓋在主圖上 */
+.product-card__img--secondary {
+  position: absolute; inset: 0; opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.pakyuet-product-card:hover .product-card__img--secondary { opacity: 1; }
+/* 觸屏裝置無 hover，關閉換圖避免主圖被永久覆蓋 */
+@media (hover: none) {
+  .product-card__img--secondary { display: none; }
+}
+.product-card__tag {
+  position: absolute; top: 8px; left: 8px; padding: 3px 10px;
+  font-size: 11px; font-weight: 500; border-radius: var(--radius-pill);
+  letter-spacing: 0.04em; z-index: 2;
+}
+.product-card__tag--moissanite { background: var(--color-tag-moissanite); color: var(--color-white); }
+.product-card__tag--daily { background: rgba(140, 140, 140, 0.85); color: var(--color-white); }
+.product-card__info { padding: 12px 14px 16px; }
+.product-card__name {
+  font-family: var(--font-sans); font-size: 13px; font-weight: 400;
+  color: var(--color-text-primary); line-height: 1.45;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; margin-bottom: 8px; min-height: 37px;
+}
+.product-card__price {
+  font-family: var(--font-sans); font-size: 15px; font-weight: 700;
+  color: var(--color-accent-gold); letter-spacing: 0.02em;
+}
+.product-card__price span { font-size: 12px; font-weight: 400; }
+.product-card__soldout { font-size: 11px; color: var(--color-text-secondary); margin-top: 4px; }
+.product-grid__empty {
+  grid-column: 1 / -1; text-align: center; padding: 48px 0;
+  color: var(--color-text-secondary); font-size: 14px;
+}
+
+/* ============================================
+   6. Brand Features Bar
+   ============================================ */
+.pakyuet-features {
+  background: var(--color-off-white); padding: 28px 0;
+  border-top: 1px solid var(--color-border-light);
+  border-bottom: 1px solid var(--color-border-light);
+}
+.pakyuet-features__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.features-bar__item {
+  display: flex; align-items: center; justify-content: center; gap: 10px; padding: 0 16px;
+}
+.features-bar__icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.features-bar__icon svg { width: 24px; height: 24px; stroke: var(--color-accent-gold); fill: none; stroke-width: 1.5; }
+.features-bar__text { text-align: left; }
+.features-bar__text-primary { font-family: var(--font-sans); font-size: 13px; font-weight: 500; color: var(--color-text-primary); line-height: 1.4; }
+.features-bar__text-secondary { font-family: var(--font-sans); font-size: 11px; font-weight: 300; color: var(--color-text-secondary); line-height: 1.4; }
+
+/* ============================================
+   7. Newsletter Bar
+   ============================================ */
+.pakyuet-newsletter { background: var(--color-dark); padding: 40px 0 36px; }
+.pakyuet-newsletter__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px; flex-wrap: wrap;
+}
+.pakyuet-newsletter__text {
+  font-family: var(--font-serif); font-size: 18.4px; font-weight: 400;
+  color: var(--color-white); letter-spacing: 0.02em; margin: 0;
+}
+.pakyuet-newsletter__form { display: flex; gap: 0; flex-shrink: 0; }
+.pakyuet-newsletter__input {
+  width: 300px; padding: 10px 18px;
+  font-family: var(--font-sans); font-size: 13px; font-weight: 300;
+  color: var(--color-white); background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15); border-right: none;
+  border-radius: var(--radius-pill) 0 0 var(--radius-pill);
+  outline: none; transition: var(--transition-fast);
+}
+.pakyuet-newsletter__input::placeholder { color: rgba(255, 255, 255, 0.35); }
+.pakyuet-newsletter__input:focus { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.3); }
+.pakyuet-newsletter__btn {
+  padding: 10px 24px; font-family: var(--font-sans); font-size: 13px; font-weight: 400;
+  letter-spacing: 0.08em; color: var(--color-dark-rich); background: var(--color-white);
+  border: 1px solid var(--color-white);
+  border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
+  cursor: pointer; transition: var(--transition-smooth); white-space: nowrap;
+}
+.pakyuet-newsletter__btn:hover { background: var(--color-accent-gold); border-color: var(--color-accent-gold); color: var(--color-white); }
+.pakyuet-newsletter__note { margin-top: 12px; font-size: 12px; color: rgba(255, 255, 255, 0.6); }
+
+/* ============================================
+   8. Footer
+   ============================================ */
+.pakyuet-footer { background: var(--color-dark); padding: 48px 0 0; }
+.pakyuet-footer__grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 36px;
+  padding-bottom: 40px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.pakyuet-footer__col-title {
+  font-family: var(--font-sans); font-size: 13px; font-weight: 700;
+  letter-spacing: 0.1em; color: rgba(255, 255, 255, 0.9); margin-bottom: 20px;
+}
+.pakyuet-footer__col ul { list-style: none; margin: 0; padding: 0; }
+.pakyuet-footer__col li { margin-bottom: 10px; }
+.pakyuet-footer__col a {
+  font-family: var(--font-sans); font-size: 13px; font-weight: 300;
+  color: rgba(255, 255, 255, 0.5); transition: var(--transition-fast);
+}
+.pakyuet-footer__col a:hover { color: rgba(255, 255, 255, 0.9); }
+.pakyuet-footer__bottom {
+  padding: 24px 0; display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+.pakyuet-footer__copyright {
+  font-family: var(--font-sans); font-size: 12px; font-weight: 300;
+  color: rgba(255, 255, 255, 0.35); margin: 0;
+}
+.pakyuet-footer__payment { display: flex; align-items: center; gap: 12px; }
+.pakyuet-footer__payment-icons { display: flex; gap: 8px; align-items: center; }
+.pakyuet-footer__payment-icon {
+  width: 36px; height: 24px; background: rgba(255, 255, 255, 0.08); border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+}
+.pakyuet-footer__payment-icon svg { width: 20px; height: 14px; stroke: rgba(255, 255, 255, 0.4); fill: none; stroke-width: 1.5; }
+.pakyuet-footer__payment-label { font-family: var(--font-sans); font-size: 11px; font-weight: 300; color: rgba(255, 255, 255, 0.3); }
+/* 公司資訊資訊欄(頁腳最右) */
+.pakyuet-footer__col--company .pakyuet-footer__company-name {
+  letter-spacing: normal; margin-bottom: 16px;
+}
+.pakyuet-footer__company-addr {
+  font-family: var(--font-sans); font-size: 11px; font-weight: 300;
+  line-height: 1.6; color: rgba(255, 255, 255, 0.45); margin: 0 0 10px;
+  white-space: pre-line;
+}
+.pakyuet-footer__company-meta { list-style: none; margin: 0; padding: 0; }
+.pakyuet-footer__company-meta li {
+  font-family: var(--font-sans); font-size: 11px; font-weight: 300;
+  color: rgba(255, 255, 255, 0.45); margin-bottom: 5px;
+}
+.pakyuet-footer__company-meta span {
+  display: block;
+  color: rgba(255, 255, 255, 0.3);
+}
+.pakyuet-footer__company-meta a {
+  color: rgba(255, 255, 255, 0.65); text-decoration: none; transition: var(--transition-fast);
+}
+.pakyuet-footer__company-meta a:hover { color: rgba(255, 255, 255, 0.9); text-decoration: underline; }
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 1200px) {
+  .pakyuet-product-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 1024px) {
+  .pakyuet-product-grid { grid-template-columns: repeat(3, 1fr); }
+  .nav__search { margin: 0 20px; max-width: 400px; }
+  .pakyuet-footer__grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .pakyuet-features__grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+}
+@media (max-width: 768px) {
+  .pakyuet-top-bar__left span { display: none; }
+  .pakyuet-top-bar__left::after { content: '免費送貨'; }
+  .nav__search { margin: 0 12px; max-width: 100%; }
+  .pakyuet-hero__carousel { height: 220px; }
+  .pakyuet-hero__content { left: 24px; max-width: 80%; }
+  .pakyuet-hero__heading { font-size: 24px; }
+  .pakyuet-hero__subtitle { font-size: 13.1px; display: none; }
+  .pakyuet-product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .product-section__header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .pakyuet-features__grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .features-bar__item { flex-direction: column; text-align: center; gap: 6px; padding: 8px; }
+  .features-bar__text { text-align: center; }
+  .pakyuet-newsletter__inner { flex-direction: column; text-align: center; }
+  .pakyuet-newsletter__form { width: 100%; max-width: 400px; }
+  .pakyuet-newsletter__input { width: 100%; flex: 1; border-right: 1px solid rgba(255, 255, 255, 0.15); border-radius: var(--radius-pill); }
+  .pakyuet-newsletter__btn { border-radius: var(--radius-pill); }
+  .pakyuet-footer__grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+  .pakyuet-footer__bottom { flex-direction: column; text-align: center; }
+  .category-tabs__inner { padding: 0 16px; }
+  .category-tab { padding: 12px 14px; font-size: 13px; }
+}
+@media (max-width: 480px) {
+  .nav__logo { font-size: 17.6px; letter-spacing: 0.1em; }
+  .nav__search { margin: 0 8px; }
+  .nav__search input { height: 36px; font-size: 12px; padding-left: 36px; }
+  .nav-action-btn svg { width: 20px; height: 20px; }
+  .pakyuet-hero__carousel { height: 180px; border-radius: 8px; }
+  .pakyuet-hero__content { left: 16px; }
+  .pakyuet-hero__label { display: none; }
+  .pakyuet-hero__heading { font-size: 20px; }
+  .pakyuet-hero__cta { padding: 8px 20px; font-size: 12px; }
+  .product-card__info { padding: 10px 10px 12px; }
+  .product-card__name { font-size: 12px; min-height: 34px; }
+  .product-card__price { font-size: 14px; }
+  .pakyuet-footer__grid { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .pakyuet-hero__slide { transition: none; }
+  .pakyuet-product-card:hover { transform: none; }
+}

@@ -1,0 +1,117 @@
+<section class="pakyuet-hero ir-hero">
+  <div class="ir-hero__carousel" data-hero-carousel>
+    {%- for block in section.blocks -%}
+      <div class="ir-hero__slide{% if forloop.first %} active{% endif %}" data-hero-slide {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}
+          {{
+            block.settings.image
+            | image_url: width: 3000
+            | image_tag:
+              sizes: '100vw',
+              widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000',
+              fetchpriority: 'high',
+              loading: 'eager',
+              class: 'ir-hero__img',
+              alt: block.settings.heading
+          }}
+        {%- else -%}
+          {%- liquid
+            assign default_img = 'ir-hero-slide-' | append: forloop.index | append: '.jpg'
+          -%}
+          <img
+            src="{{ default_img | asset_url }}"
+            alt="{{ block.settings.heading | escape }}"
+            class="ir-hero__img"
+            width="2560"
+            height="1440"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          >
+        {%- endif -%}
+        <div class="ir-hero__overlay"></div>
+        <div class="ir-hero__content">
+          {%- if block.settings.label != blank -%}
+            <p class="ir-hero__eyebrow">{{ block.settings.label }}</p>
+          {%- endif -%}
+          {%- if block.settings.heading != blank -%}
+            {%- assign hero_heading = block.settings.heading -%}
+            {%- if localization.language.iso_code == 'en' -%}
+              {%- case block.settings.heading -%}
+                {%- when '莫桑石項鍊、戒指推薦' -%}{%- assign hero_heading = 'Moissanite Necklaces & Rings' -%}
+                {%- when '求婚訂婚莫桑石戒系列' -%}{%- assign hero_heading = 'Moissanite Engagement Rings' -%}
+                {%- when '定情對戒系列' -%}{%- assign hero_heading = 'The Couples Ring Collection' -%}
+              {%- endcase -%}
+            {%- endif -%}
+            <h1 class="ir-hero__title">{{ hero_heading }}</h1>
+          {%- endif -%}
+          {%- if block.settings.subtitle != blank -%}
+            {%- assign hero_subtitle = block.settings.subtitle -%}
+            {%- if localization.language.iso_code == 'en' -%}
+              {%- case block.settings.subtitle -%}
+                {%- when '永恆璀璨 · 專屬妳的動人時刻' -%}{%- assign hero_subtitle = 'Forever brilliant — a shining moment made for you' -%}
+                {%- when '璀璨承諾 · 永世相伴' -%}{%- assign hero_subtitle = 'A brilliant promise, together forever' -%}
+                {%- when '嚴選臻品 · 傳遞專屬心意' -%}{%- assign hero_subtitle = 'Select pieces that carry your one-of-a-kind feelings' -%}
+              {%- endcase -%}
+            {%- endif -%}
+            <p class="ir-hero__subtitle">{{ hero_subtitle }}</p>
+          {%- endif -%}
+          <div class="ir-hero__line"></div>
+          {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
+            {%- assign hero_btn = block.settings.button_label -%}
+            {%- if localization.language.iso_code == 'en' -%}
+              {%- case block.settings.button_label -%}
+                {%- when '立即選購' -%}{%- assign hero_btn = 'Shop Now' -%}
+                {%- when '查看系列' -%}{%- assign hero_btn = 'View Collection' -%}
+                {%- when 'PAKYUET 推薦' -%}{%- assign hero_btn = 'PAKYUET Picks' -%}
+              {%- endcase -%}
+            {%- endif -%}
+            <a class="ir-hero__cta" href="{{ block.settings.button_link }}">
+              <span class="ir-hero__cta-label">{{ hero_btn }}</span>
+              <span class="ir-hero__cta-arrow" aria-hidden="true">&#8250;</span>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+
+    {%- if section.blocks.size > 1 -%}
+      <button type="button" class="ir-hero__prev" data-hero-prev aria-label="{% if localization.language.iso_code == 'en' %}Previous slide{% else %}上一張{% endif %}">&#8249;</button>
+      <button type="button" class="ir-hero__next" data-hero-next aria-label="{% if localization.language.iso_code == 'en' %}Next slide{% else %}下一張{% endif %}">&#8250;</button>
+      <div class="ir-hero__dots" data-hero-dots>
+        {%- for block in section.blocks -%}
+          <button type="button" class="ir-hero__dot{% if forloop.first %} active{% endif %}" data-hero-dot="{{ forloop.index0 }}" aria-label="{% if localization.language.iso_code == 'en' %}Slide {{ forloop.index }}{% else %}第 {{ forloop.index }} 張{% endif %}"></button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "PAKYUET Hero",
+  "max_blocks": 5,
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "輪播頁",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "圖片", "info": "未選取時使用內建 hero-ring.jpg" },
+        { "type": "text", "id": "label", "label": "眉題", "default": "PAKYUET&nbsp;ACCESSORIES" },
+        { "type": "text", "id": "heading", "label": "標題", "default": "莫桑石項鍊、戒指推薦" },
+        { "type": "textarea", "id": "subtitle", "label": "副標題", "default": "永恆璀璨 · 專屬妳的動人時刻" },
+        { "type": "text", "id": "button_label", "label": "按鈕文字", "default": "立即選購" },
+        { "type": "url", "id": "button_link", "label": "按鈕連結", "info": "填 collection/product 路徑，如 /collections/necklaces；留空則該頁不顯示按鈕" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PAKYUET Hero",
+      "blocks": [
+        { "type": "slide" }
+      ]
+    }
+  ]
+}
+{% endschema %}

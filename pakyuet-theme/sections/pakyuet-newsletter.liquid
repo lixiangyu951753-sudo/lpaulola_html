@@ -1,0 +1,60 @@
+{%- liquid
+  assign n_heading = section.settings.heading
+  assign n_placeholder = section.settings.placeholder
+  assign n_button_text = section.settings.button_text
+  assign n_success_text = section.settings.success_text
+  if localization.language.iso_code == 'en'
+    case n_heading
+    when '訂閱 PAKYUET 電子報，率先獲取新品與優惠資訊'
+      assign n_heading = 'Subscribe to the PAKYUET newsletter for early access to new arrivals and offers'
+    endcase
+    case n_placeholder
+    when '輸入你的電郵地址'
+      assign n_placeholder = 'Enter your email address'
+    endcase
+    case n_button_text
+    when '訂閱'
+      assign n_button_text = 'Subscribe'
+    endcase
+    case n_success_text
+    when '感謝訂閱！'
+      assign n_success_text = 'Thanks for subscribing!'
+    endcase
+  endif
+-%}
+<section class="pakyuet-newsletter">
+  <div class="container">
+    <div class="pakyuet-newsletter__inner">
+      <p class="pakyuet-newsletter__text">{{ n_heading }}</p>
+      {%- form 'customer' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="pakyuet-newsletter__form">
+          <input
+            type="email"
+            name="contact[email]"
+            class="pakyuet-newsletter__input"
+            placeholder="{{ n_placeholder }}"
+            aria-label="{% if localization.language.iso_code == 'en' %}Email address{% else %}電郵地址{% endif %}"
+            required>
+          <button type="submit" class="pakyuet-newsletter__btn">{{ n_button_text }}</button>
+        </div>
+        {%- if form.posted_successfully? -%}
+          <p class="pakyuet-newsletter__note">{{ n_success_text }}</p>
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "PAKYUET Newsletter",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "標題", "default": "訂閱 PAKYUET 電子報，率先獲取新品與優惠資訊" },
+    { "type": "text", "id": "placeholder", "label": "輸入框佔位文字", "default": "輸入你的電郵地址" },
+    { "type": "text", "id": "button_text", "label": "按鈕文字", "default": "訂閱" },
+    { "type": "text", "id": "success_text", "label": "成功訊息", "default": "感謝訂閱！" }
+  ],
+  "presets": [{ "name": "PAKYUET Newsletter" }]
+}
+{% endschema %}

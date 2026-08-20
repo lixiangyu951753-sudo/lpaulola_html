@@ -1,0 +1,262 @@
+{{ 'section-image-banner.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign story_image = section.settings.image
+  assign story_asset = section.settings.image_asset
+  assign story_video = section.settings.video
+  assign has_media = false
+  if story_image != blank or story_asset != blank or story_video != blank
+    assign has_media = true
+  endif
+  if story_image == blank and story_asset != blank
+    assign story_image = story_asset | asset_url
+  endif
+  assign story_heading = section.settings.heading
+  assign story_text = section.settings.text
+  assign story_button_label = section.settings.button_label
+  if localization.language.iso_code == 'en'
+    case story_heading
+    when '專屬線上諮詢'
+      assign story_heading = 'Personal Online Consultation'
+    endcase
+    case story_text
+    when '<p>透過 WhatsApp 與專業客服一對一諮詢，為您推薦最契合的專屬飾品，讓每個重要時刻都能完美定格。</p>'
+      assign story_text = '<p>Chat with our specialists one-on-one via WhatsApp for tailored recommendations, so every important moment is perfectly matched.</p>'
+    endcase
+    case story_button_label
+    when '立即諮詢'
+      assign story_button_label = 'Chat With Us'
+    endcase
+  endif
+-%}
+
+<div
+  class="pakyuet-story pakyuet-story--{{ section.settings.height }} section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient"
+  style="--overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"
+>
+  {%- if has_media -%}
+    <div class="pakyuet-story__media">
+      {%- if story_video != blank -%}
+        <video
+          class="pakyuet-story__video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          {% if story_image != blank %}poster="{{ story_image | image_url: width: 1920 }}"{% endif %}
+        >
+          {%- for source in story_video.sources -%}
+            <source src="{{ source.url }}" type="video/{{ source.format }}">
+          {%- endfor -%}
+        </video>
+      {%- elsif story_image != blank -%}
+        {%- if story_asset != blank -%}
+          <img
+            src="{{ story_image }}"
+            alt="{{ story_heading | escape }}"
+            class="pakyuet-story__image"
+            width="1920"
+            height="1080"
+            loading="lazy"
+          >
+        {%- else -%}
+          {{
+            story_image
+            | image_url: width: 2400
+            | image_tag:
+              loading: 'lazy',
+              widths: '375, 550, 750, 1100, 1500, 1780, 2000, 2400',
+              sizes: '100vw',
+              class: 'pakyuet-story__image'
+          }}
+        {%- endif -%}
+      {%- endif -%}
+      <div class="pakyuet-story__overlay"></div>
+    </div>
+  {%- endif -%}
+
+  <div class="pakyuet-story__content pakyuet-story__content--{{ section.settings.content_position }} pakyuet-story__content--{{ section.settings.text_color }}">
+    <div class="pakyuet-story__inner page-width">
+      {%- if section.settings.caption != blank -%}
+        <p class="pakyuet-story__caption caption-with-letter-spacing">{{ section.settings.caption }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="pakyuet-story__heading h1">{{ story_heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="pakyuet-story__text rte">{{ story_text }}</div>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <a
+          {% if section.settings.button_link != blank %}href="{{ section.settings.button_link }}"{% endif %}
+          class="button button--secondary pakyuet-story__button"
+        >
+          {{- story_button_label -}}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- style -%}
+  .pakyuet-story.section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .pakyuet-story.section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "PAKYUET 产品故事",
+  "tag": "section",
+  "class": "section pakyuet-story-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "媒体"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "背景图片"
+    },
+    {
+      "type": "text",
+      "id": "image_asset",
+      "label": "素材档名 (assets/)",
+      "info": "未选图片时用此档名，如 tryon-experience.jpg"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Shopify 托管视频(优选,自动播放静音循环)"
+    },
+    {
+      "type": "paragraph",
+      "content": "若同时设置了视频和图片,视频在上层播放,图片作为视频海报/兜底。仅支持 Shopify 托管视频(后台文件库上传 mp4)。"
+    },
+    {
+      "type": "header",
+      "content": "叠加文字"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "小标题(字间距样式)",
+      "default": "L'amour Series"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "标题",
+      "default": "以爱之名,星月为证"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "正文",
+      "default": "<p>L'amour 限量系列,以水晶与柔美气质为灵感,搭配 S925 纯银工艺,献给挚爱的完美礼物。</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "按钮文字",
+      "default": "探索系列"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "按钮链接"
+    },
+    {
+      "type": "header",
+      "content": "布局"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "高度",
+      "options": [
+        { "value": "small", "label": "小" },
+        { "value": "medium", "label": "中" },
+        { "value": "large", "label": "大" },
+        { "value": "adapt", "label": "适配图片" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "文字位置",
+      "options": [
+        { "value": "center", "label": "居中" },
+        { "value": "bottom-left", "label": "左下" },
+        { "value": "bottom-right", "label": "右下" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "文字颜色",
+      "options": [
+        { "value": "light", "label": "浅色(深色背景)" },
+        { "value": "dark", "label": "深色(浅色背景)" }
+      ],
+      "default": "light"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "遮罩透明度",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 35
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "配色",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "间距"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "上间距",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "下间距",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "PAKYUET 产品故事"
+    }
+  ]
+}
+{% endschema %}

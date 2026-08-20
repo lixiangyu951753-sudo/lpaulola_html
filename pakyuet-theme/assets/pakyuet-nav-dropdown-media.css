@@ -1,0 +1,43 @@
+/* PAKYUET 页眉下拉卡片 —— 促销图片（复刻 idearock 右侧促销图）。
+   独立新文件：旧 pakyuet-nav-dropdown.css 已被 Cloudflare 缓存 1 年，
+   改旧文件看不到效果，必须在 theme.liquid 里于旧文件之后加载本文件覆盖
+   （见 pakyuet-cdn-cache-poisoning）。nav-dropdown-media-v1 */
+
+/* 覆盖旧文件的 flex-wrap 布局：链接列 + 图片列 左右并排，垂直居中 */
+.ir-nav-dropdown__inner {
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 48px;
+}
+
+/* 左：分类链接列（沿用旧文件的 .ir-nav-dropdown__link 样式） */
+.ir-nav-dropdown__links {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 48px;
+}
+
+/* 右：促销图片，占卡片约 44%，点击跳转 */
+.ir-nav-dropdown__media {
+  flex: 0 0 44%;
+  max-width: 600px;
+  display: block;
+  border-radius: 4px;
+  overflow: hidden;
+  line-height: 0;
+  transition: opacity 0.2s;
+}
+.ir-nav-dropdown__media:hover {
+  opacity: 0.92;
+}
+.ir-nav-dropdown__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 1;
+  object-fit: cover;
+}
+
+/* 窄屏（768px 以下导航整体隐藏，无需处理） */

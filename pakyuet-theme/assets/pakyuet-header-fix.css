@@ -1,0 +1,15 @@
+/* PAKYUET 页眉吸顶修复（独立文件，确保绕过 Cloudflare 旧 CSS 缓存强制回源）。
+   pakyuet.com 的 CDN 忽略 query、缓存 /cdn/shop/t/20/assets/*.css 长达 1 年，
+   改旧文件访客看不到，新增文件路径从未被缓存 → 所有访客立即生效。
+
+   问题：线上首页页眉 (.ir-header) 滚动后消失。原 CSS 把 position:sticky 加在
+   .ir-header 上，但它的父容器 (.shopify-section-group-header-group) 只有页眉自身
+   125px 高 —— sticky 只在父容器高度内生效，所以一滚动页眉就跟着滚走。
+   修复：把 sticky 加在 section 容器上。该容器是 body 的直接子元素、占满整页高度，
+   sticky 才能整页吸顶。参考 idearock.com.tw（position:fixed）保持页眉固定。
+   header-fix-v1 */
+.shopify-section-group-header-group {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}

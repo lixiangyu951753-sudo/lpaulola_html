@@ -1,0 +1,44 @@
+/*
+ * pakyuet-hero-cta.css
+ * Hero 轮播 CTA 按钮（新增独立文件，绕开 Cloudflare /cdn/*.css 一年缓存）
+ * 对齐 .ir-store-btn 视觉：香槟金底 + 白字 + 圆角
+ */
+.ir-hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 28px;
+  background: #c4a35a;
+  color: #ffffff;
+  border: none;
+  border-radius: 2px;
+  padding: 12px 32px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-decoration: none;
+  font-family: inherit;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
+  transition: background 0.2s ease;
+}
+.ir-hero__cta:hover {
+  background: #a8893f;
+  color: #ffffff;
+}
+.ir-hero__cta-arrow {
+  font-size: 16px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+.ir-hero__cta:hover .ir-hero__cta-arrow {
+  transform: translateX(3px);
+}
+
+@media (max-width: 768px) {
+  .ir-hero__cta {
+    margin-top: 22px;
+    padding: 10px 24px;
+    font-size: 13px;
+    letter-spacing: 2px;
+  }
+}
