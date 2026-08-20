@@ -1,0 +1,116 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "pakyuet_header": {
+      "type": "pakyuet-header",
+      "blocks": {
+        "nav_rings": {
+          "type": "nav_link",
+          "settings": {
+            "label": "戒指",
+            "link_url": "/collections/rings",
+            "child_label_1": "莫桑石",
+            "child_url_1": "/collections/moissanite",
+            "child_label_2": "鋯石",
+            "child_url_2": "/collections/zircon",
+            "child_label_3": "日常系列",
+            "child_url_3": "/collections/daily-essentials",
+            "promo_slug": "rings",
+            "promo_link": "/collections/rings",
+            "promo_alt": "戒指系列"
+          }
+        },
+        "nav_necklaces": {
+          "type": "nav_link",
+          "settings": {
+            "label": "項鏈",
+            "link_url": "/collections/necklaces",
+            "child_label_1": "莫桑石",
+            "child_url_1": "/collections/moissanite",
+            "child_label_2": "鋯石",
+            "child_url_2": "/collections/zircon",
+            "child_label_3": "日常系列",
+            "child_url_3": "/collections/daily-essentials",
+            "promo_slug": "necklace",
+            "promo_link": "/collections/necklaces",
+            "promo_alt": "項鏈系列"
+          }
+        },
+        "nav_earrings": {
+          "type": "nav_link",
+          "settings": {
+            "label": "耳飾",
+            "link_url": "/collections/earrings",
+            "child_label_1": "莫桑石",
+            "child_url_1": "/collections/moissanite",
+            "child_label_2": "鋯石",
+            "child_url_2": "/collections/zircon",
+            "child_label_3": "日常系列",
+            "child_url_3": "/collections/daily-essentials",
+            "promo_slug": "earrings",
+            "promo_link": "/collections/earrings",
+            "promo_alt": "耳飾系列"
+          }
+        },
+        "nav_bracelets": {
+          "type": "nav_link",
+          "settings": {
+            "label": "手鏈",
+            "link_url": "/collections/bracelets",
+            "child_label_1": "莫桑石",
+            "child_url_1": "/collections/moissanite",
+            "child_label_2": "鋯石",
+            "child_url_2": "/collections/zircon",
+            "child_label_3": "日常系列",
+            "child_url_3": "/collections/daily-essentials",
+            "promo_slug": "bracelet",
+            "promo_link": "/collections/bracelets",
+            "promo_alt": "手鏈系列"
+          }
+        },
+        "nav_blog": {
+          "type": "nav_link",
+          "settings": {
+            "label": "BLOG",
+            "link_url": "/blogs/inspiration"
+          }
+        }
+      },
+      "block_order": [
+        "nav_rings",
+        "nav_necklaces",
+        "nav_earrings",
+        "nav_bracelets",
+        "nav_blog"
+      ],
+      "settings": {
+        "show_announcement": true,
+        "announcement_text": "莫桑石珠寶設計　匠心工藝　爲妳而作",
+        "show_announcement2": true,
+        "announcement2_text": "藝人見證的安心工藝 · 懂妳才懂做的戒指專家",
+        "logo_text": "PAULOLA",
+        "show_search": true,
+        "search_placeholder": "搜尋商品...",
+        "show_account": true,
+        "login_text": "登入",
+        "show_cart": true,
+        "cart_label": "購物車",
+        "help_text": "幫助中心",
+        "help_link": ""
+      }
+    }
+  },
+  "order": [
+    "pakyuet_header"
+  ]
+}
