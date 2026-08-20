@@ -26,6 +26,17 @@
   {%- assign mobile_video_url = 'https://cdn.shopify.com/videos/c/vp/2de7b8e9c93549b7928ff5dd78a1c43c/2de7b8e9c93549b7928ff5dd78a1c43c.HD-720p-1.6Mbps-91724913.mp4' -%}
 {%- endif -%}
 
+{%- comment -%}
+  首饰介绍卡「查看商品」链接：戒指→rings 集合、项链→necklaces 集合（若无项链则 pendants 吊坠）、手链→bracelets、耳环→earrings
+{%- endcomment -%}
+{%- assign hero_ring_url = collections['rings'].url | default: '/collections/all' -%}
+{%- assign hero_necklace_url = collections['necklaces'].url | default: '' -%}
+{%- if hero_necklace_url == blank -%}
+  {%- assign hero_necklace_url = collections['pendants'].url | default: '/collections/all' -%}
+{%- endif -%}
+{%- assign hero_bracelet_url = collections['bracelets'].url | default: '/collections/all' -%}
+{%- assign hero_earrings_url = collections['earrings'].url | default: '/collections/all' -%}
+
 <section class="pk-hero" id="pkHero">
   <video class="pk-hero-video" autoplay muted loop playsinline preload="auto" poster="{{ poster_url }}"
          data-desktop-src="{{ video_url }}" data-mobile-src="{{ mobile_video_url }}">
@@ -85,28 +96,28 @@
     <p class="pk-intro-eyebrow"></p>
     <h3 class="pk-intro-name pk-serif"></h3>
     <p class="pk-intro-desc"></p>
-    <a class="pk-intro-link" href="#" onclick="return false;">查看商品 →</a>
+    <a class="pk-intro-link" href="{{ hero_bracelet_url }}">查看商品 →</a>
   </div>
   <div class="pk-hero-intro" id="pkIntro-necklace" hidden>
     <button class="pk-intro-close" aria-label="關閉">✕</button>
     <p class="pk-intro-eyebrow"></p>
     <h3 class="pk-intro-name pk-serif"></h3>
     <p class="pk-intro-desc"></p>
-    <a class="pk-intro-link" href="#" onclick="return false;">查看商品 →</a>
+    <a class="pk-intro-link" href="{{ hero_necklace_url }}">查看商品 →</a>
   </div>
   <div class="pk-hero-intro" id="pkIntro-ring" hidden>
     <button class="pk-intro-close" aria-label="關閉">✕</button>
     <p class="pk-intro-eyebrow"></p>
     <h3 class="pk-intro-name pk-serif"></h3>
     <p class="pk-intro-desc"></p>
-    <a class="pk-intro-link" href="#" onclick="return false;">查看商品 →</a>
+    <a class="pk-intro-link" href="{{ hero_ring_url }}">查看商品 →</a>
   </div>
   <div class="pk-hero-intro" id="pkIntro-earrings" hidden>
     <button class="pk-intro-close" aria-label="關閉">✕</button>
     <p class="pk-intro-eyebrow"></p>
     <h3 class="pk-intro-name pk-serif"></h3>
     <p class="pk-intro-desc"></p>
-    <a class="pk-intro-link" href="#" onclick="return false;">查看商品 →</a>
+    <a class="pk-intro-link" href="{{ hero_earrings_url }}">查看商品 →</a>
   </div>
 </section>
 

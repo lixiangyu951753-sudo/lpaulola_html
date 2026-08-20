@@ -11,35 +11,174 @@
   "sections": {
     "announcement": {
       "type": "announcement-bar",
-      "settings": {}
+      "settings": {
+        "text": "全館滿 HK$300 免運｜莫桑石終身保固｜30天無鑑退換",
+        "background": "#0f0f0f",
+        "text_color": "#c4a35a"
+      }
     },
     "hero": {
       "type": "hero-video",
-      "settings": {}
+      "settings": {
+        "heading": "莫桑璀璨 真愛永恆",
+        "subtext": "探索香港頂級莫桑石珠寶，每一件都經過嚴選認證",
+        "btn_text": "探索系列",
+        "btn_link": "",
+        "btn2_text": "了解更多",
+        "btn2_link": ""
+      }
     },
     "icon-row": {
       "type": "icon-row",
+      "blocks": {
+        "icon_pendants": {
+          "type": "icon",
+          "settings": {
+            "icon": "pendants",
+            "label": "Pendants",
+            "link": "shopify://collections/necklaces"
+          }
+        },
+        "icon_earrings": {
+          "type": "icon",
+          "settings": {
+            "icon": "earrings",
+            "label": "Earrings",
+            "link": "shopify://collections/earrings"
+          }
+        },
+        "icon_gem": {
+          "type": "icon",
+          "settings": {
+            "icon": "gem",
+            "label": "Gem & stones",
+            "link": ""
+          }
+        },
+        "icon_rings": {
+          "type": "icon",
+          "settings": {
+            "icon": "rings",
+            "label": "Rings",
+            "link": "shopify://collections/rings"
+          }
+        },
+        "icon_bracelets": {
+          "type": "icon",
+          "settings": {
+            "icon": "bracelets",
+            "label": "Bracelets",
+            "link": "shopify://collections/bracelets-1"
+          }
+        }
+      },
+      "block_order": [
+        "icon_pendants",
+        "icon_earrings",
+        "icon_gem",
+        "icon_rings",
+        "icon_bracelets"
+      ],
       "settings": {}
     },
     "category-cards": {
       "type": "category-cards",
+      "blocks": {
+        "card_rings": {
+          "type": "card",
+          "settings": {
+            "collection": "rings",
+            "title": "戒指<br>Rings",
+            "description": "求婚訂婚 · 日常疊戴，嚴選莫桑石戒指",
+            "button_text": "探索戒指 →",
+            "link": ""
+          }
+        },
+        "card_necklaces": {
+          "type": "card",
+          "settings": {
+            "collection": "necklaces",
+            "title": "項鏈<br>Necklaces",
+            "description": "鎖骨鏈 · 吊墜，點亮日常穿搭",
+            "button_text": "探索項鏈 →",
+            "link": ""
+          }
+        },
+        "card_earrings": {
+          "type": "card",
+          "settings": {
+            "collection": "earrings",
+            "title": "耳飾<br>Earrings",
+            "description": "耳釘 · 耳扣，細節處見精緻",
+            "button_text": "探索耳飾 →",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_rings",
+        "card_necklaces",
+        "card_earrings"
+      ],
       "settings": {}
     },
     "craft": {
       "type": "craft",
-      "settings": {}
+      "settings": {
+        "heading": "Craft With Care",
+        "pillar_1_title": "HIGH QUALITY",
+        "pillar_1_text": "精選 D 色 / VVS 級莫桑石，S925 純銀 / 18K 金雙工藝鍛造。每一顆寶石皆通過國際鑑定標準，為您帶來鑽石級的視覺體驗。",
+        "pillar_2_title": "EXPERT CRAFTSMANSHIP",
+        "pillar_2_text": "超過 30 道工序手工鑲嵌，由 15 年以上經驗的珠寶匠人親手打磨。從設計到出品，每一件作品都承載著匠人的溫度。",
+        "button_text": "Explore Now",
+        "button_link": "shopify://collections/all"
+      }
     },
     "featured-products": {
       "type": "featured-products",
-      "settings": {}
+      "settings": {
+        "collection": ""
+      }
     },
     "blog-posts": {
       "type": "blog-posts",
-      "settings": {}
+      "blocks": {
+        "article_1": {
+          "type": "article",
+          "settings": {
+            "date": "15 AUG",
+            "title": "莫桑石與鑽石：你需要知道的 5 個差異",
+            "link": "",
+            "read_more": "閱讀更多"
+          }
+        },
+        "article_2": {
+          "type": "article",
+          "settings": {
+            "date": "08 AUG",
+            "title": "如何挑選完美的訂婚戒指",
+            "link": "",
+            "read_more": "閱讀更多"
+          }
+        }
+      },
+      "block_order": [
+        "article_1",
+        "article_2"
+      ],
+      "settings": {
+        "heading": "最新資訊",
+        "subheading": "LATEST NEWS"
+      }
     },
-    "footer": {
-      "type": "footer",
-      "settings": {}
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "加入寶洛拉會員",
+        "subtext": "搶先獲得最新產品資訊與專屬優惠",
+        "placeholder": "請輸入您的電子信箱",
+        "button_text": "訂閱"
+      }
     }
   },
   "order": [
@@ -50,6 +189,6 @@
     "craft",
     "featured-products",
     "blog-posts",
-    "footer"
+    "newsletter"
   ]
 }
