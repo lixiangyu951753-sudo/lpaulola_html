@@ -90,10 +90,6 @@
         {%- endif -%}
       {%- endform -%}
 
-      {%- if product.description != blank -%}
-        <div class="cf-pdp__desc">{{ product.description }}</div>
-      {%- endif -%}
-
       <div class="cf-pdp__trust">
         <div class="cf-pdp__trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>100% 安全付款</div>
         <div class="cf-pdp__trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9"/><polyline points="3 3 3 8 8 8"/></svg>48 小時退換保障</div>
@@ -167,9 +163,6 @@
 .cf-pdp__payment .shopify-payment-button__more-options { font-size: 13px; }
 .cf-pdp__whatsapp { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; margin-top: 12px; padding: 14px 24px; background: #25D366; color: #fff; font-size: 15px; font-weight: 500; letter-spacing: .04em; border-radius: 999px; text-decoration: none; transition: background .2s ease; }
 .cf-pdp__whatsapp:hover { background: #1EBE5B; color: #fff; }
-.cf-pdp__desc { margin: 32px 0; padding-top: 24px; border-top: 1px solid var(--cf-cream-line); font-size: 14px; line-height: 1.8; color: var(--cf-text-soft); }
-.cf-pdp__desc h2, .cf-pdp__desc h3 { font-family: var(--pk-font-serif); color: var(--cf-text); margin: 18px 0 10px; }
-.cf-pdp__desc ul { padding-left: 20px; }
 .cf-pdp__trust { display: flex; gap: 20px; flex-wrap: wrap; border-top: 1px solid var(--cf-cream-line); padding-top: 20px; }
 .cf-pdp__trust-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--cf-text-soft); }
 .cf-pdp__trust-item svg { width: 18px; height: 18px; color: var(--cf-gold); flex-shrink: 0; }
