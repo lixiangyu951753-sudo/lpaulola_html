@@ -37,10 +37,6 @@
       "type": "blog-posts",
       "settings": {}
     },
-    "newsletter": {
-      "type": "newsletter",
-      "settings": {}
-    },
     "footer": {
       "type": "footer",
       "settings": {}
@@ -54,7 +50,6 @@
     "craft",
     "featured-products",
     "blog-posts",
-    "newsletter",
     "footer"
   ]
 }
