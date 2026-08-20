@@ -8,5 +8,13 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "sections": {
+    "main": {
+      "type": "main-search",
+      "settings": {
+        "results_per_page": 16
+      }
+    }
+  },
+  "order": ["main"]
 }

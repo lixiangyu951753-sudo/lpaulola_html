@@ -1,0 +1,76 @@
+{%- comment -%} PAULOLA 文章詳情頁 {%- endcomment -%}
+<section class="pk-article pk-section-pad">
+  <div class="pk-container" style="max-width: 820px;">
+    <h1 class="pk-article__title">{{ article.title }}</h1>
+    {%- if section.settings.show_meta -%}
+      <p class="pk-article__meta">
+        {{ article.published_at | date: '%Y-%m-%d' }}{% if article.author != blank %} · {{ article.author }}{% endif %}
+      </p>
+    {%- endif -%}
+    {%- if section.settings.show_image and article.image != blank -%}
+      <img src="{{ article.image | image_url: width: 1200 }}" alt="{{ article.title | escape }}" class="pk-article__image" width="1200" height="700" loading="lazy">
+    {%- endif -%}
+    <div class="pk-rte pk-article__content">{{ article.content }}</div>
+    {%- if section.settings.show_share -%}
+      <div class="pk-article__back">
+        <a href="{{ blog.url }}" class="pk-btn-outline">← 返回{{ blog.title }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "文章內容",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "顯示封面圖",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_meta",
+      "label": "顯示日期與作者",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share",
+      "label": "顯示返回部落格按鈕",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "文章內容"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+.pk-article__title {
+  font-family: var(--pk-font-serif);
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+  margin: 0 0 14px;
+}
+.pk-article__meta {
+  font-size: 13px;
+  color: var(--pk-text-muted);
+  letter-spacing: 0.08em;
+  margin: 0 0 26px;
+}
+.pk-article__image {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 0 0 28px;
+}
+.pk-article__back { margin-top: 40px; }
+{% endstylesheet %}

@@ -1,30 +1,35 @@
+{%- comment -%}
+  PAULOLA 最新資訊：標題可配置，文章卡片為可增刪的區塊
+{%- endcomment -%}
 <section class="cf-blog" aria-label="最新資訊">
   <div class="pk-container-inner">
     <div class="cf-section-head">
-      <h2>最新資訊</h2>
-      <p>LATEST NEWS</p>
+      <h2>{{ section.settings.heading | default: '最新資訊' }}</h2>
+      <p>{{ section.settings.subheading | default: 'LATEST NEWS' }}</p>
     </div>
     <div class="cf-blog-grid">
-      <article class="cf-blog-card">
-        <div class="cf-blog-img">
-          <span class="cf-blog-date">15 AUG</span>
-          <img src="{{ 'blog-pendant.png' | asset_url }}" alt="莫桑石與鑽石差異文章" width="1216" height="700" loading="lazy">
-        </div>
-        <div class="cf-blog-body">
-          <h3>莫桑石與鑽石：你需要知道的 5 個差異</h3>
-          <a href="{{ routes.root_url }}">閱讀更多</a>
-        </div>
-      </article>
-      <article class="cf-blog-card">
-        <div class="cf-blog-img">
-          <span class="cf-blog-date">08 AUG</span>
-          <img src="{{ 'blog-ring-marquis.png' | asset_url }}" alt="挑選訂婚戒指文章" width="1216" height="700" loading="lazy">
-        </div>
-        <div class="cf-blog-body">
-          <h3>如何挑選完美的訂婚戒指</h3>
-          <a href="{{ routes.root_url }}">閱讀更多</a>
-        </div>
-      </article>
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'article' -%}
+          <article class="cf-blog-card" {{ block.shopify_attributes }}>
+            <div class="cf-blog-img">
+              {%- if block.settings.date != blank -%}
+                <span class="cf-blog-date">{{ block.settings.date }}</span>
+              {%- endif -%}
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 1216 }}" alt="{{ block.settings.title | escape }}" width="1216" height="700" loading="lazy">
+              {%- else -%}
+                <img src="{{ 'blog-pendant.png' | asset_url }}" alt="{{ block.settings.title | escape }}" width="1216" height="700" loading="lazy">
+              {%- endif -%}
+            </div>
+            <div class="cf-blog-body">
+              <h3>{{ block.settings.title }}</h3>
+              {%- if block.settings.link != blank -%}
+                <a href="{{ block.settings.link }}">{{ block.settings.read_more | default: '閱讀更多' }}</a>
+              {%- endif -%}
+            </div>
+          </article>
+        {%- endif -%}
+      {%- endfor -%}
     </div>
   </div>
 </section>
@@ -33,10 +38,64 @@
 {
   "name": "最新資訊",
   "tag": "section",
-  "settings": [],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "標題",
+      "default": "最新資訊"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "英文副標題",
+      "default": "LATEST NEWS"
+    }
+  ],
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "article",
+      "name": "文章卡片",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "圖片（留空使用默認圖）"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "日期文字",
+          "default": "15 AUG"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "標題",
+          "default": "莫桑石與鑽石：你需要知道的 5 個差異"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "文章連結"
+        },
+        {
+          "type": "text",
+          "id": "read_more",
+          "label": "閱讀更多文字",
+          "default": "閱讀更多"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "最新資訊"
+      "name": "最新資訊",
+      "blocks": [
+        { "type": "article", "settings": { "date": "15 AUG", "title": "莫桑石與鑽石：你需要知道的 5 個差異" } },
+        { "type": "article", "settings": { "date": "08 AUG", "title": "如何挑選完美的訂婚戒指" } }
+      ]
     }
   ]
 }
@@ -45,6 +104,8 @@
 {% stylesheet %}
 .cf-blog { padding: 96px 24px; background: var(--cf-cream-soft); }
 .cf-blog .pk-container-inner { max-width: var(--pk-container-max); margin: 0 auto; }
+.cf-section-head h2 { font-family: var(--pk-font-serif); font-size: 32px; font-weight: 600; margin: 0; color: var(--cf-text); letter-spacing: -0.01em; }
+.cf-section-head p { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cf-text-soft); margin: 6px 0 0; }
 .cf-blog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 12px; }
 .cf-blog-card { background: #fff; border-radius: 6px; overflow: hidden; transition: transform .25s ease, box-shadow .25s ease; cursor: pointer; }
 .cf-blog-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(26,26,26,0.08); }

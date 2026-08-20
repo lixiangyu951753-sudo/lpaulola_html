@@ -1,0 +1,253 @@
+{% comment %}
+  PAULOLA: Cart page (main-cart)
+  Renders the /cart page: line items with quantity update / remove,
+  order summary with subtotal and checkout button.
+{% endcomment %}
+
+<section class="pk-cart-page pk-section-pad">
+  <div class="pk-container">
+    <h1 class="pk-cart-page__title">購物袋</h1>
+
+    {%- if cart.empty? -%}
+      <div class="pk-cart-empty">
+        <p class="pk-cart-empty__text">你的購物袋是空的</p>
+        <a href="{{ routes.all_products_collection_url }}" class="pk-btn">繼續購物</a>
+      </div>
+    {%- else -%}
+      <form action="{{ routes.cart_url }}" method="post" class="pk-cart-form">
+        <div class="pk-cart-layout">
+          <div class="pk-cart-items">
+            {%- for item in cart.items -%}
+              <div class="pk-cart-item">
+                {%- if item.image != blank -%}
+                  <img
+                    src="{{ item.image | image_url: width: 160 }}"
+                    alt="{{ item.title | escape }}"
+                    class="pk-cart-item__img"
+                    loading="lazy"
+                    width="80"
+                    height="80"
+                  >
+                {%- endif -%}
+                <div class="pk-cart-item__info">
+                  <a href="{{ item.url }}" class="pk-cart-item__title">{{ item.product.title }}</a>
+                  {%- unless item.product.has_only_default_variant -%}
+                    <p class="pk-cart-item__variant">{{ item.variant.title }}</p>
+                  {%- endunless -%}
+                  {%- if item.line_level_discount_allocations.size > 0 -%}
+                    <p class="pk-cart-item__compare">{{ item.original_price | money }}</p>
+                  {%- endif -%}
+                  <p class="pk-cart-item__price">{{ item.final_line_price | money }}</p>
+                </div>
+                <div class="pk-cart-item__actions">
+                  <input
+                    type="number"
+                    name="updates[]"
+                    value="{{ item.quantity }}"
+                    min="0"
+                    class="pk-cart-item__qty"
+                    aria-label="數量"
+                  >
+                  <a
+                    href="{{ routes.cart_change_url }}?line={{ forloop.index }}&amp;quantity=0"
+                    class="pk-cart-item__remove"
+                  >移除</a>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+
+          <aside class="pk-cart-summary">
+            <h2 class="pk-cart-summary__title">訂單摘要</h2>
+
+            {%- if cart.cart_level_discount_applications.size > 0 -%}
+              <ul class="pk-cart-summary__discounts">
+                {%- for discount in cart.cart_level_discount_applications -%}
+                  <li>
+                    <span>{{ discount.title }}</span>
+                    <span>− {{ discount.total_allocated_amount | money }}</span>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+
+            <div class="pk-cart-summary__row pk-cart-summary__total">
+              <span>小計</span>
+              <span>{{ cart.total_price | money_with_currency }}</span>
+            </div>
+
+            <p class="pk-cart-summary__note">稅金和運費將於結帳時計算</p>
+
+            <button type="submit" name="checkout" class="pk-btn pk-btn--full">結帳</button>
+            <button type="submit" name="update" class="pk-btn-link">更新數量</button>
+            <a href="{{ routes.all_products_collection_url }}" class="pk-btn-link">繼續購物</a>
+          </aside>
+        </div>
+      </form>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .pk-cart-page__title {
+    font-family: var(--pk-font-serif);
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin: 0 0 28px;
+  }
+
+  .pk-cart-empty {
+    text-align: center;
+    padding: 48px 0;
+  }
+  .pk-cart-empty__text {
+    color: var(--pk-text-secondary);
+    margin-bottom: 20px;
+  }
+
+  .pk-cart-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .pk-cart-item {
+    display: flex;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--pk-border);
+  }
+  .pk-cart-item__img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .pk-cart-item__info {
+    flex: 1;
+    min-width: 0;
+  }
+  .pk-cart-item__title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--pk-text-primary);
+    text-decoration: none;
+    display: inline-block;
+  }
+  .pk-cart-item__title:hover { color: var(--pk-gold); }
+  .pk-cart-item__variant,
+  .pk-cart-item__compare {
+    font-size: 12px;
+    color: var(--pk-text-muted);
+    margin: 4px 0 0;
+  }
+  .pk-cart-item__compare { text-decoration: line-through; }
+  .pk-cart-item__price {
+    font-size: 14px;
+    color: var(--pk-text-primary);
+    margin: 6px 0 0;
+  }
+  .pk-cart-item__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+  .pk-cart-item__qty {
+    width: 64px;
+    border: 1px solid var(--pk-border);
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 14px;
+    text-align: center;
+    font-family: inherit;
+  }
+  .pk-cart-item__remove {
+    font-size: 12px;
+    color: var(--pk-text-muted);
+    text-decoration: none;
+  }
+  .pk-cart-item__remove:hover { color: var(--pk-gold); }
+
+  .pk-cart-summary {
+    border: 1px solid var(--pk-border);
+    padding: 24px;
+    position: sticky;
+    top: 90px;
+  }
+  .pk-cart-summary__title {
+    font-family: var(--pk-font-serif);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin: 0 0 16px;
+  }
+  .pk-cart-summary__discounts {
+    list-style: none;
+    margin: 0 0 8px;
+    padding: 0;
+  }
+  .pk-cart-summary__discounts li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--pk-gold);
+    padding: 4px 0;
+  }
+  .pk-cart-summary__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .pk-cart-summary__total {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 12px 0 4px;
+  }
+  .pk-cart-summary__note {
+    font-size: 12px;
+    color: var(--pk-text-muted);
+    margin: 0 0 16px;
+  }
+
+  .pk-btn {
+    display: inline-block;
+    background: var(--pk-gold);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 999px;
+    padding: 14px 32px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: background .2s ease;
+    font-family: inherit;
+  }
+  .pk-btn:hover { background: var(--pk-gold-hover); }
+  .pk-btn--full { display: block; width: 100%; margin-bottom: 10px; }
+  .pk-btn-link {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 8px 0;
+    font-size: 13px;
+    color: var(--pk-text-secondary);
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    font-family: inherit;
+  }
+  .pk-btn-link:hover { color: var(--pk-gold); }
+
+  @media (max-width: 768px) {
+    .pk-cart-layout { grid-template-columns: 1fr; gap: 24px; }
+    .pk-cart-summary { position: static; }
+  }
+{% endstylesheet %}

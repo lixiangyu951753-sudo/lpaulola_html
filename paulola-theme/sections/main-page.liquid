@@ -1,0 +1,40 @@
+{%- comment -%} PAULOLA 頁面模板（可在後台 線上商店→頁面 建立頁面並編輯內容） {%- endcomment -%}
+<section class="pk-page pk-section-pad">
+  <div class="pk-container" style="max-width: 820px;">
+    {%- if section.settings.show_title -%}
+      <h1 class="pk-page__title">{{ page.title }}</h1>
+    {%- endif -%}
+    <div class="pk-rte pk-page__content">{{ page.content }}</div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "頁面內容",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "顯示頁面標題",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "頁面內容"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+.pk-page__title {
+  font-family: var(--pk-font-serif);
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin: 0 0 28px;
+  color: var(--pk-text-primary);
+}
+{% endstylesheet %}

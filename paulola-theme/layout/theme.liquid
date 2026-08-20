@@ -13,14 +13,14 @@
     {{ content_for_header }}
     <style>
       :root {
-        --pk-gold: #C4A35A;
-        --pk-gold-hover: #A98A45;
-        --pk-dark: #0F0F0F;
-        --pk-text-primary: #1A1A1A;
-        --pk-text-secondary: #666666;
+        --pk-gold: {{ settings.color_gold | default: '#C4A35A' }};
+        --pk-gold-hover: {{ settings.color_gold_hover | default: '#A98A45' }};
+        --pk-dark: {{ settings.color_footer_bg | default: '#0F0F0F' }};
+        --pk-text-primary: {{ settings.color_text | default: '#1A1A1A' }};
+        --pk-text-secondary: {{ settings.color_text_secondary | default: '#666666' }};
         --pk-text-muted: #999999;
         --pk-border: #E5DDD5;
-        --pk-footer-bg: #0F0F0F;
+        --pk-footer-bg: {{ settings.color_footer_bg | default: '#0F0F0F' }};
         --pk-footer-text: #CCCCCC;
         --pk-font-serif: 'Noto Serif TC', 'Songti TC', serif;
         --pk-font-sans: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
@@ -31,7 +31,7 @@
         margin: 0;
         font-family: var(--pk-font-sans);
         color: var(--pk-text-primary);
-        background: #FFFFFF;
+        background: {{ settings.color_background | default: '#FFFFFF' }};
         -webkit-font-smoothing: antialiased;
       }
       a { color: inherit; }
@@ -45,17 +45,167 @@
       .pk-header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; max-width: 1160px; margin: 0 auto; }
       .pk-logo { font-family: var(--pk-font-serif); font-size: 24px; font-weight: 700; letter-spacing: 0.08em; text-decoration: none; color: var(--pk-text-primary); }
       .pk-logo-sub { font-size: 10px; letter-spacing: 0.3em; color: var(--pk-text-muted); text-align: center; margin-top: 2px; }
-      .pk-header-right { font-size: 13px; color: var(--pk-text-secondary); font-weight: 500; }
+      .pk-header-right { display: flex; align-items: center; justify-content: flex-end; gap: 16px; font-size: 13px; color: var(--pk-text-secondary); font-weight: 500; }
+
+      /* 语言 / 国家选择器 */
+      .pk-localization { display: inline-flex; }
+      .pk-select {
+        border: none;
+        background: transparent;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--pk-text-secondary);
+        cursor: pointer;
+        padding: 4px 2px;
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='6' viewBox='0 0 8 6'%3E%3Cpath d='M1 1l3 3 3-3' fill='none' stroke='%23999999' stroke-width='1.2'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right center;
+        padding-right: 14px;
+      }
+      .pk-select option { color: var(--pk-text-primary); }
+      .pk-select:hover { color: var(--pk-gold); }
+
+      /* 登录链接 / 新版客户账户按钮（shopify-account 组件，仿 Tinker） */
+      .pk-account-link { color: inherit; text-decoration: none; white-space: nowrap; transition: color .2s ease; }
+      .pk-account-link:hover { color: var(--pk-gold); }
+      .pk-account { display: inline-flex; align-items: center; }
+      .pk-account shopify-account {
+        --shopify-account-font-heading: var(--pk-font-serif);
+        --shopify-account-font-heading-weight: 700;
+        --shopify-account-font-body: var(--pk-font-sans);
+        --shopify-account-font-body-weight: 400;
+        --shopify-account-radius-base: 12px;
+        --shopify-account-radius-button: 999px;
+        --shopify-account-radius-button-small: 999px;
+        --shopify-account-radius-input: 999px;
+        --shopify-account-color-background: #FFFFFF;
+        --shopify-account-color-text: var(--pk-text-primary);
+        --shopify-account-color-accent: var(--pk-gold);
+        --shopify-account-color-accent-text: #FFFFFF;
+        --shopify-account-dialog-position-top: 64px;
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+      }
+      .pk-account shopify-account:not(:defined) {
+        min-width: 44px;
+        justify-content: center;
+      }
+      .pk-account-fallback {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background-color: var(--pk-gold);
+      }
+
+      /* 购物车图标 */
+      .pk-cart { position: relative; display: inline-flex; align-items: center; color: var(--pk-text-secondary); text-decoration: none; transition: color .2s ease; }
+      .pk-cart:hover { color: var(--pk-gold); }
+      .pk-cart-count {
+        position: absolute;
+        top: -7px;
+        right: -9px;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 4px;
+        border-radius: 8px;
+        background: var(--pk-gold);
+        color: #FFFFFF;
+        font-size: 10px;
+        line-height: 16px;
+        text-align: center;
+        font-weight: 600;
+      }
+
+      /* 通用按鈕（全站） */
+      .pk-btn-gold { display: inline-flex; align-items: center; gap: 8px; background: var(--pk-gold); color: var(--pk-dark); font-size: 15px; font-weight: 600; padding: 14px 32px; border-radius: 999px; text-decoration: none; transition: background .2s ease, transform .2s ease; border: none; cursor: pointer; font-family: inherit; }
+      .pk-btn-gold:hover { background: var(--pk-gold-hover); transform: translateY(-1px); }
+      .pk-btn-outline { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--pk-text-primary); color: var(--pk-text-primary); font-size: 15px; font-weight: 500; padding: 13px 31px; border-radius: 999px; text-decoration: none; transition: background .2s ease, color .2s ease; background: transparent; cursor: pointer; font-family: inherit; }
+      .pk-btn-outline:hover { background: var(--pk-text-primary); color: #fff; }
+
+      /* 富文本（文章/頁面內容） */
+      .pk-rte { font-size: 15px; line-height: 1.9; color: var(--pk-text-primary); }
+      .pk-rte h1, .pk-rte h2, .pk-rte h3, .pk-rte h4 { font-family: var(--pk-font-serif); line-height: 1.3; margin: 1.6em 0 0.6em; }
+      .pk-rte p { margin: 0 0 1em; }
+      .pk-rte ul, .pk-rte ol { padding-left: 1.4em; margin: 0 0 1em; }
+      .pk-rte img { max-width: 100%; height: auto; }
+      .pk-rte a { color: var(--pk-gold); }
+      .pk-rte blockquote { border-left: 3px solid var(--pk-gold); margin: 1.5em 0; padding-left: 1.2em; color: var(--pk-text-secondary); }
+
+      @media (max-width: 640px) {
+        .pk-header-inner { padding: 12px 16px; }
+        .pk-header-right { gap: 10px; }
+        .pk-select { font-size: 12px; }
+      }
     </style>
   </head>
   <body class="template-{{ request.page_type | handle }}">
     <header class="pk-header">
       <div class="pk-header-inner">
-        <a href="{{ routes.root_url }}" class="pk-logo">PAULOLA</a>
-        <div class="pk-logo-sub">寶 洛 拉 珠 寶</div>
-        <div class="pk-header-right">{{ localization.country.iso_code }} {{ cart.currency.iso_code }}</div>
+        <a href="{{ routes.root_url }}" class="pk-logo">{{ settings.header_logo_text | default: 'PAULOLA' }}</a>
+        <div class="pk-logo-sub">{{ settings.header_subtitle | default: '寶 洛 拉 珠 寶' }}</div>
+        <div class="pk-header-right">
+          {%- if localization.available_languages.size > 1 -%}
+            <form method="post" action="/localization" accept-charset="UTF-8" class="pk-localization">
+              <input type="hidden" name="form_type" value="localization">
+              <input type="hidden" name="utf8" value="✓">
+              <input type="hidden" name="_method" value="put">
+              <select name="language_code" class="pk-select" aria-label="Language" onchange="this.form.submit()">
+                {%- for language in localization.available_languages -%}
+                  <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>{{ language.endonym_name | capitalize }}</option>
+                {%- endfor -%}
+              </select>
+            </form>
+          {%- endif -%}
+          {%- if localization.available_countries.size > 1 -%}
+            <form method="post" action="/localization" accept-charset="UTF-8" class="pk-localization">
+              <input type="hidden" name="form_type" value="localization">
+              <input type="hidden" name="utf8" value="✓">
+              <input type="hidden" name="_method" value="put">
+              <select name="country_code" class="pk-select" aria-label="Country/Region" onchange="this.form.submit()">
+                {%- for country in localization.available_countries -%}
+                  <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>{{ country.name }} ({{ country.currency.iso_code }})</option>
+                {%- endfor -%}
+              </select>
+            </form>
+          {%- endif -%}
+          {%- if shop.customer_accounts_enabled -%}
+            {%- comment -%} 新版客户账户：Shopify 托管登录，头部用 shopify-account 组件（仿 Tinker） {%- endcomment -%}
+            <div class="pk-account">
+              <shopify-account menu="customer-account-main-menu">
+                {%- if customer -%}
+                  <div class="pk-account-fallback"></div>
+                {%- else -%}
+                  <span slot="signed-out-avatar" class="pk-account-link">{% if localization.language.iso_code == 'en' %}Sign in{% else %}登入{% endif %}</span>
+                {%- endif -%}
+              </shopify-account>
+            </div>
+          {%- else -%}
+            {%- comment -%} 经典客户账户回退 {%- endcomment -%}
+            {%- if customer -%}
+              <a href="{{ routes.account_url }}" class="pk-account-link">我的帳戶</a>
+            {%- else -%}
+              <a href="{{ routes.account_login_url }}" class="pk-account-link">{% if localization.language.iso_code == 'en' %}Sign in{% else %}登入{% endif %}</a>
+            {%- endif -%}
+          {%- endif -%}
+          <a href="{{ routes.cart_url }}" class="pk-cart" aria-label="購物袋">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+              <path d="M3 6h18"></path>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            {%- if cart.item_count > 0 -%}
+              <span class="pk-cart-count">{{ cart.item_count }}</span>
+            {%- endif -%}
+          </a>
+        </div>
       </div>
     </header>
     <main id="MainContent">{{ content_for_layout }}</main>
+    {%- comment -%} PAULOLA: 頁腳（全站顯示，模組化 blocks） {%- endcomment -%}
+    {% sections 'footer-group' %}
   </body>
 </html>

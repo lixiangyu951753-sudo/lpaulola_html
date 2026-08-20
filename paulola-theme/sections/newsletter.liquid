@@ -1,18 +1,54 @@
+{%- comment -%}
+  PAULOLA 訂閱電子報：標題/文案可配置，表單為真實 Shopify 客戶訂閱表單
+{%- endcomment -%}
 <section class="cf-newsletter" aria-label="訂閱電子報">
-  <h2>加入寶洛拉會員</h2>
-  <p>搶先獲得最新產品資訊與專屬優惠</p>
-  {% comment %} 可升級為 Shopify 訂閱表單：{% form 'customer' %} ... {% endform %} {% endcomment %}
-  <form class="cf-newsletter-form" onsubmit="return false;">
-    <input type="email" placeholder="請輸入您的電子信箱" aria-label="電子信箱">
-    <button type="submit">訂閱</button>
-  </form>
+  <h2>{{ section.settings.heading | default: '加入寶洛拉會員' }}</h2>
+  <p>{{ section.settings.subtext | default: '搶先獲得最新產品資訊與專屬優惠' }}</p>
+  {% form 'customer' %}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+    <div class="cf-newsletter-form">
+      <input type="email" name="contact[email]" class="cf-newsletter-input" placeholder="{{ section.settings.placeholder | default: '請輸入您的電子信箱' }}" aria-label="電子信箱" required>
+      <button type="submit">{{ section.settings.button_text | default: '訂閱' }}</button>
+    </div>
+    {%- if form.posted_successfully? -%}
+      <p class="cf-newsletter-success">已訂閱成功，感謝您的支持！</p>
+    {%- endif -%}
+    {%- if form.errors -%}
+      <p class="cf-newsletter-error">{{ form.errors | default_errors }}</p>
+    {%- endif -%}
+  {% endform %}
 </section>
 
 {% schema %}
 {
   "name": "訂閱電子報",
   "tag": "section",
-  "settings": [],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "標題",
+      "default": "加入寶洛拉會員"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "副標題",
+      "default": "搶先獲得最新產品資訊與專屬優惠"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "輸入框佔位文字",
+      "default": "請輸入您的電子信箱"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "按鈕文字",
+      "default": "訂閱"
+    }
+  ],
   "presets": [
     {
       "name": "訂閱電子報"
@@ -26,8 +62,10 @@
 .cf-newsletter h2 { font-family: var(--pk-font-serif); font-size: 30px; font-weight: 600; margin: 0 0 12px; color: var(--cf-text); letter-spacing: -0.01em; }
 .cf-newsletter p { color: var(--cf-text-soft); font-size: 14px; margin: 0 0 32px; }
 .cf-newsletter-form { display: flex; max-width: 480px; margin: 0 auto; gap: 0; border: 1px solid var(--cf-text); border-radius: 0; overflow: hidden; }
-.cf-newsletter-form input { flex: 1; padding: 14px 20px; border: none; background: transparent; color: var(--cf-text); font-size: 14px; outline: none; font-family: var(--pk-font-sans); }
+.cf-newsletter-form input { flex: 1; padding: 14px 20px; border: none; background: transparent; color: var(--cf-text); font-size: 14px; outline: none; font-family: var(--pk-font-sans); min-width: 0; }
 .cf-newsletter-form input::placeholder { color: var(--cf-text-soft); }
 .cf-newsletter-form button { padding: 14px 32px; background: var(--cf-text); color: #fff; border: none; font-size: 14px; font-weight: 500; cursor: pointer; transition: background .2s ease; font-family: var(--pk-font-sans); }
 .cf-newsletter-form button:hover { background: #333; }
+.cf-newsletter-success { color: var(--pk-gold); font-size: 13px; margin-top: 14px; }
+.cf-newsletter-error { color: #c0392b; font-size: 13px; margin-top: 14px; }
 {% endstylesheet %}

@@ -8,5 +8,13 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "sections": {
+    "main": {
+      "type": "main-blog",
+      "settings": {
+        "posts_per_page": 9
+      }
+    }
+  },
+  "order": ["main"]
 }

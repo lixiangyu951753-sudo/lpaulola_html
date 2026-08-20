@@ -8,5 +8,13 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "sections": {
+    "main": {
+      "type": "main-list-collections",
+      "settings": {
+        "heading": "所有系列"
+      }
+    }
+  },
+  "order": ["main"]
 }

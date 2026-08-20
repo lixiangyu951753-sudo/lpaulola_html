@@ -1,0 +1,127 @@
+{%- comment -%} PAULOLA 搜尋頁 {%- endcomment -%}
+<section class="pk-search-page pk-section-pad">
+  <div class="pk-container">
+    <h1 class="pk-search-page__title">搜尋</h1>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="pk-search-form">
+      <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="搜尋商品…" aria-label="搜尋">
+      <button type="submit" class="pk-btn-gold">搜尋</button>
+    </form>
+
+    {%- if search.performed -%}
+      <p class="pk-search-page__count">
+        {%- if search.results_count > 0 -%}
+          {{ search.results_count }} 筆結果（"{{ search.terms }}"）
+        {%- else -%}
+          沒有找到與 "{{ search.terms }}" 相符的結果
+        {%- endif -%}
+      </p>
+      {%- if search.results_count > 0 -%}
+        {%- paginate search.results by section.settings.results_per_page -%}
+          <div class="pk-search-page__grid">
+            {%- for item in search.results -%}
+              {%- case item.object_type -%}
+                {%- when 'product' -%}
+                  <a href="{{ item.url }}" class="pk-search-card">
+                    {%- if item.featured_image != blank -%}
+                      <img src="{{ item.featured_image | image_url: width: 400 }}" alt="{{ item.title | escape }}" width="400" height="400" loading="lazy">
+                    {%- endif -%}
+                    <span class="pk-search-card__title">{{ item.title }}</span>
+                    <span class="pk-search-card__price">{{ item.price | money }}</span>
+                  </a>
+                {%- else -%}
+                  <a href="{{ item.url }}" class="pk-search-card pk-search-card--text">
+                    <span class="pk-search-card__title">{{ item.title }}</span>
+                    <span class="pk-search-card__type">{{ item.object_type }}</span>
+                  </a>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+          {%- if paginate.pages > 1 -%}
+            {{ paginate | default_pagination }}
+          {%- endif -%}
+        {%- endpaginate -%}
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "搜尋",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "results_per_page",
+      "label": "每頁結果數",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 16
+    }
+  ],
+  "presets": [
+    {
+      "name": "搜尋"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+.pk-search-page__title {
+  font-family: var(--pk-font-serif);
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin: 0 0 24px;
+}
+.pk-search-form {
+  display: flex;
+  gap: 12px;
+  max-width: 560px;
+  margin-bottom: 32px;
+}
+.pk-search-form input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--pk-border);
+  border-radius: 999px;
+  padding: 13px 22px;
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+}
+.pk-search-form input:focus { border-color: var(--pk-gold); }
+.pk-search-page__count {
+  color: var(--pk-text-secondary);
+  font-size: 14px;
+  margin: 0 0 24px;
+}
+.pk-search-page__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.pk-search-card {
+  display: block;
+  text-decoration: none;
+  border: 1px solid var(--pk-border);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.pk-search-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(26,26,26,0.08); }
+.pk-search-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+.pk-search-card--text { padding: 24px; display: block; }
+.pk-search-card__title { display: block; font-size: 14px; font-weight: 600; color: var(--pk-text-primary); padding: 12px 14px 0; line-height: 1.4; }
+.pk-search-card--text .pk-search-card__title { padding: 0 0 8px; }
+.pk-search-card__price { display: block; font-size: 13px; color: var(--pk-gold); padding: 4px 14px 14px; }
+.pk-search-card__type { display: block; font-size: 12px; color: var(--pk-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+@media (max-width: 900px) {
+  .pk-search-page__grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 600px) {
+  .pk-search-page__grid { grid-template-columns: repeat(2, 1fr); }
+}
+{% endstylesheet %}

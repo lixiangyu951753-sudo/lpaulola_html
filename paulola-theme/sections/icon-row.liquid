@@ -1,25 +1,29 @@
+{%- comment -%}
+  PAULOLA 產品分類圖標列：每個區塊 = 一個圖標（可增刪/排序）
+{%- endcomment -%}
 <section class="cf-icons" aria-label="產品分類">
   <div class="cf-icon-row">
-    <a href="{{ routes.root_url }}" class="cf-icon-item">
-      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="14" r="6"/><path d="M14 14 C14 14 16 26 22 32 L26 36 L22 40"/><path d="M34 14 C34 14 32 26 26 32"/><circle cx="24" cy="40" r="3"/></svg>
-      <span class="cf-icon-label">Pendants</span>
-    </a>
-    <a href="{{ routes.root_url }}" class="cf-icon-item">
-      <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 10 L14 22"/><circle cx="14" cy="28" r="5"/><path d="M34 10 L34 22"/><circle cx="34" cy="28" r="5"/><circle cx="14" cy="8" r="2"/><circle cx="34" cy="8" r="2"/></svg>
-      <span class="cf-icon-label">Earrings</span>
-    </a>
-    <a href="{{ routes.root_url }}" class="cf-icon-item">
-      <svg viewBox="0 0 48 48" aria-hidden="true"><polygon points="24,6 38,16 38,32 24,42 10,32 10,16"/><line x1="10" y1="16" x2="38" y2="16"/><line x1="24" y1="6" x2="24" y2="42"/></svg>
-      <span class="cf-icon-label">Gem &amp; stones</span>
-    </a>
-    <a href="{{ routes.root_url }}" class="cf-icon-item">
-      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="13"/><circle cx="24" cy="11" r="3"/></svg>
-      <span class="cf-icon-label">Rings</span>
-    </a>
-    <a href="{{ routes.root_url }}" class="cf-icon-item">
-      <svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="24" rx="14" ry="18"/><ellipse cx="24" cy="14" rx="14" ry="3"/></svg>
-      <span class="cf-icon-label">Bracelets</span>
-    </a>
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'icon' -%}
+        <a href="{{ block.settings.link | default: routes.root_url }}" class="cf-icon-item" {{ block.shopify_attributes }}>
+          {%- case block.settings.icon -%}
+            {%- when 'pendants' -%}
+              <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="14" r="6"/><path d="M14 14 C14 14 16 26 22 32 L26 36 L22 40"/><path d="M34 14 C34 14 32 26 26 32"/><circle cx="24" cy="40" r="3"/></svg>
+            {%- when 'earrings' -%}
+              <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 10 L14 22"/><circle cx="14" cy="28" r="5"/><path d="M34 10 L34 22"/><circle cx="34" cy="28" r="5"/><circle cx="14" cy="8" r="2"/><circle cx="34" cy="8" r="2"/></svg>
+            {%- when 'gem' -%}
+              <svg viewBox="0 0 48 48" aria-hidden="true"><polygon points="24,6 38,16 38,32 24,42 10,32 10,16"/><line x1="10" y1="16" x2="38" y2="16"/><line x1="24" y1="6" x2="24" y2="42"/></svg>
+            {%- when 'rings' -%}
+              <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="13"/><circle cx="24" cy="11" r="3"/></svg>
+            {%- when 'bracelets' -%}
+              <svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="24" rx="14" ry="18"/><ellipse cx="24" cy="14" rx="14" ry="3"/></svg>
+            {%- else -%}
+              <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="13"/></svg>
+          {%- endcase -%}
+          <span class="cf-icon-label">{{ block.settings.label }}</span>
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
   </div>
 </section>
 
@@ -28,9 +32,49 @@
   "name": "產品分類圖標列",
   "tag": "section",
   "settings": [],
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "icon",
+      "name": "圖標",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "圖標樣式",
+          "options": [
+            { "value": "pendants", "label": "吊墜" },
+            { "value": "earrings", "label": "耳飾" },
+            { "value": "gem", "label": "寶石" },
+            { "value": "rings", "label": "戒指" },
+            { "value": "bracelets", "label": "手鐲" }
+          ],
+          "default": "rings"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "文字",
+          "default": "Rings"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "連結"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "產品分類圖標列"
+      "name": "產品分類圖標列",
+      "blocks": [
+        { "type": "icon", "settings": { "icon": "pendants", "label": "Pendants" } },
+        { "type": "icon", "settings": { "icon": "earrings", "label": "Earrings" } },
+        { "type": "icon", "settings": { "icon": "gem", "label": "Gem & stones" } },
+        { "type": "icon", "settings": { "icon": "rings", "label": "Rings" } },
+        { "type": "icon", "settings": { "icon": "bracelets", "label": "Bracelets" } }
+      ]
     }
   ]
 }

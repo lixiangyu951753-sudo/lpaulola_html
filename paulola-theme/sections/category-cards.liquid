@@ -1,41 +1,39 @@
+{%- comment -%}
+  PAULOLA 商品分類卡：每個區塊 = 一張卡片（可增刪/排序）
+{%- endcomment -%}
 <section class="cf-cats" aria-label="商品分類">
   <div class="cf-cat-grid">
-    {%- assign cat_rings = collections['rings'] -%}
-    {%- assign cat_necklaces = collections['necklaces'] -%}
-    {%- assign cat_earrings = collections['earrings'] -%}
-
-    <a href="{{ cat_rings.url | default: '/collections/rings' }}" class="cf-cat-card">
-      <img src="{{ 'asian-diamond-rings.png' | asset_url }}" alt="戒指系列" width="832" height="1118" loading="lazy">
-      <div class="cf-cat-overlay"></div>
-      <div class="cf-cat-content">
-        <h3 class="cf-cat-title">戒指<br>Rings</h3>
-        <span class="cf-zigzag"><svg viewBox="0 0 84 8" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,4 6,1 12,7 18,1 24,7 30,1 36,7 42,1 48,7 54,1 60,7 66,1 72,7 78,1 84,4" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <p class="cf-cat-desc">求婚訂婚 · 日常疊戴，嚴選莫桑石戒指</p>
-        <span class="cf-btn-outline-light">探索戒指 →</span>
-      </div>
-    </a>
-
-    <a href="{{ cat_necklaces.url | default: '/collections/necklaces' }}" class="cf-cat-card">
-      <img src="{{ 'asian-gold-necklace.png' | asset_url }}" alt="項鏈系列" width="832" height="1118" loading="lazy">
-      <div class="cf-cat-overlay"></div>
-      <div class="cf-cat-content">
-        <h3 class="cf-cat-title">項鏈<br>Necklaces</h3>
-        <span class="cf-zigzag"><svg viewBox="0 0 84 8" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,4 6,1 12,7 18,1 24,7 30,1 36,7 42,1 48,7 54,1 60,7 66,1 72,7 78,1 84,4" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <p class="cf-cat-desc">鎖骨鏈 · 吊墜，點亮日常穿搭</p>
-        <span class="cf-btn-outline-light">探索項鏈 →</span>
-      </div>
-    </a>
-
-    <a href="{{ cat_earrings.url | default: '/collections/earrings' }}" class="cf-cat-card">
-      <img src="{{ 'asian-earring.png' | asset_url }}" alt="耳飾系列" width="832" height="1118" loading="lazy">
-      <div class="cf-cat-overlay"></div>
-      <div class="cf-cat-content">
-        <h3 class="cf-cat-title">耳飾<br>Earrings</h3>
-        <span class="cf-zigzag"><svg viewBox="0 0 84 8" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,4 6,1 12,7 18,1 24,7 30,1 36,7 42,1 48,7 54,1 60,7 66,1 72,7 78,1 84,4" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <p class="cf-cat-desc">耳釘 · 耳扣，細節處見精緻</p>
-        <span class="cf-btn-outline-light">探索耳飾 →</span>
-      </div>
-    </a>
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'card' -%}
+        {%- liquid
+          assign card_collection = collections[block.settings.collection]
+          assign card_url = card_collection.url | default: block.settings.link | default: '#'
+          assign fallback_img = 'asian-diamond-rings.png'
+          case block.settings.collection
+            when 'necklaces'
+              assign fallback_img = 'asian-gold-necklace.png'
+            when 'earrings'
+              assign fallback_img = 'asian-earring.png'
+          endcase
+        -%}
+        <a href="{{ card_url }}" class="cf-cat-card" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            <img src="{{ block.settings.image | image_url: width: 832 }}" alt="{{ block.settings.title | strip_html | escape }}" width="832" height="1118" loading="lazy">
+          {%- else -%}
+            <img src="{{ fallback_img | asset_url }}" alt="{{ block.settings.title | strip_html | escape }}" width="832" height="1118" loading="lazy">
+          {%- endif -%}
+          <div class="cf-cat-overlay"></div>
+          <div class="cf-cat-content">
+            <h3 class="cf-cat-title">{{ block.settings.title }}</h3>
+            <span class="cf-zigzag"><svg viewBox="0 0 84 8" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,4 6,1 12,7 18,1 24,7 30,1 36,7 42,1 48,7 54,1 60,7 66,1 72,7 78,1 84,4" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            {%- if block.settings.description != blank -%}
+              <p class="cf-cat-desc">{{ block.settings.description }}</p>
+            {%- endif -%}
+            <span class="cf-btn-outline-light">{{ block.settings.button_text }}</span>
+          </div>
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
   </div>
 </section>
 
@@ -44,9 +42,56 @@
   "name": "商品分類卡",
   "tag": "section",
   "settings": [],
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "card",
+      "name": "分類卡片",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "連結的集合"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "圖片（留空使用默認圖）"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "標題",
+          "default": "戒指<br>Rings"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "描述",
+          "default": "求婚訂婚 · 日常疊戴，嚴選莫桑石戒指"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "按鈕文字",
+          "default": "探索戒指 →"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "自訂連結（未選集合時使用）"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "商品分類卡"
+      "name": "商品分類卡",
+      "blocks": [
+        { "type": "card", "settings": { "collection": "rings", "title": "戒指<br>Rings", "description": "求婚訂婚 · 日常疊戴，嚴選莫桑石戒指", "button_text": "探索戒指 →" } },
+        { "type": "card", "settings": { "collection": "necklaces", "title": "項鏈<br>Necklaces", "description": "鎖骨鏈 · 吊墜，點亮日常穿搭", "button_text": "探索項鏈 →" } },
+        { "type": "card", "settings": { "collection": "earrings", "title": "耳飾<br>Earrings", "description": "耳釘 · 耳扣，細節處見精緻", "button_text": "探索耳飾 →" } }
+      ]
     }
   ]
 }

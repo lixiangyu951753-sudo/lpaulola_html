@@ -1,6 +1,6 @@
 <nav class="cf-pdp-breadcrumb" aria-label="麵包屑">
   <div class="cf-pdp-breadcrumb__inner">
-    <a href="{{ routes.root_url }}">首頁</a>
+    <a href="{{ routes.root_url }}">{{ section.settings.home_text | default: '首頁' }}</a>
     <span class="cf-pdp-breadcrumb__sep">/</span>
     {%- if collection != blank -%}
       <a href="{{ collection.url }}">{{ collection.title }}</a>
@@ -14,7 +14,14 @@
 {
   "name": "麵包屑",
   "tag": "section",
-  "settings": []
+  "settings": [
+    {
+      "type": "text",
+      "id": "home_text",
+      "label": "首頁文字",
+      "default": "首頁"
+    }
+  ]
 }
 {% endschema %}
 

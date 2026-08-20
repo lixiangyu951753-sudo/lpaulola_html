@@ -1,10 +1,115 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "PAULOLA Hero Video",
-    "theme_version": "0.1.0",
+    "theme_name": "PAULOLA Custom",
+    "theme_version": "0.3.1",
     "theme_author": "paulola",
     "theme_documentation_url": "https://www.paulola.com/",
     "theme_support_url": "https://www.paulola.com/"
+  },
+  {
+    "name": "全局顏色",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_gold",
+        "label": "金色主色",
+        "default": "#C4A35A"
+      },
+      {
+        "type": "color",
+        "id": "color_gold_hover",
+        "label": "金色懸停色",
+        "default": "#A98A45"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "正文文字色",
+        "default": "#1A1A1A"
+      },
+      {
+        "type": "color",
+        "id": "color_text_secondary",
+        "label": "次要文字色",
+        "default": "#666666"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "頁面背景色",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_footer_bg",
+        "label": "頁腳背景色",
+        "default": "#0F0F0F"
+      }
+    ]
+  },
+  {
+    "name": "頁頭",
+    "settings": [
+      {
+        "type": "text",
+        "id": "header_logo_text",
+        "label": "Logo 文字",
+        "default": "PAULOLA"
+      },
+      {
+        "type": "text",
+        "id": "header_subtitle",
+        "label": "Logo 副標題",
+        "default": "寶 洛 拉 珠 寶"
+      }
+    ]
+  },
+  {
+    "name": "頁腳",
+    "settings": [
+      {
+        "type": "text",
+        "id": "footer_copyright",
+        "label": "版權文字（可用 {year} 佔位符）",
+        "default": "© {year}, Paulola Jewelry 由 Shopify 技術支援"
+      },
+      {
+        "type": "text",
+        "id": "footer_whatsapp_text",
+        "label": "WhatsApp 顯示文字",
+        "default": "+852 9711 2975"
+      },
+      {
+        "type": "text",
+        "id": "footer_whatsapp_url",
+        "label": "WhatsApp 連結",
+        "default": "http://wa.me/85297112975"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook 連結",
+        "default": "https://www.facebook.com/share/1KWp86kvwC/"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram 連結",
+        "default": "https://www.instagram.com/paulolajewelry_hk"
+      },
+      {
+        "type": "text",
+        "id": "social_x",
+        "label": "X (Twitter) 連結",
+        "default": "https://x.com/Paulolajewelry"
+      },
+      {
+        "type": "text",
+        "id": "social_threads",
+        "label": "Threads 連結",
+        "default": "https://www.threads.com/@paulolajewelry_hk"
+      }
+    ]
   }
 ]

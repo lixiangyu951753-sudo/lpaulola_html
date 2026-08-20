@@ -1,0 +1,80 @@
+{%- comment -%} PAULOLA 所有系列列表（/collections） {%- endcomment -%}
+<section class="pk-collections-page pk-section-pad">
+  <div class="pk-container">
+    <h1 class="pk-collections-page__title">{{ section.settings.heading | default: '所有系列' }}</h1>
+    <div class="pk-collections-page__grid">
+      {%- for collection in collections -%}
+        {%- if collection.all_products_count > 0 -%}
+          <a href="{{ collection.url }}" class="pk-collection-card">
+            {%- if collection.featured_image != blank -%}
+              <img src="{{ collection.featured_image | image_url: width: 600 }}" alt="{{ collection.title | escape }}" width="600" height="750" loading="lazy">
+            {%- elsif collection.products.first.featured_image != blank -%}
+              <img src="{{ collection.products.first.featured_image | image_url: width: 600 }}" alt="{{ collection.title | escape }}" width="600" height="750" loading="lazy">
+            {%- endif -%}
+            <span class="pk-collection-card__title">{{ collection.title }}</span>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "所有系列",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "標題",
+      "default": "所有系列"
+    }
+  ],
+  "presets": [
+    {
+      "name": "所有系列"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+.pk-collections-page__title {
+  font-family: var(--pk-font-serif);
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin: 0 0 32px;
+}
+.pk-collections-page__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.pk-collection-card {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  aspect-ratio: 4/5;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--cf-cream);
+}
+.pk-collection-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.pk-collection-card:hover img { transform: scale(1.05); }
+.pk-collection-card__title {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 40px 16px 16px;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 100%);
+  color: #fff;
+  font-family: var(--pk-font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+@media (max-width: 900px) {
+  .pk-collections-page__grid { grid-template-columns: repeat(2, 1fr); }
+}
+{% endstylesheet %}

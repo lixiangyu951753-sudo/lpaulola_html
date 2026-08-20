@@ -8,5 +8,15 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "sections": {
+    "main": {
+      "type": "main-article",
+      "settings": {
+        "show_image": true,
+        "show_meta": true,
+        "show_share": true
+      }
+    }
+  },
+  "order": ["main"]
 }
