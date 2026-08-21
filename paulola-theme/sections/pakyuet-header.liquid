@@ -553,7 +553,14 @@
     --ir-line: #e8e8e8;
     --container-max: 1160px;
   }
+  /* PAULOLA: 页眉 sticky 容器（Shopify group section 外层）——滚动时保持吸顶 */
+  .shopify-section-group-header-group {
+    position: sticky;
+    top: 0;
+    z-index: 90;
+  }
   .pakyuet-header.ir-header {
+    position: relative;
     background: #ffffff;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     display: flex;
