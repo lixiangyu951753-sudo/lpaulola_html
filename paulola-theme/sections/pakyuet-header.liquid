@@ -273,7 +273,7 @@
             endif
           endcapture
         -%}
-        {%- if settings.cart_type == 'drawer' and template.name != 'cart' -%}
+        {%- if template.name != 'cart' -%}
           <button type="button" class="ir-icon-btn ir-cart-btn" data-open-cart-drawer aria-label="{{ cart_out }}">{{ cart_icon_markup }}</button>
         {%- else -%}
           <a href="{{ routes.cart_url }}" class="ir-icon-btn ir-cart-btn" aria-label="{{ cart_out }}">{{ cart_icon_markup }}</a>
@@ -427,6 +427,57 @@
         </div>
       {%- endif -%}
     </nav>
+  </div>
+
+  {%- comment -%} 购物车抽屉（右侧滑入，轻量自包含） {%- endcomment -%}
+  <div class="pk-cart-drawer__backdrop" data-cart-backdrop></div>
+  <div class="pk-cart-drawer" id="pk-cart-drawer" data-cart-drawer role="dialog" aria-modal="true" aria-label="{{ cart_out }}">
+    <div class="pk-cart-drawer__header">
+      <h3 class="pk-cart-drawer__title">{%- if localization.language.iso_code == 'en' -%}Your Cart{%- else -%}購物袋{%- endif -%} <span class="pk-cart-drawer__count" data-cart-count>({{ cart.item_count }})</span></h3>
+      <button type="button" class="pk-cart-drawer__close" data-cart-close aria-label="{%- if localization.language.iso_code == 'en' -%}Close{%- else -%}關閉{%- endif -%}">×</button>
+    </div>
+    <div class="pk-cart-drawer__body">
+      {%- if cart.item_count > 0 -%}
+        <div class="pk-cart-drawer__items" data-cart-items>
+          {%- for item in cart.items -%}
+            <div class="pk-cart-item" data-cart-item data-line="{{ item.key }}">
+              <a class="pk-cart-item__img" href="{{ item.url }}">
+                {%- if item.image -%}
+                  <img src="{{ item.image | image_url: width: 120 }}" alt="{{ item.image.alt | escape }}" width="60" height="{{ 60 | divided_by: item.image.aspect_ratio | ceil }}" loading="lazy">
+                {%- endif -%}
+              </a>
+              <div class="pk-cart-item__info">
+                <a class="pk-cart-item__title" href="{{ item.url }}">{{ item.product.title | escape }}</a>
+                {%- unless item.product.has_only_default_variant -%}
+                  <p class="pk-cart-item__variant">{{ item.variant.title }}</p>
+                {%- endunless -%}
+                <div class="pk-cart-item__qty">
+                  <button type="button" data-cart-minus data-line="{{ item.key }}" aria-label="-" disabled>−</button>
+                  <input type="number" value="{{ item.quantity }}" min="0" data-cart-qty data-line="{{ item.key }}" aria-label="Quantity">
+                  <button type="button" data-cart-plus data-line="{{ item.key }}" aria-label="+">+</button>
+                </div>
+              </div>
+              <div class="pk-cart-item__price">
+                <span class="pk-cart-item__amount">{{ item.final_line_price | money }}</span>
+                <button type="button" class="pk-cart-item__remove" data-cart-remove data-line="{{ item.key }}" aria-label="Remove">✕</button>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <div class="pk-cart-drawer__empty" data-cart-empty>
+          <p>{%- if localization.language.iso_code == 'en' -%}Your cart is empty{%- else -%}您的購物袋是空的{%- endif -%}</p>
+        </div>
+      {%- endif -%}
+    </div>
+    <div class="pk-cart-drawer__footer">
+      <div class="pk-cart-drawer__total">
+        <span>{%- if localization.language.iso_code == 'en' -%}Subtotal{%- else -%}小計{%- endif -%}</span>
+        <strong data-cart-total>{{ cart.total_price | money }}</strong>
+      </div>
+      <a href="/checkout" class="pk-cart-drawer__checkout">{%- if localization.language.iso_code == 'en' -%}Checkout{%- else -%}結帳{%- endif -%}</a>
+      <a href="{{ routes.cart_url }}" class="pk-cart-drawer__view-cart">{%- if localization.language.iso_code == 'en' -%}View cart{%- else -%}查看購物袋{%- endif -%}</a>
+    </div>
   </div>
 </header>
 
@@ -883,6 +934,109 @@
     .ir-logo { position: absolute; left: 50%; transform: translateX(-50%); }
     .ir-nav__right { flex: 0 0 auto; justify-content: flex-end; }
   }
+
+  /* ================================================================
+     购物车抽屉（右侧滑入，PAULOLA 轻量自包含版）
+     ================================================================ */
+  .pk-cart-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(420px, 92vw);
+    max-width: 100%;
+    background: #ffffff;
+    z-index: 200;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.18);
+    display: flex;
+    flex-direction: column;
+    visibility: hidden;
+  }
+  .pk-cart-drawer.open { transform: translateX(0); visibility: visible; }
+  .pk-cart-drawer__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 199;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+  }
+  .pk-cart-drawer__backdrop.open { opacity: 1; visibility: visible; }
+  body.pk-cart-open { overflow: hidden; }
+  .pk-cart-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--ir-line, #e8e8e8);
+    flex: 0 0 auto;
+  }
+  .pk-cart-drawer__title { font-family: var(--pk-font-serif); font-size: 18px; font-weight: 600; margin: 0; color: var(--ir-text); }
+  .pk-cart-drawer__count { color: var(--ir-text-muted); font-size: 14px; font-weight: 400; }
+  .pk-cart-drawer__close {
+    background: none; border: 0; font-size: 26px; line-height: 1;
+    color: var(--ir-text); cursor: pointer; padding: 0 4px;
+  }
+  .pk-cart-drawer__body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 16px 20px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .pk-cart-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--ir-line, #f0f0f0);
+  }
+  .pk-cart-item__img { flex: 0 0 60px; }
+  .pk-cart-item__img img { width: 60px; height: auto; border-radius: 4px; display: block; }
+  .pk-cart-item__info { flex: 1 1 auto; min-width: 0; }
+  .pk-cart-item__title { font-size: 13.5px; font-weight: 500; color: var(--ir-text); text-decoration: none; display: block; line-height: 1.4; }
+  .pk-cart-item__title:hover { color: var(--ir-primary); }
+  .pk-cart-item__variant { font-size: 12px; color: var(--ir-text-muted); margin: 4px 0 8px; }
+  .pk-cart-item__qty { display: flex; align-items: center; gap: 8px; }
+  .pk-cart-item__qty button {
+    width: 26px; height: 26px; border: 1px solid var(--ir-line, #ddd);
+    background: #fff; border-radius: 4px; cursor: pointer; font-size: 14px; line-height: 1;
+    color: var(--ir-text); display: flex; align-items: center; justify-content: center;
+  }
+  .pk-cart-item__qty button:disabled { opacity: 0.4; cursor: default; }
+  .pk-cart-item__qty input {
+    width: 42px; height: 26px; border: 1px solid var(--ir-line, #ddd); border-radius: 4px;
+    text-align: center; font-size: 13px; font-family: inherit;
+  }
+  .pk-cart-item__price { flex: 0 0 auto; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .pk-cart-item__amount { font-size: 14px; font-weight: 600; color: var(--ir-text); }
+  .pk-cart-item__remove { background: none; border: 0; color: var(--ir-text-muted); cursor: pointer; font-size: 14px; }
+  .pk-cart-item__remove:hover { color: #e06666; }
+  .pk-cart-drawer__empty { text-align: center; padding: 48px 0; color: var(--ir-text-muted); font-size: 14px; }
+  .pk-cart-drawer__footer {
+    flex: 0 0 auto;
+    padding: 16px 20px 20px;
+    border-top: 1px solid var(--ir-line, #e8e8e8);
+  }
+  .pk-cart-drawer__total {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px; font-size: 15px; color: var(--ir-text);
+  }
+  .pk-cart-drawer__total strong { font-size: 17px; }
+  .pk-cart-drawer__checkout {
+    display: block; width: 100%; text-align: center; padding: 14px;
+    background: var(--ir-primary, #C4A35A); color: #fff; font-size: 15px; font-weight: 600;
+    border-radius: 4px; text-decoration: none; margin-bottom: 10px;
+    transition: background 0.2s;
+  }
+  .pk-cart-drawer__checkout:hover { background: var(--ir-primary-dark, #A98A45); }
+  .pk-cart-drawer__view-cart {
+    display: block; width: 100%; text-align: center; padding: 12px;
+    border: 1px solid var(--ir-line, #ddd); color: var(--ir-text); font-size: 14px;
+    border-radius: 4px; text-decoration: none; transition: background 0.2s;
+  }
+  .pk-cart-drawer__view-cart:hover { background: #f7f7f7; }
 </style>
 
 <script>
@@ -903,22 +1057,133 @@
     });
   })();
 
-  // 購物車按鈕：抽屜模式（非購物車頁）下點擊開啟購物車抽屜；無抽屜時回退到 /cart
+  // 購物車抽屜（右侧滑入）：打开/关闭 + 数量增减/删除（/cart/change.js）+ 徽标同步
   (function () {
-    var cartButtons = document.querySelectorAll('[data-open-cart-drawer]');
-    if (!cartButtons.length) return;
-    var fallbackUrl = {% if routes.cart_url != blank %}'{{ routes.cart_url | escape }}'{% else %}'/cart'{% endif %};
-    cartButtons.forEach(function (btn) {
-      btn.addEventListener('click', function (event) {
-        event.preventDefault();
-        var drawer = document.querySelector('cart-drawer');
-        if (drawer && typeof drawer.open === 'function') {
-          drawer.open();
-        } else {
-          window.location.href = fallbackUrl;
-        }
-      });
+    if (window.__pkCartInit) return;
+    window.__pkCartInit = true;
+    var CURRENCY_SYMBOL = {%- if localization.country.currency.iso_code == 'TWD' -%}'NT$'{%- elsif localization.country.currency.iso_code == 'SGD' -%}'S$'{%- elsif localization.country.currency.iso_code == 'HKD' -%}'$'{%- elsif localization.country.currency.iso_code == 'MYR' -%}'RM'{%- elsif localization.country.currency.iso_code == 'THB' -%}'฿'{%- else -%}'$'{%- endif -%};
+    var drawer = document.getElementById('pk-cart-drawer');
+    var backdrop = document.querySelector('[data-cart-backdrop]');
+    if (!drawer) return;
+
+    function open() {
+      drawer.classList.add('open');
+      if (backdrop) backdrop.classList.add('open');
+      document.body.classList.add('pk-cart-open');
+    }
+    function close() {
+      drawer.classList.remove('open');
+      if (backdrop) backdrop.classList.remove('open');
+      document.body.classList.remove('pk-cart-open');
+    }
+
+    // 绑定打开按钮
+    document.querySelectorAll('[data-open-cart-drawer]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) { e.preventDefault(); open(); });
     });
+    // 关闭：关闭按钮 / backdrop / Esc
+    var closeBtn = drawer.querySelector('[data-cart-close]');
+    if (closeBtn) closeBtn.addEventListener('click', close);
+    if (backdrop) backdrop.addEventListener('click', close);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+
+    // AJAX 更新购物车（数量增减/删除）并刷新 drawer + header 徽标
+    function changeCart(line, quantity) {
+      if (typeof fetch !== 'function') { window.location.href = {% if routes.cart_url != blank %}'{{ routes.cart_url | escape }}'{% else %}'/cart'{% endif %}; return; }
+      var body = 'id=' + encodeURIComponent(line) + '&quantity=' + encodeURIComponent(quantity);
+      fetch('/cart/change.js', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' }, body: body })
+        .then(function (r) { return r.json(); })
+        .then(function (cart) { refreshDrawer(cart); })
+        .catch(function () { window.location.reload(); });
+    }
+
+    // 刷新 drawer 内容（从 /cart.js 拿最新状态）
+    function refreshDrawer(cart) {
+      var itemsEl = drawer.querySelector('[data-cart-items]');
+      var emptyEl = drawer.querySelector('[data-cart-empty]');
+      var totalEl = drawer.querySelector('[data-cart-total]');
+      var countEl = drawer.querySelector('[data-cart-count]');
+      // header 徽标
+      var badge = document.querySelector('.ir-cart-count');
+      if (badge) {
+        if (cart.item_count > 0) { badge.textContent = cart.item_count; badge.style.display = 'flex'; }
+        else { badge.style.display = 'none'; }
+      }
+      if (countEl) countEl.textContent = '(' + cart.item_count + ')';
+      if (totalEl) totalEl.textContent = formatMoney(cart.total_price);
+      // 空车状态
+      if (cart.item_count === 0) {
+        if (itemsEl) itemsEl.innerHTML = '';
+        if (emptyEl) emptyEl.style.display = '';
+        var footer = drawer.querySelector('.pk-cart-drawer__footer');
+        if (footer) footer.style.display = 'none';
+        return;
+      }
+      if (emptyEl) emptyEl.style.display = 'none';
+      var footer = drawer.querySelector('.pk-cart-drawer__footer');
+      if (footer) footer.style.display = '';
+      // 重建商品列表
+      if (itemsEl) {
+        itemsEl.innerHTML = (cart.items || []).map(function (item) {
+          var img = item.image ? '<a class="pk-cart-item__img" href="' + item.url + '"><img src="' + item.image + '" alt="" width="60" loading="lazy"></a>' : '';
+          var variant = (!item.variant_title || item.variant_title === 'Default Title') ? '' : '<p class="pk-cart-item__variant">' + escapeHtml(item.variant_title) + '</p>';
+          var line = item.key;
+          return '<div class="pk-cart-item" data-cart-item data-line="' + line + '">' + img +
+            '<div class="pk-cart-item__info"><a class="pk-cart-item__title" href="' + item.url + '">' + escapeHtml(item.product_title) + '</a>' + variant +
+            '<div class="pk-cart-item__qty">' +
+            '<button type="button" data-cart-minus data-line="' + line + '" aria-label="-" ' + (item.quantity <= 1 ? 'disabled' : '') + '>−</button>' +
+            '<input type="number" value="' + item.quantity + '" min="0" data-cart-qty data-line="' + line + '" aria-label="Quantity">' +
+            '<button type="button" data-cart-plus data-line="' + line + '" aria-label="+">+</button></div></div>' +
+            '<div class="pk-cart-item__price"><span class="pk-cart-item__amount">' + item.final_line_price + '</span>' +
+            '<button type="button" class="pk-cart-item__remove" data-cart-remove data-line="' + line + '" aria-label="Remove">✕</button></div></div>';
+        }).join('');
+        bindCartItemEvents(itemsEl);
+      }
+    }
+
+    function bindCartItemEvents(scope) {
+      scope.querySelectorAll('[data-cart-minus]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var line = b.getAttribute('data-line');
+          var input = scope.querySelector('[data-cart-qty][data-line="' + line + '"]');
+          var v = parseInt(input ? input.value : 1, 10) || 1;
+          changeCart(line, Math.max(1, v - 1));
+        });
+      });
+      scope.querySelectorAll('[data-cart-plus]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var line = b.getAttribute('data-line');
+          var input = scope.querySelector('[data-cart-qty][data-line="' + line + '"]');
+          var v = parseInt(input ? input.value : 1, 10) || 1;
+          changeCart(line, v + 1);
+        });
+      });
+      scope.querySelectorAll('[data-cart-remove]').forEach(function (b) {
+        b.addEventListener('click', function () { changeCart(b.getAttribute('data-line'), 0); });
+      });
+      scope.querySelectorAll('[data-cart-qty]').forEach(function (input) {
+        input.addEventListener('change', function () {
+          var v = parseInt(input.value, 10) || 0;
+          changeCart(input.getAttribute('data-line'), Math.max(0, v));
+        });
+      });
+    }
+
+    function formatMoney(cents) {
+      // cart.js 返回的 total_price 是分（cents）；格式化为带千分位的金额
+      if (cents === null || cents === undefined || isNaN(cents)) return '';
+      var neg = cents < 0;
+      var str = (Math.abs(cents) / 100).toFixed(2);
+      str = str.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      return (neg ? '-' : '') + CURRENCY_SYMBOL + str;
+    }
+    function escapeHtml(s) {
+      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // 初始绑定已渲染的条目
+    var itemsEl = drawer.querySelector('[data-cart-items]');
+    if (itemsEl) bindCartItemEvents(itemsEl);
   })();
 
   // 漢堡抽屜 + 滾動收起公告欄（复刻 PAKYUET）
