@@ -38,7 +38,7 @@
 {%- assign hero_earrings_url = collections['earrings'].url | default: '/collections/all' -%}
 
 <section class="pk-hero" id="pkHero">
-  <video class="pk-hero-video" autoplay muted loop playsinline preload="auto" poster="{{ poster_url }}"
+  <video class="pk-hero-video" autoplay muted loop playsinline webkit-playsinline preload="auto" poster="{{ poster_url }}"
          data-desktop-src="{{ video_url }}" data-mobile-src="{{ mobile_video_url }}">
     <source src="{{ video_url }}" type="video/mp4">
   </video>
@@ -279,19 +279,61 @@
     var video = document.querySelector('.pk-hero-video');
     var hero = document.querySelector('.pk-hero');
 
-    /* 响应式视频：手机端（<768px）切换为竖屏 9:16 版 */
+    /* 响应式视频：手机端（<768px）切换为竖屏 9:16 版
+       注意：iOS Safari 上 load() 会重置播放状态，不能在 load() 后立即
+       play()（元数据未就绪会失败）。只在实际切换源时才 load，并等
+       loadeddata/canplay 就绪后再播放。 */
     var mq = window.matchMedia('(max-width: 768px)');
+    function ensureMuted() {
+      if (!video) return;
+      video.muted = true;
+      video.defaultMuted = true;
+      video.setAttribute('muted', '');
+    }
     function applySrc() {
       if (!video || !video.dataset.desktopSrc) return;
+      ensureMuted();
       var target = mq.matches && video.dataset.mobileSrc ? video.dataset.mobileSrc : video.dataset.desktopSrc;
-      if (video.currentSrc.indexOf(target) === -1) {
+      var cur = video.currentSrc || video.getAttribute('src') || '';
+      if (cur.indexOf(target) === -1) {
+        var started = false;
+        function tryPlay() {
+          if (started) return;
+          started = true;
+          var p = video.play();
+          if (p && p.catch) p.catch(function () { started = false; });
+        }
         video.src = target;
         video.load();
-        video.play().catch(function () {});
+        if (video.readyState >= 1) { tryPlay(); }
+        video.addEventListener('loadeddata', tryPlay, { once: true });
+        video.addEventListener('canplay', tryPlay, { once: true });
+      } else {
+        var p = video.play();
+        if (p && p.catch) p.catch(function () {});
       }
     }
     if (mq.addEventListener) { mq.addEventListener('change', applySrc); } else if (mq.addListener) { mq.addListener(applySrc); }
     applySrc();
+
+    /* iOS Safari 自动播放兜底：muted+playsinline 理应自动播，但个别版本
+       或低电量模式会拦截；用户一旦点击/滑动页面就立即尝试恢复播放 */
+    var userTouched = false;
+    function retryPlay() {
+      if (!video || video.paused === false) return;
+      ensureMuted();
+      var p = video.play();
+      if (p && p.catch) p.catch(function () {});
+    }
+    ['touchstart', 'touchend', 'click', 'scroll', 'keydown'].forEach(function (evt) {
+      document.addEventListener(evt, function () {
+        if (!userTouched) { userTouched = true; retryPlay(); }
+      }, { passive: true, once: false });
+    });
+    /* 页面可见性恢复时也重试（从后台切回可能被暂停） */
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) retryPlay();
+    });
 
     var dots = {};
     var cards = {};
