@@ -478,17 +478,13 @@
   .ir-announcement2__localization .pk-select option { color: var(--ir-text); }
   .ir-announcement2__localization .pk-select:hover { color: var(--ir-primary); }
 
-  /* 移动端：副公告栏改为上下两行（文字居中 + 语言/国家切换器居中），避免重叠 */
+  /* 移动端：隐藏副公告栏文字，只保留语言/国家切换器（居中显示） */
   @media (max-width: 768px) {
     .ir-announcement2__inner {
-      flex-direction: column;
-      gap: 2px;
       padding: 4px 16px;
     }
     .ir-announcement2__text {
-      font-size: 12px;
-      text-align: center;
-      line-height: 1.4;
+      display: none;
     }
     .ir-announcement2__localization {
       position: static;
