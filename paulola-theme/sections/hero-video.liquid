@@ -258,6 +258,22 @@
       "earrings": [[7.46, 49.4, 0.8], [7.71, 50.5, 5.9], [7.96, 51.5, 11.4], [8.21, 51.4, 20.3], [8.46, 51.5, 25.8], [8.71, 51.8, 32], [8.96, 51.7, 37.4], [9.21, 51.6, 40.9], [9.46, 52.2, 45.1], [9.71, 53, 48.3], [9.96, 53.1, 50.1]]
     };
 
+    /* ===== 手机版（9:16 竖屏）首饰时间轴 + 手动标注跟踪数据 =====
+       手机版视频是桌面版的 smart-crop 竖屏裁剪，首饰出现时段与桌面版不同，
+       以下为逐帧视觉标记（vision_ground/glance 像素定位 → 百分比）。 */
+    var ITEMS_MOBILE = [
+      { id: 'ring', name: '經典莫桑石戒指', eyebrow: 'RING', desc: '六爪鑲嵌圓形莫桑石，火彩從每個角度綻放，見證永恆時刻。', start: 0.0, end: 2.2, x: 60, y: 40 },
+      { id: 'bracelet', name: '璀璨莫桑石手鏈', eyebrow: 'BRACELET', desc: 'S925 純銀莫桑石手鏈，日常疊戴的點睛之選，舉手間熠熠生輝。', start: 2.8, end: 5.2, x: 70, y: 50 },
+      { id: 'necklace', name: '莫桑石項鍊', eyebrow: 'NECKLACE', desc: '纖細銀鏈綴單顆莫桑石，貼合頸間線條，低調而閃耀。', start: 5.5, end: 8.2, x: 65, y: 30 },
+      { id: 'earrings', name: '莫桑石耳環', eyebrow: 'EARRINGS', desc: '圈形密鑲搭配垂墜莫桑石，隨步伐輕盈搖曳，點亮側顏。', start: 8.5, end: 10.0, x: 60, y: 20 }
+    ];
+    var TRACKING_MOBILE = {
+      "ring": [[0, 62, 42], [0.5, 62, 42], [1.0, 63, 42], [1.5, 49, 35], [2.0, 49, 36], [2.2, 49, 36]],
+      "bracelet": [[2.8, 72, 50], [3.0, 76, 51], [3.5, 69, 52], [4.2, 50, 70], [4.8, 50, 70], [5.2, 50, 70]],
+      "necklace": [[5.5, 63, 23], [6.0, 64, 24], [6.5, 64, 26], [7.5, 76, 60], [8.0, 76, 59], [8.2, 76, 59]],
+      "earrings": [[8.5, 58, 16], [9.0, 58, 18], [9.5, 60, 21], [10.0, 60, 21]]
+    };
+
     var video = document.querySelector('.pk-hero-video');
     var hero = document.querySelector('.pk-hero');
 
@@ -294,10 +310,10 @@
     var wasActive = {};
     var openCards = {};
 
-    /* Catmull-Rom 样条插值：轨迹穿过全部标注点 */
+    /* Catmull-Rom 样条插值：轨迹穿过全部标注点（手机版用独立 TRACKING_MOBILE） */
     function trackPos(item, t) {
       var fallback = { x: item.x, y: item.y };
-      var pts = TRACKING[item.id];
+      var pts = (mq.matches ? TRACKING_MOBILE : TRACKING)[item.id];
       if (!pts) return fallback;
       var P = [];
       for (var i = 0; i < pts.length; i++) {
@@ -427,7 +443,8 @@
       /* GSAP ticker 驱动 */
       function loop() {
         var t = video.currentTime;
-        ITEMS.forEach(function (it) {
+        var activeItems = mq.matches ? ITEMS_MOBILE : ITEMS;
+        activeItems.forEach(function (it) {
           var d = dots[it.id];
           if (!d) return;
           var active = t >= it.start && t < it.end;
@@ -478,7 +495,7 @@
             if (wasActive[it.id]) { wasActive[it.id] = false; closeCard(it); }
           }
         });
-        ITEMS.forEach(function (it) {
+        activeItems.forEach(function (it) {
           if (openCards[it.id] && cards[it.id] && !cards[it.id].hidden) positionCard(it);
         });
       }
