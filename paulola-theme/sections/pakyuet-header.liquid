@@ -556,18 +556,20 @@
     align-items: center;
   }
   .ir-nav__account shopify-account {
-    --shopify-account-font-heading: var(--font-heading-family);
-    --shopify-account-font-heading-weight: var(--font-heading-weight, 400);
-    --shopify-account-font-body: var(--font-body-family);
-    --shopify-account-font-body-weight: var(--font-body-weight, 400);
+    --shopify-account-font-heading: var(--pk-font-serif);
+    --shopify-account-font-heading-weight: 600;
+    --shopify-account-font-body: var(--pk-font-sans);
+    --shopify-account-font-body-weight: 400;
     --shopify-account-radius-base: 14px;
     --shopify-account-radius-button: 0;
     --shopify-account-radius-button-small: 0;
     --shopify-account-radius-input: 0;
-    --shopify-account-color-background: rgb(var(--color-background));
-    --shopify-account-color-text: rgb(var(--color-foreground));
-    --shopify-account-color-accent: rgb(var(--color-button));
-    --shopify-account-color-accent-text: rgb(var(--color-button-text));
+    /* PAULOLA：用具体颜色（精简主题无 --color-* 变量，引用会透明） */
+    --shopify-account-color-background: #FFFFFF;
+    --shopify-account-color-text: #1A1A1A;
+    --shopify-account-color-accent: #C4A35A;
+    --shopify-account-color-accent-text: #FFFFFF;
+    --shopify-account-color-border: rgba(0, 0, 0, 0.08);
     --shopify-account-dialog-position-top: 64px;
     display: inline-flex;
     align-items: center;
@@ -587,6 +589,28 @@
     font-size: 14px;
     color: var(--ir-text);
     white-space: nowrap;
+  }
+
+  /* ================================================================
+     登录弹窗（shopify-account 组件）：
+     - 背景不透明（精简主题无 --color-* 变量，必须给具体颜色）
+     - 移动端(≤750px)组件默认是底部全屏抽屉，改为顶部右侧卡片（同桌面）
+     ================================================================ */
+  shopify-account::part(dialog) {
+    background-color: #FFFFFF !important;
+    color: #1A1A1A !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.16) !important;
+    border-radius: 14px !important;
+  }
+  @media (max-width: 750px) {
+    shopify-account::part(dialog) {
+      inset: 64px 12px auto auto !important;
+      bottom: auto !important;
+      width: 360px !important;
+      max-width: calc(100vw - 24px) !important;
+      max-height: calc(100dvh - 80px) !important;
+      border-radius: 14px !important;
+    }
   }
 
   /* ================================================================
