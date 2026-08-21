@@ -1216,11 +1216,30 @@
     window.__pkHeaderInit = true;
     var header = document.querySelector('[data-pakyuet-header]');
 
-    // 滚动收起公告栏
+    // 滚动收起公告栏（方向感知 + 顶部阈值，避免向上滚动时震颤）
     if (header) {
       var ticking = false;
+      var lastY = window.scrollY;
+      // collapsed = 当前公告栏是否已收起（与 DOM 的 ir-header--scrolled 同步）
+      var collapsed = window.scrollY > 8;
+      header.classList.toggle('ir-header--scrolled', collapsed);
+
       function update() {
-        header.classList.toggle('ir-header--scrolled', window.scrollY > 8);
+        var y = window.scrollY;
+        var scrollUp = y < lastY;
+        lastY = y;
+        var wantCollapse = y > 8;
+        // 防震颤：只在「滚动方向明确」且「状态需要切换」时才切换，
+        // 避免滚动过程中高度动画与滚动叠加产生抖动。
+        if (scrollUp && !wantCollapse && collapsed) {
+          // 向上滚动到接近顶部：展开完整页眉
+          header.classList.remove('ir-header--scrolled');
+          collapsed = false;
+        } else if (!scrollUp && wantCollapse && !collapsed) {
+          // 向下滚动超过阈值：收起公告栏
+          header.classList.add('ir-header--scrolled');
+          collapsed = true;
+        }
         ticking = false;
       }
       window.addEventListener('scroll', function () {
@@ -1229,7 +1248,6 @@
           ticking = true;
         }
       }, { passive: true });
-      update();
     }
 
     // 汉堡抽屉
